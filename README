@@ -1,0 +1,7 @@
+This is a coding project by Josh Mermelstein in the summer of 2012 for the
+Tufts CS departament.  Its goal is to create a program that can take a
+non-planar graph and determine if there is a way to make it planar by copying
+any number of vertices while preserving connections.
+
+The overall structure is centered on a circular doublely linked list which is
+specified in the circ_list files.
