@@ -5,3 +5,9 @@ any number of vertices while preserving connections.
 
 The overall structure is centered on a circular doublely linked list which is
 specified in the circ_list files.
+
+the following is the format in which the program reads in a graph:
+the first line will be the number of vertices
+every subsequent line will represtent a new vertex whose index is the line
+number -1
+Each of these lines will end in a period.
