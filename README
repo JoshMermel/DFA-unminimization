@@ -11,3 +11,25 @@ the first line will be the number of vertices
 every subsequent line will represtent a new vertex whose index is the line
 number -1
 Each of these lines will end in a period.
+
+some known information.
+
+Planar Expandable graphs
+K_6
+K_{3,4}
+K_{2,2,3}
+K_{3,3,1}
+K_{4,2,1}
+
+
+Proven non-planar expandable
+K_7
+K_{4,4}
+K_{3,5}
+
+Suspected expandable
+
+
+suspected non expandable
+any two planar expandible graphs connected by one edge
+a K_7 with one vertex missing
