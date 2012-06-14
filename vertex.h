@@ -1,3 +1,6 @@
+#ifndef MERMEL_VERTEX
+#define MERMEL_VERTEX
+
 class Vertex
 {
 	public:
@@ -25,3 +28,5 @@ class Vertex
 		vector<bool> neighbors;
 		static int num_vertices;
 };
+
+#endif

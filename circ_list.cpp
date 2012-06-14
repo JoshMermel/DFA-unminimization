@@ -56,3 +56,54 @@ void Circ_list::print_list(Node* begin)
 		}
 	}
 }
+
+void Circ_list::check_forward()
+{
+	Node* temp = start->next;
+	while(temp != start)
+	{
+		if(!temp->vert->is_satisfied())
+		{
+			// check if they should connect and connect them.
+			return;
+		}
+		temp = temp -> next;
+	}
+}
+
+void Circ_list::check_backward()
+{
+	Node* temp = start->prev;
+	while(temp != start)
+	{
+		if(!temp->vert->is_satisfied())
+		{
+			// check if they should connect and connect them.
+			return;
+		}
+		temp = temp -> prev;
+	}
+}
+
+void Circ_list::have_children()
+{
+
+}
+
+// WARNING, I think this fails in the case of a list of size 1. I shoudl check
+// start before I do other stuff.
+bool Circ_list::is_done()
+{
+	Node* temp = start -> next;
+	// loop through the infinite face
+	while(temp != start)
+	{
+		// return false if you see something unsatisfied
+		if(!temp->vert->is_satisfied())
+			return false;
+		temp = temp-> next;
+	}
+	// if you get back to the start and have yet to see an unsatisfied vertex
+	// go ahead and return true
+	return true;
+}

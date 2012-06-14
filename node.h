@@ -4,11 +4,13 @@
  * to be used as part of a circular doubly linked list.
  */
 
- class Node
- {
+#ifndef MERMEL_NODE
+#define MERMEL_NODE
+
+class Node
+{
 	public:
 		Node();
-
 		~Node();
 
 		Vertex* vert;
@@ -16,4 +18,6 @@
 		Node* prev;
 
 	private:
- };
+};
+
+#endif

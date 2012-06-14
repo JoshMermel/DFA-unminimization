@@ -6,17 +6,13 @@
  * last edit 6/12/12
  */
 
+#ifndef MERMEL_CIRCLIST
+#define MERMEL_CIRCLIST
+
 #include <cmath>
 #include "vertex"
 
 using namespace std;
-
-struct Node
-{
-	Vertex* vert;
-	Node* next;
-	Node* prev;
-};
 
 class Circ_list
 {
@@ -34,6 +30,24 @@ class Circ_list
 			// from there stopping when it returns to the start point.
 			// ?add a paramter to signify direction?
 
+		void check_forward();
+		void check_backward();
+		void have_children();
+			// these three functions should always be called in this order.
+			// The first two check forward and backward for the first
+			// non-saturated vertex and if it is one that can pair with the
+			// vertex they are checking from does so.
+			//
+			// the third function then checks which of its requirements aren't
+			// satisfied and creates appropriate vertices and adjusts the
+			// circular linked list as appropriate.  It all adjusts the value
+			// of the start pointer
+
+		bool is_done();
+			// checks if all verices in the list are satisfied or not.+<F21>
+
 	private:
 		Node* start;
 };
+
+#endif
