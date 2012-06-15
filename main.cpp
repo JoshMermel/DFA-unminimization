@@ -26,6 +26,7 @@ int main()
 	circ_list my_list;
 
 	// put on of the vertices into it.
+	circ_list.add_to_list(vert_set(get_env(FIRST)), NULL);
 	//IMPORTANT, figure out which one this should be
 
 	while(true)

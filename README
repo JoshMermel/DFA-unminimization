@@ -20,6 +20,8 @@ K_{3,4}
 K_{2,2,3}
 K_{3,3,1}
 K_{4,2,1}
+K_7 with 4 edges missing (all 4 sharing a vertex)
+	(make a drawing of a K_6 and put a new vertex inside of a triangle)
 
 
 Proven non-planar expandable
@@ -32,4 +34,5 @@ Suspected expandable
 
 suspected non expandable
 any two planar expandible graphs connected by one edge
-a K_7 with one vertex missing
+a K_7 with two edges missing (not sharing a vertex)
+a K_7 with two edges missing (sharing a vertex)

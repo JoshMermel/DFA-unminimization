@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-Circ_list::Circ_list()
+Circ_list::Circ_list(Vertex* vert)
 {
 	//initialize variables
 	start = NULL;
@@ -87,7 +87,10 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children()
 {
+	for(int i = 0; i < start.num_verices; i++)
+	{
 
+	}
 }
 
 // WARNING, I think this fails in the case of a list of size 1. I shoudl check
