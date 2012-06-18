@@ -12,26 +12,27 @@ Circ_list::Circ_list(Vertex* vert)
 	size = 0;
 }
 
-//insert a node with index a after the node called prior
+// insert the first node into the list
+void Circ_list::start_list_with(Vertex* vert)
+{
+	// shuffle pointers appropriately
+	start = vert;
+	vert -> next = vert;
+	vert -> prev = vert;
+
+	// set size appropriately
+	size = 1;
+}
+
+// insert a node with index a after the node called prior
 void Circ_list::add_to_list(int a, Node* prior)
 {
-	// if the list isn't empty
-	if(prior != NULL)
-	{
-		//shuffle pointers to put the one in.
-		Node* temp = new Node(Vertex(a));
-		temp -> prev = prior;
-		temp -> next = prior -> next;
-		prior -> next = temp;
-		temp -> next -> prev = temp;
-		}
-	// otherwise (the list is empty), put the node to be added in.
-	else
-	{
-		start = new Node(Vertex(a));
-		start -> next = start; 
-		start -> prev = start;
-	}
+	//shuffle pointers to put the one in.
+	Node* temp = new Node(Vertex(a));
+	temp -> prev = prior;
+	temp -> next = prior -> next;
+	prior -> next = temp;
+	temp -> next -> prev = temp;
 
 	// keep track of the size
 	size++;
@@ -65,6 +66,7 @@ void Circ_list::check_forward()
 		if(!temp->vert->is_satisfied())
 		{
 			// check if they should connect and connect them.
+			// also remove all vertices between them.
 			return;
 		}
 		temp = temp -> next;
@@ -79,6 +81,7 @@ void Circ_list::check_backward()
 		if(!temp->vert->is_satisfied())
 		{
 			// check if they should connect and connect them.
+			// also remove all vertices between them.
 			return;
 		}
 		temp = temp -> prev;

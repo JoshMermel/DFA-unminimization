@@ -25,20 +25,26 @@ int main()
 	// declare the circular doubly linked list
 	circ_list my_list;
 
-	// put on of the vertices into it.
-	circ_list.add_to_list(vert_set(get_env(FIRST)), NULL);
-	//IMPORTANT, figure out which one this should be
+	// put one of the vertices into it.
+	// which vertex is put in is determined by an enviromental variable called
+	// "FIRST"
+	my_list.start_list_with(vert_set(get_env(FIRST)));
+
 
 	while(true)
 	{
+		
 		// check forward and backward of the vertex to see if it want to
 		// connect to the nearest non-saturated neighber and vice versa
-			// do or don't do it
-			// if you did, check if every vertex is satisfied
-				//if so, end.
+		my_list.check_forward();
+		my_list.check_backward();
+		// check if we are done, and if so end.
+		if(my_list.is_done())
+			return 0;
 		// now look at what it is missing and create those nodes
-		// adjust the circ_list as appropriate
+		my_list.have_children();
 	}
 
-	return 0;
+	cout << "flow got to the end of main - past the while loop\n";
+	exit(1);
 }
