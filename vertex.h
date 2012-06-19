@@ -7,6 +7,13 @@ class Vertex
 		Vertex(int my_index);
 			// the constructor,
 			// sets a bunch of data
+		
+		void increase_reference();
+			// adds one to the number of references
+
+		bool decrease_references();
+			// subtracts one from the number of references and returns wheather
+			// or not the number of references is bigger that 0
 
 		int get_index();
 			// a getter for the private variable, index
@@ -26,7 +33,8 @@ class Vertex
 	private:
 		int index;
 		vector<bool> neighbors;
-		static int num_vertices;
+		int references;
 };
+
 
 #endif

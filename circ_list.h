@@ -3,7 +3,11 @@
  * written 6/12/12
  * creates a circular doubly linked list of pointers to vertices
  * 
- * last edit 6/12/12
+ * issue: main has a master set of verticies denoting what each vertex has and
+ * wants.  We can't point to those objects because we will need copies of them
+ * as they were.
+ * solution: copy constructor?
+ * 
  */
 
 #ifndef MERMEL_CIRCLIST
