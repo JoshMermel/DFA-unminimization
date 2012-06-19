@@ -11,7 +11,14 @@ class Node
 {
 	public:
 		Node();
-		~Node();
+		// default constructor
+
+		Node(Vertex* my_vert);
+		// secondary constructor, takes a vertex and puts it in a Node
+
+		// Note: there is intentionally not a destructor. Memory isn't being
+		// leaked by not handling deleting vert because the deleting of
+		// verticies is handled by main.
 
 		Vertex* vert;
 		Node* next;

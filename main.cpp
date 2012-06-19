@@ -38,9 +38,12 @@ int main()
 		// connect to the nearest non-saturated neighber and vice versa
 		my_list.check_forward();
 		my_list.check_backward();
-		// check if we are done, and if so end.
+		// check if we are done
 		if(my_list.is_done())
+		{
+			//delete some dynamically allocated memory
 			return 0;
+		}
 		// now look at what it is missing and create those nodes
 		my_list.have_children();
 	}
