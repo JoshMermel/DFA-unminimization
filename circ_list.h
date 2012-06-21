@@ -53,8 +53,14 @@ class Circ_list
 			// of the start pointer
 
 		bool is_done();
-			// checks if all verices in the list are satisfied or not.+<F21>
+			// checks if all verices in the list are satisfied or not.
 
+		void remove(Node* begin, Node* end,);
+			// given a Node to start at, a node to end at it removes all
+			// nodes (forward direction) between the two and handles decreasing
+			// references appropriately.  If you want to delete backward just
+			// switch the order of the parameters.
+			
 	private:
 		Node* start;
 };

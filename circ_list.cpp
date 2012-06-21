@@ -96,6 +96,20 @@ void Circ_list::have_children()
 	}
 }
 
+void Circ_list::remove(Node* begin, Node* end)
+{
+	Node* temp;
+	temp -> next = begin -> next;
+	temp -> prev = end -> prev;
+	begin -> next = end;
+	end -> prev = begin;
+	while(temp != end)
+	{
+		temp = temp -> next;
+		temp->vert->decrease references();
+	}
+}
+
 // WARNING, I think this fails in the case of a list of size 1. I shoudl check
 // start before I do other stuff.
 bool Circ_list::is_done()
