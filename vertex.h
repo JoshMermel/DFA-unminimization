@@ -34,8 +34,9 @@ class Vertex
 		bool is_satisfied();
 			// checks if a vertex is has all necessary connections.
 
-	private:
 		int index;
+		
+       private:
 		vector<bool> neighbors;
 		int references;
 };
