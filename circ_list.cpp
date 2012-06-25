@@ -1,7 +1,6 @@
 #include "vertex.h"
 #include "node.h"
 #include "circ_list.h"
-#include "bitset"
 #include <iostream>
 
 
@@ -9,19 +8,16 @@ Circ_list::Circ_list(Vertex* vert)
 {
 	//initialize variables
 	start = NULL;
-	size = 0;
 }
 
 // insert the first node into the list
 void Circ_list::start_list_with(Vertex* vert)
 {
 	// shuffle pointers appropriately
-	start = vert;
-	vert -> next = vert;
-	vert -> prev = vert;
-
-	// set size appropriately
-	size = 1;
+	Node* temp_node(vert);
+	start = temp_node;
+	temp_node -> next = temp_node;
+	temp_node -> prev = temp_node;
 }
 
 // insert a node called to_add after the node called prior
@@ -33,9 +29,6 @@ void Circ_list::add_to_list(Node* to_add, Node* prior)
 	to_add-> next = prior -> next;
 	prior -> next = to_add;
 	to_add -> next -> prev = to_add;
-
-	// keep track of the size
-	size++;
 }
 
 // passed a Node* at which to start printing
@@ -65,9 +58,10 @@ void Circ_list::check_forward()
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			// check if they should connect and connect them.
-			if(start[temp->index] == 0 && temp[start->index]==0)
+			// check if start wants to connect to temp
+			if(start[temp -> vert -> index] == 0 )
 			{
+				// connect them
 				start.set(temp->index, 1);
 				temp.set(start->index, 1);
 				// also remove all vertices between them.
@@ -89,8 +83,8 @@ void Circ_list::check_backward()
 			if(start[temp->index] == 0 && temp[start->index]==0)
 			{
 				// check if they should connect and connect them.
-				start.set(temp->index, 1);
-				temp.set(start->index, 1);
+				start->vert->set(temp->index, 1);
+				temp->vert->set(start->index, 1);
 				// also remove all vertices between them.
 				remove(temp, start);
 				return;
@@ -102,7 +96,7 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set)
 {
-	for(int i = 0; i < start.num_verices; i++)
+	for(int i = 0; i < start->vert->neighbors.size; i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
@@ -110,10 +104,10 @@ void Circ_list::have_children(Vertex** vert_set)
 			// create that vertex and add it after start
 			Vertex* temp_vert(vert_set[i]);
 			Node* temp_node = new Node(temp_vert);
-			add(temp_node, start);
+			add_to_list(temp_node, start);
 			// copy whatever vertex start pointed to after that vertex
 			temp_node = new Node(start->vert);
-			add(temp_node, start->next);
+			add_to_list(temp_node, start->next);
 		}
 	}
 	// incrememnt start to the next unsaturated node

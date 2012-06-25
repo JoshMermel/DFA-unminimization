@@ -22,7 +22,7 @@ using namespace std;
 class Circ_list
 {
 	public:
-		Circ_list();
+		Circ_list(Vertex* vert);
 			// the default constructor for the class
 		
 		void start_list_with(Vertex* vert);
