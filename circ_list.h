@@ -30,10 +30,8 @@ class Circ_list
 			// than adding later elements so there is a specialized function
 			// for it.
 
-		void add_to_list(int a, Node* prior);
-			// given an integer to add and a node after which to add it, this
-			// function creates a new node and shuffles pointers to get it into
-			// place
+		void add_to_list(Node* to_add, Node* prior);
+			// adds the node called to_add after the node call prior. 
 
 		void print_list(Node* begin);
 			// given a start point, this function prints the list move forward
@@ -42,7 +40,7 @@ class Circ_list
 
 		void check_forward();
 		void check_backward();
-		void have_children();
+		void have_children(Vertex** vert_set);
 			// these three functions should always be called in this order.
 			// The first two check forward and backward for the first
 			// non-saturated vertex and if it is one that can pair with the

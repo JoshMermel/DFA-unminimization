@@ -24,15 +24,15 @@ void Circ_list::start_list_with(Vertex* vert)
 	size = 1;
 }
 
-// insert a node with index a after the node called prior
-void Circ_list::add_to_list(int a, Node* prior)
+// insert a node called to_add after the node called prior
+void Circ_list::add_to_list(Node* to_add, Node* prior)
 {
 	//shuffle pointers to put the one in.
-	Node* temp = new Node(Vertex(a));
-	temp -> prev = prior;
-	temp -> next = prior -> next;
-	prior -> next = temp;
-	temp -> next -> prev = temp;
+	
+	to_add -> prev = prior;
+	to_add-> next = prior -> next;
+	prior -> next = to_add;
+	to_add -> next -> prev = to_add;
 
 	// keep track of the size
 	size++;
@@ -100,16 +100,28 @@ void Circ_list::check_backward()
 	}
 }
 
-void Circ_list::have_children()
+void Circ_list::have_children(Vertex** vert_set)
 {
 	for(int i = 0; i < start.num_verices; i++)
 	{
 		// check if it needs a vertex
-			// create that vertex
-			// and insert it into circlist
+		if(start->vert->is_needed(i))
+		{
+			// create that vertex and add it after start
+			Vertex* temp_vert(vert_set[i]);
+			Node* temp_node = new Node(temp_vert);
+			add(temp_node, start);
+			// copy whatever vertex start pointed to after that vertex
+			temp_node = new Node(start->vert);
+			add(temp_node, start->next);
+		}
 	}
-
 	// incrememnt start to the next unsaturated node
+	start;
+	while(start->vert->is_satisfied())
+	{
+		start = start->next;
+	}
 }
 
 void Circ_list::remove(Node* begin, Node* end)

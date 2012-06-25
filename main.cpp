@@ -45,7 +45,7 @@ int main()
 			return 0;
 		}
 		// now look at what it is missing and create those nodes
-		my_list.have_children();
+		my_list.have_children(vert_set);
 	}
 
 	cout << "flow got to the end of main - past the while loop\n";
