@@ -26,7 +26,7 @@ class Circ_list
 			// the default constructor for the class
 		
 		void start_list_with(Vertex* vert);
-			// adding the first element to the list is sleightly different
+			// adding the first element to the list is slightly different
 			// than adding later elements so there is a specialized function
 			// for it.
 

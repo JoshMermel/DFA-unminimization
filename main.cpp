@@ -1,34 +1,34 @@
 #include "circ_list.h"
 #include <iostream>
-
 using namespace std;
 
 int main()
 {
 	// determine how many vertices there are
 	int num_vertices;
-	cin << num_vertices;
+	cin >> num_vertices;
 
 	// create an array to store them
 	Vertex** vert_set = new Vertex*[num_vertices];
 
 	// read them into that array
+	int temp;
 	for(int i = 0; i < num_vertices; i++)
 	{
 		vert_set[i] = new Vertex(i);
-		while(cin >> temp)
+		while(cin >> temp) //NEEDS CHANGE.
 		{
-			vert_set[i].set(temp, 0);
+			vert_set[i]->set(temp, 0);
 		}
 	}
 
 	// declare the circular doubly linked list
-	circ_list my_list;
+	Circ_list my_list;
 
 	// put one of the vertices into it.
 	// which vertex is put in is determined by an enviromental variable called
 	// "FIRST"
-	my_list.start_list_with(vert_set(get_env(FIRST)));
+	my_list.start_list_with(vert_set[atoi(getenv("FIRST"))]);
 
 
 	while(true)
