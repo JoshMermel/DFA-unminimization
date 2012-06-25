@@ -15,6 +15,7 @@
 
 #include <cmath>
 #include "vertex.h"
+#include "node.h"
 
 using namespace std;
 

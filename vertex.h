@@ -1,6 +1,10 @@
 #ifndef MERMEL_VERTEX
 #define MERMEL_VERTEX
 
+#include <vector>
+
+using namespace std;
+
 class Vertex
 {
 	public:
@@ -23,7 +27,7 @@ class Vertex
 			// return true if the vertex that index represents is needed and
 			// false if not.
 
-		void set(int index, val);
+		void set(int index, int val);
 			// changes the vector of bools to reflect the addition of a new
 			// edge.
 
