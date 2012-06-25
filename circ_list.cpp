@@ -104,8 +104,12 @@ void Circ_list::have_children()
 {
 	for(int i = 0; i < start.num_verices; i++)
 	{
-
+		// check if it needs a vertex
+			// create that vertex
+			// and insert it into circlist
 	}
+
+	// incrememnt start to the next unsaturated node
 }
 
 void Circ_list::remove(Node* begin, Node* end)
