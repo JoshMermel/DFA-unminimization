@@ -98,16 +98,21 @@ void Circ_list::have_children()
 
 void Circ_list::remove(Node* begin, Node* end)
 {
-	Node* temp;
-	temp -> next = begin -> next;
-	temp -> prev = end -> prev;
-	begin -> next = end;
-	end -> prev = begin;
-	while(temp != end)
+	Node* temp;						// declare a temp node and make it the
+	temp -> next = begin -> next;	// beginning of a new linked list whose
+									// second node is the one after begin
+	temp -> next -> prev = temp;	// correct that node's prev pointer
+	end -> prev -> next = NULL;		// replace the end of the segment to be
+									// removed with NULL
+	begin -> next = end;			// contract the list so begin and end are
+	end -> prev = begin;			// adjacent
+	while(temp != NULL)				// now read from temp until NULL
 	{
-		temp = temp -> next;
-		temp->vert->decrease references();
+		temp = temp -> next;		// deleting the Node before where you are
+		delete temp -> prev;		// as you read
 	}
+	delete temp;					// finally delete temp, the last node in
+									// list
 }
 
 // WARNING, I think this fails in the case of a list of size 1. I shoudl check

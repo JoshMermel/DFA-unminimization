@@ -57,8 +57,8 @@ class Circ_list
 
 		void remove(Node* begin, Node* end,);
 			// given a Node to start at, a node to end at it removes all
-			// nodes (forward direction) between the two and handles decreasing
-			// references appropriately.  If you want to delete backward just
+			// nodes (forward direction) between the two references 
+			//appropriately.  If you want to delete backward just
 			// switch the order of the parameters.
 			
 	private:
