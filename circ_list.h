@@ -14,7 +14,7 @@
 #define MERMEL_CIRCLIST
 
 #include <cmath>
-#include "vertex"
+#include "vertex.h"
 
 using namespace std;
 

@@ -9,3 +9,5 @@ node.o: node.cpp
 
 vertex.o: vertex.cpp
 	g++ -c vertex.cpp
+
+export FIRST=1
