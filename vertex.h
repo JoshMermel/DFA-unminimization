@@ -35,9 +35,8 @@ class Vertex
 			// checks if a vertex is has all necessary connections.
 
 		int index;
-		
-       private:
 		vector<bool> neighbors;
+       private:
 		int references;
 };
 

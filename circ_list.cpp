@@ -14,7 +14,7 @@ Circ_list::Circ_list(Vertex* vert)
 void Circ_list::start_list_with(Vertex* vert)
 {
 	// shuffle pointers appropriately
-	Node* temp_node(vert);
+	Node* temp_node = new Node(vert);
 	start = temp_node;
 	temp_node -> next = temp_node;
 	temp_node -> prev = temp_node;
@@ -59,11 +59,11 @@ void Circ_list::check_forward()
 		if(!temp->vert->is_satisfied())
 		{
 			// check if start wants to connect to temp
-			if(start[temp -> vert -> index] == 0 )
+			if(start->vert->neighbors[temp->vert->get_index()] == 0 )
 			{
 				// connect them
-				start.set(temp->index, 1);
-				temp.set(start->index, 1);
+				start->vert->set(temp->vert->index, 1);
+				temp->vert->set(start->vert->index, 1);
 				// also remove all vertices between them.
 				remove(start, temp);
 				return;
@@ -80,11 +80,12 @@ void Circ_list::check_backward()
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			if(start[temp->index] == 0 && temp[start->index]==0)
+			if(start->vert->neighbors[temp->vert->index] == 0 &&
+			temp->vert->neighbors[start->vert->index]==0)
 			{
 				// check if they should connect and connect them.
-				start->vert->set(temp->index, 1);
-				temp->vert->set(start->index, 1);
+				start->vert->set(temp->vert->index, 1);
+				temp->vert->set(start->vert->index, 1);
 				// also remove all vertices between them.
 				remove(temp, start);
 				return;
@@ -96,7 +97,7 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set)
 {
-	for(int i = 0; i < start->vert->neighbors.size; i++)
+	for(int i = 0; i < start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
