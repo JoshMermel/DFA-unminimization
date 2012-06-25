@@ -1,3 +1,5 @@
+export FIRST=1
+
 expand: main.o circ_list.o node.o vertex.o
 	g++ main.o circ_list.o node.o vertex.o
 
@@ -9,5 +11,3 @@ node.o: node.cpp
 
 vertex.o: vertex.cpp
 	g++ -c vertex.cpp
-
-export FIRST=1
