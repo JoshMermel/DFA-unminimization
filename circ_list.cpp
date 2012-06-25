@@ -66,8 +66,14 @@ void Circ_list::check_forward()
 		if(!temp->vert->is_satisfied())
 		{
 			// check if they should connect and connect them.
-			// also remove all vertices between them.
-			return;
+			if(start[temp->index] == 0 && temp[start->index]==0)
+			{
+				start.set(temp->index, 1);
+				temp.set(start->index, 1);
+				// also remove all vertices between them.
+				remove(start, temp);
+				return;
+			}
 		}
 		temp = temp -> next;
 	}
@@ -80,9 +86,15 @@ void Circ_list::check_backward()
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			// check if they should connect and connect them.
-			// also remove all vertices between them.
-			return;
+			if(start[temp->index] == 0 && temp[start->index]==0)
+			{
+				// check if they should connect and connect them.
+				start.set(temp->index, 1);
+				temp.set(start->index, 1);
+				// also remove all vertices between them.
+				remove(temp, start);
+				return;
+			}
 		}
 		temp = temp -> prev;
 	}
