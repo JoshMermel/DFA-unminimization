@@ -12,14 +12,16 @@ int main()
 	Vertex** vert_set = new Vertex*[num_vertices];
 
 	// read them into that array
-	int temp;
+	char temp='0';
 	for(int i = 0; i < num_vertices; i++)
 	{
 		vert_set[i] = new Vertex(i);
-		while(cin >> temp) //NEEDS CHANGE.
+		while(temp != '\n') //read stdin char by char until newline
 		{
-			vert_set[i]->set(temp, 0);
+		  temp=getchar();
+		  vert_set[i]->set(atoi(&temp), 0);
 		}
+		getchar();//eat the remaining newline
 	}
 
 	// declare the circular doubly linked list
