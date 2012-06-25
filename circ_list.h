@@ -56,7 +56,7 @@ class Circ_list
 		bool is_done();
 			// checks if all verices in the list are satisfied or not.
 
-		void remove(Node* begin, Node* end,);
+		void remove(Node* begin, Node* end);
 			// given a Node to start at, a node to end at it removes all
 			// nodes (forward direction) between the two references 
 			//appropriately.  If you want to delete backward just
