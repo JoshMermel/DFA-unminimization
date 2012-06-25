@@ -127,10 +127,14 @@ void Circ_list::remove(Node* begin, Node* end)
 									// list
 }
 
-// WARNING, I think this fails in the case of a list of size 1. I shoudl check
-// start before I do other stuff.
 bool Circ_list::is_done()
 {
+	if(!start->vert->is_satisfied())
+	{
+		return false;
+		// without this line, this function would fail on lists of size 1
+	}
+
 	Node* temp = start -> next;
 	// loop through the infinite face
 	while(temp != start)
