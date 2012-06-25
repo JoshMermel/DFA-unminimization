@@ -108,6 +108,8 @@ void Circ_list::have_children()
 			// create that vertex
 			// and insert it into circlist
 	}
+
+	// incrememnt start to the next unsaturated node
 }
 
 void Circ_list::remove(Node* begin, Node* end)
