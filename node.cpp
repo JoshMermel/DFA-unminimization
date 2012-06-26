@@ -1,4 +1,5 @@
 #include "node.h"
+using namespace std;
 
 Node::Node()
 {
@@ -17,6 +18,6 @@ Node::Node(Vertex* my_vert)
 Node::~Node()
 {
 	vert->decrease_references();
-	if(vert->references == 0)
+	if(vert->get_references() == 0)
 		delete vert;
 }

@@ -8,11 +8,11 @@ using namespace std;
 class Vertex
 {
 	public:
-		Vertex(int my_index);
+		Vertex(int my_index, int num_vertices);
 			// the constructor,
 			// sets a bunch of data
 		
-		void increase_reference();
+		void increase_references();
 			// adds one to the number of references
 
 		bool decrease_references();
@@ -20,6 +20,9 @@ class Vertex
 			// or not the number of references is bigger that 0
 
 		int get_index();
+			// a getter for the private variable, index
+
+		int get_references();
 			// a getter for the private variable, index
 
 		bool is_needed(int index);

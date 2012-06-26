@@ -1,16 +1,11 @@
-Vertex::Vertex(int my_index)
+#include "vertex.h"
+
+Vertex::Vertex(int my_index,int num_vertices)
 {
 	// fill the bitset with all ones
-	neighbors.resize(num_vertices, 1)
+	neighbors.resize(,num_verticies 1)
 	index = myindex;
 	references = 1;
-	//now read through the definition of the vector with index myindex and set
-	//all values listed as associated with it to 0;
-	int temp;
-	while(cin >> temp)
-	{
-		neighbors.set(temp, 0);
-	}
 }
 
 void Vertex::increase_references()
@@ -22,6 +17,11 @@ bool Vertex::decrease_references()
 {
 	references--;
 	return (references == 0);
+}
+
+int Vertex::get_references()
+{
+	return references;
 }
 
 int Vertex::get_index()

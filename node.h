@@ -7,13 +7,15 @@
 #ifndef MERMEL_NODE
 #define MERMEL_NODE
 
+#include "vertex.h"
+
 class Node
 {
 	public:
 		Node();
 		// default constructor
 
-		Node(Vertex* my_vert);
+		Node(Vertex *my_vert);
 		// secondary constructor, takes a vertex and puts it in a Node
 
 		~Node();
@@ -26,8 +28,6 @@ class Node
 		Vertex* vert;
 		Node* next;
 		Node* prev;
-
-	private:
 };
 
 #endif

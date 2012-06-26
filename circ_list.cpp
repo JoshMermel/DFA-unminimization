@@ -6,6 +6,7 @@
 
 Circ_list::Circ_list(Vertex* vert)
 {
+	start_list_with(vert);
 	//initialize variables
 	start = NULL;
 }
@@ -108,6 +109,7 @@ void Circ_list::have_children(Vertex** vert_set)
 			add_to_list(temp_node, start);
 			// copy whatever vertex start pointed to after that vertex
 			temp_node = new Node(start->vert);
+			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
 		}
 	}

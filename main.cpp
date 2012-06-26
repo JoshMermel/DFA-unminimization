@@ -15,7 +15,7 @@ int main()
 	char temp='0';
 	for(int i = 0; i < num_vertices; i++)
 	{
-		vert_set[i] = new Vertex(i);
+		vert_set[i] = new Vertex(num_vertices, i);
 		while(temp != '\n') //read stdin char by char until newline
 		{
 		  temp=getchar();
@@ -24,14 +24,9 @@ int main()
 		getchar();//eat the remaining newline
 	}
 
-	// declare the circular doubly linked list
-	Circ_list my_list;
-
-	// put one of the vertices into it.
-	// which vertex is put in is determined by an enviromental variable called
-	// "FIRST"
-	my_list.start_list_with(vert_set[atoi(getenv("FIRST"))]);
-
+	// declare the circular doubly linked list and put the vertex whose index
+	// is the same as the enviromental variable first into it to start it
+	Circ_list my_list(vert_set[atoi(getenv("FIRST"))]);
 
 	while(true)
 	{
