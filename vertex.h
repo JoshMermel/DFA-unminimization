@@ -30,7 +30,7 @@ class Vertex
 			// return true if the vertex that index represents is needed and
 			// false if not.
 
-		void set(int index, int val);
+		void set(int index, bool val);
 			// changes the vector of bools to reflect the addition of a new
 			// edge.
 

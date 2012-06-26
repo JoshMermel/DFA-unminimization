@@ -63,8 +63,8 @@ void Circ_list::check_forward()
 			if(start->vert->neighbors[temp->vert->get_index()] == 0 )
 			{
 				// connect them
-				start->vert->set(temp->vert->index, 1);
-				temp->vert->set(start->vert->index, 1);
+				start->vert->set(temp->vert->index, true);
+				temp->vert->set(start->vert->index, true);
 				// also remove all vertices between them.
 				remove(start, temp);
 				return;
@@ -85,8 +85,8 @@ void Circ_list::check_backward()
 			temp->vert->neighbors[start->vert->index]==0)
 			{
 				// check if they should connect and connect them.
-				start->vert->set(temp->vert->index, 1);
-				temp->vert->set(start->vert->index, 1);
+				start->vert->set(temp->vert->index, true);
+				temp->vert->set(start->vert->index, true);
 				// also remove all vertices between them.
 				remove(temp, start);
 				return;

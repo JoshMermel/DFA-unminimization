@@ -7,22 +7,44 @@ int main()
 	// determine how many vertices there are
 	int num_vertices;
 	cin >> num_vertices;
+	// purges a newline from the stream
+	cin.get();
 
 	// create an array to store them
 	Vertex** vert_set = new Vertex*[num_vertices];
-
 	// read them into that array
-	string temp="";
+	char temp;
+	string temp_string;
+	
+	// for each vertex
 	for(int i = 0; i < num_vertices; i++)
 	{
-		vert_set[i] = new Vertex(num_vertices, i);
-		while(strcmp(temp.c_str(),"\n"))
-		//read stdin char by char until newline
+		// create an object to hold the data
+		vert_set[i] = new Vertex(i, num_vertices);
+		// read until you see a newline
+		temp = 'a';
+		while(1)
 		{
-		  scanf("%s", &temp);
-		  vert_set[i]->set(atoi(temp.c_str()), 0);
+			temp_string = "";
+			if(temp == '\n')
+				break;
+			temp = cin.get();
+			// read until you see a space
+			while(1)
+			{
+				if(temp == ' ' || temp=='\n')
+					break;
+				//concatonate newly read chars onto temp_string
+				temp_string += temp;
+				temp='a';
+				temp = cin.get();
+			}
+			// set the vertex to know that it needs what was just found
+			cout << "atoi:"<<atoi(temp_string.c_str()) << endl;
+			cout << "i:"<<i<<endl;
+			vert_set[i]->set(atoi(temp_string.c_str()), 0);
+
 		}
-		getchar();//eat the remaining newline
 	}
 
 	// declare the circular doubly linked list and put the vertex whose index
