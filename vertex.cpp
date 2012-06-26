@@ -33,7 +33,7 @@ int Vertex::get_index()
 
 bool Vertex::is_needed(int index)
 {
-	return neighbors[index];
+	return !neighbors[index];
 }
 
 void Vertex::set(int index, bool val)

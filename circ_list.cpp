@@ -43,6 +43,7 @@ void Circ_list::print_list(Node* begin)
 		Node* temp = begin->next;
 		while(temp != begin)
 		{
+			cout << temp << endl;
 			cout << temp->vert->index << endl;
 			temp = temp -> next;
 		}
@@ -51,6 +52,7 @@ void Circ_list::print_list(Node* begin)
 
 void Circ_list::check_forward()
 {
+	print_list(start);
 	cout << "check forward started\n";
 	Node* temp = start->next;
 	while(temp != start)
@@ -96,13 +98,16 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set)
 {
+	cout << "have children was called\n" << start->vert->neighbors.size() <<
+	endl;
 	for(int i = 1; i <= start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
 		{
 			// create that vertex and add it after start
-			Vertex* temp_vert(vert_set[i]);
+			Vertex* temp_vert = new Vertex(vert_set[i]->index, 
+										start->vert->neighbors.size()-1);
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
 			// copy whatever vertex start pointed to after that vertex
@@ -112,7 +117,6 @@ void Circ_list::have_children(Vertex** vert_set)
 		}
 	}
 	// incrememnt start to the next unsaturated node
-	start;
 	while(start->vert->is_satisfied())
 	{
 		start = start->next;
@@ -122,6 +126,12 @@ void Circ_list::have_children(Vertex** vert_set)
 void Circ_list::remove(Node* begin, Node* end)
 {
 	cout << "remove began\n";
+	if(begin->next->next == end)
+	{
+		cout << "fuckity fuck\n";
+		exit(1);
+	}
+
 	Node* temp = new Node;			// declare a temp node and make it the
 	temp -> next = begin -> next;	// beginning of a new linked list whose
 									// second node is the one after begin

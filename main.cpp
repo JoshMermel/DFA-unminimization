@@ -61,6 +61,7 @@ int main(int argc, char* argv[])
 		if(my_list.is_done())
 		{
 			//delete some dynamically allocated memory
+			cout << "I win!\n";
 			return 0;
 		}
 		// now look at what it is missing and create those nodes
