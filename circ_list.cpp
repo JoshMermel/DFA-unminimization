@@ -7,18 +7,15 @@
 Circ_list::Circ_list(Vertex* vert)
 {
 	start_list_with(vert);
-	//initialize variables
-	start = NULL;
 }
 
 // insert the first node into the list
 void Circ_list::start_list_with(Vertex* vert)
 {
 	// shuffle pointers appropriately
-	Node* temp_node = new Node(vert);
-	start = temp_node;
-	temp_node -> next = temp_node;
-	temp_node -> prev = temp_node;
+	start = new Node(vert);
+	start -> next = start;
+	start -> prev = start;
 }
 
 // insert a node called to_add after the node called prior
@@ -54,13 +51,14 @@ void Circ_list::print_list(Node* begin)
 
 void Circ_list::check_forward()
 {
+	cout << "check forward started\n";
 	Node* temp = start->next;
 	while(temp != start)
 	{
 		if(!temp->vert->is_satisfied())
 		{
 			// check if start wants to connect to temp
-			if(start->vert->neighbors[temp->vert->get_index()] == 0 )
+			if(start->vert->is_needed(temp->vert->get_index()))
 			{
 				// connect them
 				start->vert->set(temp->vert->index, true);
@@ -98,7 +96,7 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set)
 {
-	for(int i = 0; i < start->vert->neighbors.size(); i++)
+	for(int i = 1; i <= start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
@@ -123,7 +121,8 @@ void Circ_list::have_children(Vertex** vert_set)
 
 void Circ_list::remove(Node* begin, Node* end)
 {
-	Node* temp;						// declare a temp node and make it the
+	cout << "remove began\n";
+	Node* temp = new Node;			// declare a temp node and make it the
 	temp -> next = begin -> next;	// beginning of a new linked list whose
 									// second node is the one after begin
 	temp -> next -> prev = temp;	// correct that node's prev pointer
@@ -133,11 +132,17 @@ void Circ_list::remove(Node* begin, Node* end)
 	end -> prev = begin;			// adjacent
 	while(temp != NULL)				// now read from temp until NULL
 	{
-		temp = temp -> next;		// deleting the Node before where you are
-		delete temp -> prev;		// as you read
+									// deleting the Node before where you are
+		if(temp->next = NULL)
+		{
+			delete temp;
+			cout << "remove finished successfully\n";
+			return;
+		}
+		temp = temp -> next;
+		delete temp -> prev;	// as you read
 	}
-	delete temp;					// finally delete temp, the last node in
-									// list
+	cout << "remove finished\n";
 }
 
 bool Circ_list::is_done()

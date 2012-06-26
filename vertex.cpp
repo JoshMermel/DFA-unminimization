@@ -38,15 +38,13 @@ bool Vertex::is_needed(int index)
 
 void Vertex::set(int index, bool val)
 {
-	cout << "the value of index is " << index << endl;
-	cout << "the size of neighbors is" << neighbors.size() << endl;
+	cout << "set was called\n";
 	neighbors.at(index) = val;
-	cout << "after\n";
 }
 
 bool Vertex::is_satisfied()
 {
-	for(int i = 0; i < neighbors.size(); i++)
+	for(int i = 1; i <= neighbors.size(); i++)
 	{
 		if(neighbors[i] == 0)
 			return false;

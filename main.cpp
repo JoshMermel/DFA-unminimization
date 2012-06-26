@@ -1,8 +1,9 @@
 #include "circ_list.h"
 #include <iostream>
+#define FIRST 1
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
 	// determine how many vertices there are
 	int num_vertices;
@@ -40,16 +41,14 @@ int main()
 				temp = cin.get();
 			}
 			// set the vertex to know that it needs what was just found
-			cout << "atoi:"<<atoi(temp_string.c_str()) << endl;
-			cout << "i:"<<i<<endl;
 			vert_set[i]->set(atoi(temp_string.c_str()), 0);
 
 		}
 	}
-
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
-	Circ_list my_list(vert_set[atoi(getenv("FIRST"))]);
+	
+	Circ_list my_list(vert_set[FIRST]);
 
 	while(true)
 	{
