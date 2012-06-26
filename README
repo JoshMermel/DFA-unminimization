@@ -36,3 +36,17 @@ suspected non expandable
 any two planar expandible graphs connected by one edge
 a K_7 with two edges missing (not sharing a vertex)
 a K_7 with two edges missing (sharing a vertex)
+
+Running theories
+Eli:
+	40% undecidable, 55% linear time solvable, 5% more than linear time
+Ben:
+	Maybe decidable but worth considering that it is undecidable.
+	If it is decidable, then no vertex needs to be used more than twice
+Michael:
+	Probably undecidable
+Josh:
+	Probably decidable
+	If one can partition the verticies into two sets such that each set is
+	non-planar (even if that set is planar expandable) then the graph is not
+	planarexpanable. (also the graph is connected)

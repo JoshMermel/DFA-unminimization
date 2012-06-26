@@ -3,8 +3,8 @@
 Vertex::Vertex(int my_index,int num_vertices)
 {
 	// fill the bitset with all ones
-	neighbors.resize(,num_verticies 1)
-	index = myindex;
+	neighbors.resize(num_vertices, 1);
+	index = my_index;
 	references = 1;
 }
 
@@ -31,7 +31,7 @@ int Vertex::get_index()
 
 bool Vertex::is_needed(int index)
 {
-	return neighbors[i];
+	return neighbors[index];
 }
 
 void Vertex::set(int index, int val)

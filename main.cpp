@@ -12,14 +12,15 @@ int main()
 	Vertex** vert_set = new Vertex*[num_vertices];
 
 	// read them into that array
-	char temp='0';
+	string temp="";
 	for(int i = 0; i < num_vertices; i++)
 	{
 		vert_set[i] = new Vertex(num_vertices, i);
-		while(temp != '\n') //read stdin char by char until newline
+		while(strcmp(temp.c_str(),"\n"))
+		//read stdin char by char until newline
 		{
-		  temp=getchar();
-		  vert_set[i]->set(atoi(&temp), 0);
+		  scanf("%s", &temp);
+		  vert_set[i]->set(atoi(temp.c_str()), 0);
 		}
 		getchar();//eat the remaining newline
 	}
