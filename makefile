@@ -1,7 +1,7 @@
 export FIRST=1
 
 expand: main.o circ_list.o node.o vertex.o
-	g++ main.o circ_list.o node.o vertex.o
+	g++ main.o circ_list.o node.o vertex.o -o expand
 
 circ_list.o: circ_list.cpp
 	g++ -c circ_list.cpp
