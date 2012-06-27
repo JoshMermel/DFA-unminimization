@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 			if(temp == '\n')
 				break;
 			temp = cin.get();
-			// read until you see a space
+			//r read until you see a space
 			while(1)
 			{
 				if(temp == ' ' || temp=='\n')
@@ -42,6 +42,14 @@ int main(int argc, char* argv[])
 			// set the vertex to know that it needs what was just found
 			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
 		}
+		for(int i=0; i< num_vertices;i++){
+		cout << "index: " <<vert_set[i]->index;
+			for(int j=0; j<num_vertices;j++){
+			cout << vert_set[i]->neighbors[j];
+			}
+		cout << endl;	
+		}
+		
 	}
 
 
