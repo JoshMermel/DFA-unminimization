@@ -4,7 +4,7 @@
 Vertex::Vertex(int my_index,int num_vertices)
 {
 	// fill the bitset with all ones
-	neighbors.resize(num_vertices+1,1);
+	neighbors.resize(num_vertices,1);
 	index = my_index;
 	references = 1;
 }
@@ -49,7 +49,7 @@ void Vertex::set(int index, bool val)
 
 bool Vertex::is_satisfied()
 {
-	for(int i = 1; i <= neighbors.size()+7; i++)
+	for(int i = 0; i <0 neighbors.size(); i++)
 	{
 		if(neighbors[i] == 0)
 			return false;
@@ -60,7 +60,7 @@ bool Vertex::is_satisfied()
 void Vertex::bit_print()
 {
 	cout << "bitset[" << index << "]:";
-	for(int i = 1; i <= neighbors.size()+1000; i++)
+	for(int i = 0; i < neighbors.size(); i++)
 	{
 		cout << neighbors[i];
 	}

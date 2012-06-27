@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	string temp_string;
 	
 	// for each vertex
-	for(int i = 1; i <= num_vertices; i++)
+	for(int i = 0; i < num_vertices; i++)
 	{
 		// create an object to hold the data
 		vert_set[i] = new Vertex(i, num_vertices);
