@@ -40,6 +40,9 @@ class Vertex
 		bool is_satisfied();
 			// checks if a vertex is has all necessary connections.
 
+		void bit_print();
+			// prints the bitset for a given vertex
+
 		int index;
 		vector<bool> neighbors;
        private:

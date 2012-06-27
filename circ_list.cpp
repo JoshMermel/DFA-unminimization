@@ -52,7 +52,7 @@ void Circ_list::print_list(Node* begin)
 
 void Circ_list::check_forward()
 {
-	print_list(start);
+	cout << "contracting forward\n";
 	Node* temp = start->next;
 	while(temp != start)
 	{
@@ -66,38 +66,42 @@ void Circ_list::check_forward()
 				temp->vert->set(start->vert->index, true);
 				// also remove all vertices between them.
 				remove(start, temp);
+				print_list(start);
 				return;
 			}
 		}
 		temp = temp -> next;
 	}
+	print_list(start);
 }
 
 void Circ_list::check_backward()
 {
+	cout << "contracting backward\n";
 	Node* temp = start->prev;
 	while(temp != start)
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			if(start->vert->neighbors[temp->vert->index] == 0 &&
-			temp->vert->neighbors[start->vert->index]==0)
+			if(start->vert->neighbors[temp->vert->index] == 0)
 			{
 				// check if they should connect and connect them.
 				start->vert->set(temp->vert->index, true);
 				temp->vert->set(start->vert->index, true);
 				// also remove all vertices between them.
 				remove(temp, start);
+				print_list(start);
 				return;
 			}
 		}
 		temp = temp -> prev;
 	}
+
+	print_list(start);
 }
 
 void Circ_list::have_children(Vertex** vert_set)
 {
-	cout << "have children was called and the index is " << start->vert->index << endl;
 	for(int i = 1; i < start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
@@ -116,7 +120,9 @@ void Circ_list::have_children(Vertex** vert_set)
 			start = start->next->next;
 		}
 	}
+	cout << "having children\n";
 	print_list(start);
+	start->vert->bit_print();
 	// incrememnt start to the next unsaturated node
 	while(start->vert->is_satisfied())
 	{
@@ -126,7 +132,6 @@ void Circ_list::have_children(Vertex** vert_set)
 
 void Circ_list::remove(Node* begin, Node* end)
 {
-	cout << "remove began\n";
 /*
 	if(begin->next->next == end)
 	{
@@ -154,15 +159,12 @@ void Circ_list::remove(Node* begin, Node* end)
 		temp = temp -> next;
 		delete temp -> prev;	// as you read
 	}*/
-	cout << "remove finished\n";
-	print_list(start);
 }
 
 bool Circ_list::is_done()
 {
 	if(!start->vert->is_satisfied())
 	{
-		cout << "isdone false 1\n";
 		return false;
 		// without this line, this function would fail on lists of size 1
 	}
@@ -174,7 +176,6 @@ bool Circ_list::is_done()
 		// return false if you see something unsatisfied
 		if(!temp->vert->is_satisfied())
 		{
-			cout << "isdone false 2\n";	
 			return false;
 		}
 		temp = temp-> next;

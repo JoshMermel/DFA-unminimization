@@ -49,10 +49,20 @@ void Vertex::set(int index, bool val)
 
 bool Vertex::is_satisfied()
 {
-	for(int i = 1; i < neighbors.size(); i++)
+	for(int i = 1; i <= neighbors.size()+7; i++)
 	{
 		if(neighbors[i] == 0)
 			return false;
 	}
 	return true;
+}
+
+void Vertex::bit_print()
+{
+	cout << "bitset[" << index << "]:";
+	for(int i = 1; i <= neighbors.size()+1000; i++)
+	{
+		cout << neighbors[i];
+	}
+	cout << endl;
 }
