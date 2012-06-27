@@ -62,8 +62,8 @@ void Circ_list::check_forward()
 			if(start->vert->is_needed(temp->vert->get_index()))
 			{
 				// connect them
-				start->vert->set(temp->vert->index, true);
-				temp->vert->set(start->vert->index, true);
+				start->vert->set((temp->vert->index)-1, true);
+				temp->vert->set((start->vert->index)-1, true);
 				// also remove all vertices between them.
 				remove(start, temp);
 				print_list(start);
@@ -83,11 +83,11 @@ void Circ_list::check_backward()
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			if(start->vert->neighbors[temp->vert->index] == 0)
+			if(start->vert->neighbors[(temp->vert->index)-1] == 0)
 			{
 				// check if they should connect and connect them.
-				start->vert->set(temp->vert->index, true);
-				temp->vert->set(start->vert->index, true);
+				start->vert->set((temp->vert->index)-1, true);
+				temp->vert->set((start->vert->index)-1, true);
 				// also remove all vertices between them.
 				remove(temp, start);
 				print_list(start);
@@ -102,7 +102,7 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set)
 {
-	for(int i = 1; i < start->vert->neighbors.size(); i++)
+	for(int i = 0; i < start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
@@ -111,7 +111,7 @@ void Circ_list::have_children(Vertex** vert_set)
 			Vertex* temp_vert = new Vertex(vert_set[i]);
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
-			temp_vert->set(start->vert->index, true);
+			temp_vert->set((start->vert->index), true);
 			// copy whatever vertex start pointed to after that vertex
 			start->vert->set(i, true);
 			temp_node = new Node(start->vert);
