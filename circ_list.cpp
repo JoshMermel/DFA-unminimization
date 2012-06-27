@@ -39,12 +39,9 @@ void Circ_list::print_list(Node* begin)
 	}
 	else
 	{
-		cout << begin->vert->index << endl;
 		Node* temp = begin->next;
 		while(temp != begin)
 		{
-			cout << temp << endl;
-			cout << temp->vert->index << endl;
 			temp = temp -> next;
 		}
 	}
@@ -100,14 +97,14 @@ void Circ_list::have_children(Vertex** vert_set)
 {
 	cout << "have children was called\n" << start->vert->neighbors.size() <<
 	endl;
-	for(int i = 1; i <= start->vert->neighbors.size(); i++)
+	for(int i = 1; i < start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
 		{
 			// create that vertex and add it after start
 			Vertex* temp_vert = new Vertex(vert_set[i]->index, 
-										start->vert->neighbors.size()-1);
+							start->vert->neighbors.size()-1);
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
 			// copy whatever vertex start pointed to after that vertex
@@ -116,6 +113,7 @@ void Circ_list::have_children(Vertex** vert_set)
 			add_to_list(temp_node, start->next);
 		}
 	}
+	print_list(start);
 	// incrememnt start to the next unsaturated node
 	while(start->vert->is_satisfied())
 	{

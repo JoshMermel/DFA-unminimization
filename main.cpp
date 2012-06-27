@@ -18,12 +18,12 @@ int main(int argc, char* argv[])
 	string temp_string;
 	
 	// for each vertex
-	for(int i = 0; i < num_vertices; i++)
+	for(int i = 1; i <= num_vertices; i++)
 	{
 		// create an object to hold the data
 		vert_set[i] = new Vertex(i, num_vertices);
 		// read until you see a newline
-		temp = 'a';
+		temp = 'b';
 		while(1)
 		{
 			temp_string = "";
@@ -37,7 +37,6 @@ int main(int argc, char* argv[])
 					break;
 				//concatonate newly read chars onto temp_string
 				temp_string += temp;
-				temp='a';
 				temp = cin.get();
 			}
 			// set the vertex to know that it needs what was just found
