@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 				temp = cin.get();
 			}
 			// set the vertex to know that it needs what was just found
-			vert_set[i]->set(atoi(temp_string.c_str()), 0);
+			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
 		}
 	}
 
