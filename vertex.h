@@ -12,6 +12,9 @@ class Vertex
 			// the constructor,
 			// sets a bunch of data
 		
+		Vertex(Vertex* vert);
+			// copy constuctor for Vertex
+	
 		void increase_references();
 			// adds one to the number of references
 

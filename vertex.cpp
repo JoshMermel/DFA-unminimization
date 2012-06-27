@@ -4,10 +4,16 @@
 Vertex::Vertex(int my_index,int num_vertices)
 {
 	// fill the bitset with all ones
-	neighbors.resize(num_vertices+1, 1);
+	neighbors.resize(num_vertices+1,1);
 	index = my_index;
 	references = 1;
-	cout << "the constructor for vertex ran successfully\n";
+}
+
+Vertex::Vertex(Vertex* vert)
+{
+	index = vert->index;
+	references = 1;
+	neighbors = vert->neighbors;
 }
 
 void Vertex::increase_references()
@@ -38,7 +44,6 @@ bool Vertex::is_needed(int index)
 
 void Vertex::set(int index, bool val)
 {
-	cout << "set was called\n";
 	neighbors.at(index) = val;
 }
 

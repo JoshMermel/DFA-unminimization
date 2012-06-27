@@ -40,17 +40,19 @@ void Circ_list::print_list(Node* begin)
 	else
 	{
 		Node* temp = begin->next;
+		cout << begin->vert->index << ' ';
 		while(temp != begin)
 		{
+			cout << temp->vert->index << ' ';
 			temp = temp -> next;
 		}
+		cout << endl;
 	}
 }
 
 void Circ_list::check_forward()
 {
 	print_list(start);
-	cout << "check forward started\n";
 	Node* temp = start->next;
 	while(temp != start)
 	{
@@ -95,22 +97,23 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set)
 {
-	cout << "have children was called\n" << start->vert->neighbors.size() <<
-	endl;
+	cout << "have children was called and the index is " << start->vert->index << endl;
 	for(int i = 1; i < start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
 		{
 			// create that vertex and add it after start
-			Vertex* temp_vert = new Vertex(vert_set[i]->index, 
-							start->vert->neighbors.size()-1);
+			Vertex* temp_vert = new Vertex(vert_set[i]);
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
+			temp_vert->set(start->vert->index, true);
 			// copy whatever vertex start pointed to after that vertex
+			start->vert->set(i, true);
 			temp_node = new Node(start->vert);
 			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
+			start = start->next->next;
 		}
 	}
 	print_list(start);
@@ -124,23 +127,24 @@ void Circ_list::have_children(Vertex** vert_set)
 void Circ_list::remove(Node* begin, Node* end)
 {
 	cout << "remove began\n";
+/*
 	if(begin->next->next == end)
 	{
 		cout << "fuckity fuck\n";
 		exit(1);
 	}
-
+*/
 	Node* temp = new Node;			// declare a temp node and make it the
-	temp -> next = begin -> next;	// beginning of a new linked list whose
-									// second node is the one after begin
-	temp -> next -> prev = temp;	// correct that node's prev pointer
+	temp -> next = begin -> next;		// beginning of a new linked list whose
+						// second node is the one after begin
+	temp -> next -> prev = temp;		// correct that node's prev pointer
 	end -> prev -> next = NULL;		// replace the end of the segment to be
-									// removed with NULL
+						// removed with NULL
 	begin -> next = end;			// contract the list so begin and end are
 	end -> prev = begin;			// adjacent
-	while(temp != NULL)				// now read from temp until NULL
+/*	while(temp != NULL)			// now read from temp until NULL
 	{
-									// deleting the Node before where you are
+						// deleting the Node before where you are
 		if(temp->next = NULL)
 		{
 			delete temp;
@@ -149,14 +153,16 @@ void Circ_list::remove(Node* begin, Node* end)
 		}
 		temp = temp -> next;
 		delete temp -> prev;	// as you read
-	}
+	}*/
 	cout << "remove finished\n";
+	print_list(start);
 }
 
 bool Circ_list::is_done()
 {
 	if(!start->vert->is_satisfied())
 	{
+		cout << "isdone false 1\n";
 		return false;
 		// without this line, this function would fail on lists of size 1
 	}
@@ -167,7 +173,10 @@ bool Circ_list::is_done()
 	{
 		// return false if you see something unsatisfied
 		if(!temp->vert->is_satisfied())
+		{
+			cout << "isdone false 2\n";	
 			return false;
+		}
 		temp = temp-> next;
 	}
 	// if you get back to the start and have yet to see an unsatisfied vertex

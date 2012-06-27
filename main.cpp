@@ -41,9 +41,10 @@ int main(int argc, char* argv[])
 			}
 			// set the vertex to know that it needs what was just found
 			vert_set[i]->set(atoi(temp_string.c_str()), 0);
-
 		}
 	}
+
+
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
 	
