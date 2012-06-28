@@ -22,6 +22,9 @@ K_{3,3,1}
 K_{4,2,1}
 K_7 with 4 edges missing (all 4 sharing a vertex)
 	(make a drawing of a K_6 and put a new vertex inside of a triangle)
+K_7 with 4 edges missing (no vertex missing more than 2)
+	(example of missing edge set, 12, 34, 35, 56
+	make a K_2211 and put the final vertex in the square)
 
 
 Proven non-planar expandable
