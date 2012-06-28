@@ -1,6 +1,6 @@
 #include "circ_list.h"
 #include <iostream>
-#define FIRST 1
+#define FIRST 0
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -42,15 +42,9 @@ int main(int argc, char* argv[])
 			// set the vertex to know that it needs what was just found
 			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
 		}
-		for(int i=0; i< num_vertices;i++){
-		cout << "index: " <<vert_set[i]->index;
-			for(int j=0; j<num_vertices;j++){
-			cout << vert_set[i]->neighbors[j];
-			}
-		cout << endl;	
-		}
-		
+			
 	}
+
 
 
 	// declare the circular doubly linked list and put the vertex whose index

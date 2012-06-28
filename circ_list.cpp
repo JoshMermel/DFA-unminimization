@@ -40,10 +40,10 @@ void Circ_list::print_list(Node* begin)
 	else
 	{
 		Node* temp = begin->next;
-		cout << begin->vert->index << ' ';
+		cout << begin->vert->index +1<< ' ';
 		while(temp != begin)
 		{
-			cout << temp->vert->index << ' ';
+			cout << temp->vert->index +1<< ' ';
 			temp = temp -> next;
 		}
 		cout << endl;
