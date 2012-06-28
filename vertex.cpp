@@ -49,7 +49,7 @@ void Vertex::set(int index, bool val)
 
 bool Vertex::is_satisfied()
 {
-	for(int i = 0; i <0 neighbors.size(); i++)
+	for(int i = 0; i <neighbors.size(); i++)
 	{
 		if(neighbors[i] == 0)
 			return false;
