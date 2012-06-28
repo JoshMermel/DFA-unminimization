@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 		// create an object to hold the data
 		vert_set[i] = new Vertex(i, num_vertices);
 		// read until you see a newline
+		//this is a garbage value to be rewritten by the following loop
 		temp = 'b';
 		while(1)
 		{
@@ -69,7 +70,6 @@ int main(int argc, char* argv[])
 				delete vert_set[i];	
 			}
 			delete [] vert_set;
-			my_list.~Circ_list();
 			return 0;
 		}
 		// now look at what it is missing and create those nodes

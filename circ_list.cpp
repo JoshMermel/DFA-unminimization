@@ -135,13 +135,6 @@ void Circ_list::have_children(Vertex** vert_set)
 
 void Circ_list::remove(Node* begin, Node* end)
 {
-/*
-	if(begin->next->next == end)
-	{
-		cout << "fuckity fuck\n";
-		exit(1);
-	}
-*/
 	Node* temp = new Node;			// declare a temp node and make it the
 	temp -> next = begin -> next;		// beginning of a new linked list whose
 						// second node is the one after begin
@@ -186,16 +179,14 @@ bool Circ_list::is_done()
 
 Circ_list::~Circ_list()
 {
-	
 	start->prev->next=NULL;
 	while(start!=NULL)
 	{	
-		cout << start << endl;
 		Node *temp=start;
 		if(start->next==NULL){
-			cout << "next check\n";
-			delete start;
-			return;
+			start=NULL;
+			delete temp;
+			break;
 		}
 		else 
 			start=start->next;
