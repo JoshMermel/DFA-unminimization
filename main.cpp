@@ -1,10 +1,14 @@
 #include "circ_list.h"
 #include <iostream>
-#define FIRST 0
+#define FIRST 9
 using namespace std;
 
 int main(int argc, char* argv[])
 {
+	if(argc < 1)
+	{
+		cout << "This program takes in one parameter: the start vertex number.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
+	}
 	// determine how many vertices there are
 	int num_vertices;
 	cin >> num_vertices;
@@ -51,7 +55,7 @@ int main(int argc, char* argv[])
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
 	
-	Circ_list my_list(vert_set[FIRST]);
+	Circ_list my_list(vert_set[atoi(argv[1])-1]);
 
 	while(true)
 	{

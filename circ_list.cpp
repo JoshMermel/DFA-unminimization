@@ -53,7 +53,6 @@ void Circ_list::print_list(Node* begin)
 
 void Circ_list::check_forward()
 {
-	cout << "contracting forward\n";
 	Node* temp = start->next;
 	while(temp != start)
 	{
@@ -79,7 +78,6 @@ void Circ_list::check_forward()
 
 void Circ_list::check_backward()
 {
-	cout << "contracting backward\n";
 	Node* temp = start->prev;
 	while(temp != start)
 	{
@@ -123,13 +121,12 @@ void Circ_list::have_children(Vertex** vert_set)
 			start = start->next->next;
 		}
 	}
-	cout << "having children\n";
 	print_list(start);
-	start->vert->bit_print();
 	// incrememnt start to the next unsaturated node
 	while(start->vert->is_satisfied())
 	{
 		start = start->next;
+		cout << "01001";
 	}
 }
 
