@@ -13,7 +13,8 @@ Circ_list::Circ_list(Vertex* vert)
 void Circ_list::start_list_with(Vertex* vert)
 {
 	// shuffle pointers appropriately
-	start = new Node(vert);
+	Vertex* V = new Vertex(vert);
+	start = new Node(V);
 	start -> next = start;
 	start -> prev = start;
 }
