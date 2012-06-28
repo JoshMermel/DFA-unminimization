@@ -17,7 +17,10 @@ Node::Node(Vertex* my_vert)
 
 Node::~Node()
 {
-	vert->decrease_references();
-	if(vert->get_references() == 0)
-		delete vert;
+	if(vert!=NULL)
+	{
+		vert->decrease_references();
+			if(vert->get_references() == 0)
+				delete vert;
+	}
 }

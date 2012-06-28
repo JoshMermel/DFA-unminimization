@@ -64,6 +64,12 @@ int main(int argc, char* argv[])
 		{
 			//delete some dynamically allocated memory
 			cout << "I win!\n";
+			for(int i=0;i<num_vertices;i++)
+			{
+				delete vert_set[i];	
+			}
+			delete [] vert_set;
+			my_list.~Circ_list();
 			return 0;
 		}
 		// now look at what it is missing and create those nodes

@@ -150,17 +150,13 @@ void Circ_list::remove(Node* begin, Node* end)
 						// removed with NULL
 	begin -> next = end;			// contract the list so begin and end are
 	end -> prev = begin;			// adjacent
+
+	Node* tmp2 = temp;
 	while(temp != NULL)			// now read from temp until NULL
 	{
-						// deleting the Node before where you are
-		if(temp->next = NULL)
-		{
-			delete temp;
-			cout << "remove finished successfully\n";
-			return;
-		}
-		temp = temp -> next;
-		delete temp -> prev;	// as you read
+		tmp2 = temp;			// deleting the Node before where you are
+		temp = temp->next;
+		delete tmp2;
 	}
 }
 
@@ -186,4 +182,23 @@ bool Circ_list::is_done()
 	// if you get back to the start and have yet to see an unsatisfied vertex
 	// go ahead and return true
 	return true;
+}
+
+Circ_list::~Circ_list()
+{
+	
+	start->prev->next=NULL;
+	while(start!=NULL)
+	{	
+		cout << start << endl;
+		Node *temp=start;
+		if(start->next==NULL){
+			cout << "next check\n";
+			delete start;
+			return;
+		}
+		else 
+			start=start->next;
+		delete temp;
+	}
 }
