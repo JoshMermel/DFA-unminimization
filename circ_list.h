@@ -60,7 +60,6 @@ class Circ_list
 			//appropriately.  If you want to delete backward just
 			// switch the order of the parameters.
 		~Circ_list();
-	private:
 		Node* start;
 };
 
