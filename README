@@ -1,4 +1,4 @@
-This is a coding project by Josh Mermelstein in the summer of 2012 for the
+This is a coding project by Josh Mermelstein and Michael James in the summer of 2012 for the
 Tufts CS departament.  Its goal is to create a program that can take a
 non-planar graph and determine if there is a way to make it planar by copying
 any number of vertices while preserving connections.
@@ -10,7 +10,8 @@ the following is the format in which the program reads in a graph:
 the first line will be the number of vertices
 every subsequent line will represtent a new vertex whose index is the line
 number -1
-Each of these lines will end in a period.
+Each of these lines will end in a newline character.
+The program internally runs from 0->n-1 but all inputs and outputs should be from 1->n.
 
 some known information.
 
@@ -47,7 +48,7 @@ Ben:
 	Maybe decidable but worth considering that it is undecidable.
 	If it is decidable, then no vertex needs to be used more than twice
 Michael:
-	Probably undecidable
+	It could be anywhere from undecidable to NP-complete to P.
 Josh:
 	Probably decidable
 	If one can partition the verticies into two sets such that each set is
