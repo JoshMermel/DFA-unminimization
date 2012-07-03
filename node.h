@@ -21,10 +21,6 @@ class Node
 		~Node();
 		// the destructor.  It handles some reference counting issues.
 
-		// Note: there is intentionally not a destructor. Memory isn't being
-		// leaked by not handling deleting vert because the deleting of
-		// verticies is handled by main.
-
 		Vertex* vert;
 		Node* next;
 		Node* prev;
