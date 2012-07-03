@@ -3,6 +3,8 @@
 #define FIRST 9
 using namespace std;
 
+void graphContract(Vertex** vert_set, int num_verts);
+
 int main(int argc, char* argv[])
 {
 	if(argc < 1)
@@ -49,7 +51,8 @@ int main(int argc, char* argv[])
 		}
 			
 	}
-
+	
+	graphContract(vert_set, num_vertices);
 
 
 	// declare the circular doubly linked list and put the vertex whose index
@@ -86,3 +89,38 @@ int main(int argc, char* argv[])
 	cout << "flow got to the end of main - past the while loop\n";
 	exit(1);
 }
+//conract the graph so that there are no dangling nodes and so the graph is as simple as possible.  Thus there should be no tails no nodes with degree two or less.  This does not affect the math as these nodes could be trvially added back in after the algrorithm's expansion
+void graphContract(Vertex** vert_set, int num_verts)
+{
+	for(int i=0; i<num_verts; i++)
+	{
+		int boolcount=0;
+		for(int j=0;j<num_verts;j++)
+		{
+			if(vert_set[i]->neighbors[j]==0)
+				boolcount++;
+		}
+		if(boolcount<=2)
+		{
+			int vprev=0,vnext=0;
+			for(vprev; vprev<num_verts; vprev++)
+				if(vert_set[i]->neighbors[vprev]==0) break;
+			for(vnext=vprev; vnext<num_verts; vnext++)
+				if(vert_set[i]->neighbors[vnext]==0) break;
+			vert_set[vprev]->set(i,1); //perhaps "muting" will suffice for now
+			vert_set[i]->set(vprev,1);
+			vert_set[vnext]->set(i,1);
+			vert_set[i]->set(vprev,1);
+		}
+	/*	if(boolcount==1)
+		{
+			int k;
+			for(k=0; k<num_verts; k++)
+				if(vert_set[i]->neighbors[k]==0)
+					break;
+			vert_set[k]->set(i,1); //perhaps just "muting" the vertex will suffice
+			vert_set[i]->set(k,1);
+		}*/
+	}
+}
+
