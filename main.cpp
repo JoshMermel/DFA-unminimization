@@ -100,27 +100,32 @@ void graphContract(Vertex** vert_set, int num_verts)
 			if(vert_set[i]->neighbors[j]==0)
 				boolcount++;
 		}
-		if(boolcount<=2)
+		if(boolcount==2)
 		{
 			int vprev=0,vnext=0;
 			for(vprev; vprev<num_verts; vprev++)
 				if(vert_set[i]->neighbors[vprev]==0) break;
-			for(vnext=vprev; vnext<num_verts; vnext++)
+			vnext=vprev+1;
+			for(vnext; vnext<num_verts; vnext++)
 				if(vert_set[i]->neighbors[vnext]==0) break;
 			vert_set[vprev]->set(i,1); //perhaps "muting" will suffice for now
 			vert_set[i]->set(vprev,1);
 			vert_set[vnext]->set(i,1);
 			vert_set[i]->set(vprev,1);
+			//must reconnect
+			vert_set[vprev]->set(vnext,0);
+			vert_set[vnext]->set(vprev,0);
+			cout << "2) Contracting and connecting vertex " << vprev+1 << ", vertex " << i+1 << ", and vertex " << vnext+1 << endl;
 		}
-	/*	if(boolcount==1)
+		if(boolcount==1)
 		{
-			int k;
-			for(k=0; k<num_verts; k++)
-				if(vert_set[i]->neighbors[k]==0)
-					break;
-			vert_set[k]->set(i,1); //perhaps just "muting" the vertex will suffice
+			int k=0;
+			for(k;k<num_verts;k++)
+				if(vert_set[i]->neighbors[k]==0) break;
+			vert_set[k]->set(i,1);
 			vert_set[i]->set(k,1);
-		}*/
+			cout <<"1) Contracting vertex "<< k+1 << " and vertex " << i+1 <<endl;
+		}
 	}
 }
 
