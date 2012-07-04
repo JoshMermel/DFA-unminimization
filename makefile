@@ -12,3 +12,6 @@ node.o: node.cpp
 
 vertex.o: vertex.cpp
 	g++ -g -c vertex.cpp
+
+treeNode.o: treeNode.cpp
+	g++ -g -c treeNode.cpp
