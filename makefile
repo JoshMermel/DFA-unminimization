@@ -1,5 +1,3 @@
-export FIRST=1
-
 expand: main.o circ_list.o node.o vertex.o
 	g++ -g main.o circ_list.o node.o vertex.o -o expand
 
