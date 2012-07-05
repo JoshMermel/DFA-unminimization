@@ -19,8 +19,8 @@ class Vertex
 			// adds one to the number of references
 
 		bool decrease_references();
-			// subtracts one from the number of references and returns wheather
-			// or not the number of references is bigger that 0
+			// subtracts one from the number of references and returns true
+			// if the number of references is bigger that 0
 
 		int get_index();
 			// a getter for the private variable, index

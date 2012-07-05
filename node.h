@@ -1,7 +1,9 @@
 /*
- * node, by Josh Mermelstein
- * Written 6/13/12
+ *
+ * Node, by Josh Mermelstein and Michael James
+ * created 6/13/12
  * to be used as part of a circular doubly linked list.
+ *
  */
 
 #ifndef MERMEL_NODE

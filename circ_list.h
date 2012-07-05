@@ -1,12 +1,7 @@
 /*
- * Circ_list, by Josh Mermelstein.
+ * Circ_list, by Josh Mermelstein and Michael James
  * written 6/12/12
  * creates a circular doubly linked list of pointers to vertices
- * 
- * issue: main has a master set of verticies denoting what each vertex has and
- * wants.  We can't point to those objects because we will need copies of them
- * as they were.
- * solution: copy constructor?
  * 
  */
 
@@ -28,7 +23,8 @@ class Circ_list
 		void start_list_with(Vertex* vert);
 			// adding the first element to the list is slightly different
 			// than adding later elements so there is a specialized function
-			// for it.
+			// for it. It should only be called once during the running of
+			// this program
 
 		void add_to_list(Node* to_add, Node* prior);
 			// adds the node called to_add after the node call prior. 
@@ -36,7 +32,7 @@ class Circ_list
 		void print_list(Node* begin);
 			// given a start point, this function prints the list move forward
 			// from there stopping when it returns to the start point.
-			// ?add a paramter to signify direction?
+			// ?add a parameter to signify direction?
 
 		void check_forward();
 		void check_backward();
@@ -52,14 +48,18 @@ class Circ_list
 			// of the start pointer
 
 		bool is_done();
-			// checks if all verices in the list are satisfied or not.
+			// checks if all vertices in the list are satisfied or not.
 
 		void remove(Node* begin, Node* end);
 			// given a Node to start at, a node to end at it removes all
 			// nodes (forward direction) between the two references 
 			//appropriately.  If you want to delete backward just
 			// switch the order of the parameters.
+		
 		~Circ_list();
+			// the destructor for circ_list.  This function is only called
+			// after the program has successfully expanded a graph of if it
+			// receives a signal to stop running (to prevent memory leaks)
 		Node* start;
 };
 
