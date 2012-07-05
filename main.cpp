@@ -25,6 +25,7 @@ int main(int argc, char* argv[])
 		cout << "with 0\n";
 	}
     signal(SIGINT, signalHandler);
+	signal(SIGTERM, signalHandler);
     ifstream myfile(argv[2]);
     cout << argv[2] << endl;
     if(myfile.is_open())
@@ -164,8 +165,6 @@ void signalHandler(int signum)
 		delete vert_set[i];	
 	}
 	delete [] vert_set;
-	delete clist_ptr;
-	//clist_ptr(Circ_list)->~Circ_list();
+	clist_ptr->~Circ_list();
 	exit(signum);
 }
-

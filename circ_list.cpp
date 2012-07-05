@@ -106,7 +106,7 @@ void Circ_list::check_backward()
 	}
 }
 
-void Circ_list::have_children(Vertex** vert_set, vector<int>)
+void Circ_list::have_children(Vertex** vert_set)
 {
 	//must change to nondeterministic
 	for(int i = 0; i < start->vert->neighbors.size(); i++)
