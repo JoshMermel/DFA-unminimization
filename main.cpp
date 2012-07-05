@@ -1,11 +1,19 @@
 #include "circ_list.h"
 #include <iostream>
 #include <fstream>
+#include <csignal>
 
 #define FIRST 9
 using namespace std;
 
 void graphContract(Vertex** vert_set, int num_verts);
+bool recurser(Circ_list* list, Vertex** vert_set);
+void signalHandler(int signum);
+
+//Global variables so that signalHandler can do its work right.
+int num_vertices;
+Vertex** vert_set;
+void* clist_ptr;
 
 int main(int argc, char* argv[])
 {
@@ -13,9 +21,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "This program takes in two parameters: the start vertex number and then the location of the graph file.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
 	}
-    
-    int num_vertices;
-    Vertex** vert_set;
+    signal(SIGINT, signalHandler);
     ifstream myfile(argv[2]);
     cout << argv[2] << endl;
     if(myfile.is_open())
@@ -67,10 +73,11 @@ int main(int argc, char* argv[])
 	// is the same as the enviromental variable first into it to start it
 	
 	Circ_list my_list(vert_set[atoi(argv[1])-1]);
-    
-    my_list.print_list(my_list.start);
+    	clist_ptr=&my_list;
 
-	while(true)
+	my_list.print_list(my_list.start);
+
+	while(!my_list.is_done())
 	{
 		
 		// check forward and backward of the vertex to see if it want to
@@ -78,23 +85,19 @@ int main(int argc, char* argv[])
 		my_list.print_list(my_list.start);
 		my_list.check_forward();
 		my_list.print_list(my_list.start);
-		my_list.check_backward();
-		// check if we are done
-		if(my_list.is_done())
-		{
-			//delete some dynamically allocated memory
-			cout << "I win!\n";
-			for(int i=0;i<num_vertices;i++)
-			{
-				delete vert_set[i];	
-			}
-			delete [] vert_set;
-			return 0;
-		}
+		my_list.check_backward();			
 		// now look at what it is missing and create those nodes
 		my_list.print_list(my_list.start);
 		my_list.have_children(vert_set);
 	}
+	//delete some dynamically allocated memory
+	cout << "I win!\n";
+	for(int i=0;i<num_vertices;i++)
+	{
+		delete vert_set[i];	
+	}
+	delete [] vert_set;
+	return 0;
 
 	cout << "flow got to the end of main - past the while loop\n";
 	exit(1);
@@ -104,13 +107,13 @@ void graphContract(Vertex** vert_set, int num_verts)
 {
 	for(int i=0; i<num_verts; i++)
 	{
-		int boolcount=0;
+		int degreecount=0;
 		for(int j=0;j<num_verts;j++)
 		{
 			if(vert_set[i]->neighbors[j]==0)
-				boolcount++;
+				degreecount++;
 		}
-		if(boolcount==2)
+		if(degreecount==2)
 		{
 			int vprev=0,vnext=0;
 			for(vprev; vprev<num_verts; vprev++)
@@ -127,7 +130,7 @@ void graphContract(Vertex** vert_set, int num_verts)
 			vert_set[vnext]->set(vprev,0);
 			cout << "2) Contracting and connecting vertex " << vprev+1 << ", vertex " << i+1 << ", and vertex " << vnext+1 << endl;
 		}
-		if(boolcount==1)
+		if(degreecount==1)
 		{
 			int k=0;
 			for(k;k<num_verts;k++)
@@ -137,5 +140,21 @@ void graphContract(Vertex** vert_set, int num_verts)
 			cout <<"1) Contracting vertex "<< k+1 << " and vertex " << i+1 <<endl;
 		}
 	}
+}
+
+bool recurser(Circ_list* list, Vertex** vert_set)
+{
+}
+
+void signalHandler(int signum)
+{
+	cout << "CAUGHT INTERRUPT [" << signum << "], QUITTING..." << endl;
+	for(int i=0;i<num_vertices;i++)
+	{
+		delete vert_set[i];	
+	}
+	delete [] vert_set;
+	clist_ptr->~Circ_list();
+	exit(signum);
 }
 

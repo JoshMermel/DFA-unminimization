@@ -25,14 +25,6 @@ treeNode* treeNode::removeChild(treeNode* list)
 {
     
 }
-void treeNode::graft(treeNode* t)
-{
-    
-}
-treeNode* treeNode::prune(Circ_list* list)
-{
-    
-}
 treeNode::~treeNode()
 {
     

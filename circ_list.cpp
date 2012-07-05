@@ -69,7 +69,7 @@ void Circ_list::check_forward()
 				remove(start, temp);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything\n";
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything right now\n";
 			return;
 		}
 		temp = temp -> next;
@@ -93,7 +93,7 @@ void Circ_list::check_backward()
 				remove(temp, start);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything\n";
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything right now\n";
 			return;
 		}
 		temp = temp -> prev;
@@ -121,11 +121,15 @@ void Circ_list::have_children(Vertex** vert_set)
 			start = start->next->next;
 		}
 	}	
-	// incrememnt start to the next unsaturated node
-	while(start->vert->is_satisfied())
+	// increment start to the next unsaturated node and make sure I don't loop.
+	// neighbors.size() is equivalent to num_vertices, and so I can pick any
+	//place in the vert set
+	int i=0;
+	while(start->vert->is_satisfied() && i < vert_set[0]->neighbors.size())
 	{
 		cout << "Vertex " << start->vert->index+1 << " is happy.\n";
 		start = start->next;
+		i++;
 	}
 }
 

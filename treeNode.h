@@ -23,24 +23,16 @@ public:
     //NOTE: This should be the root and should only be called once.
     
     treeNode(treeNode* t);
-    //PRECONDITION: 
-    //POSTCONDITION:
+    //PRECONDITION: t must be valid 
+    //POSTCONDITION: This will be used as a copy constructor
     
     void addChild(treeNode* t);
-    //PRECONDITION: 
+    //PRECONDITION: none
     //POSTCONDITION:
     
     treeNode* removeChild(treeNode* t);
-    //PRECONDITION: 
-    //POSTCONDITION:
-    
-    void graft(treeNode* t);
-    //PRECONDITION: 
-    //POSTCONDITION:
-    
-    treeNode* prune(Circ_list* list);
-    //PRECONDITION: 
-    //POSTCONDITION:
+    //PRECONDITION: treeNode must have at least one child
+    //POSTCONDITION: returns the removed child
     
     ~treeNode();
     //PRECONDITION: 
