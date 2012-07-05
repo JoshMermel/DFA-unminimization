@@ -141,9 +141,10 @@ void graphContract(Vertex** vert_set, int num_verts)
 		}
 	}
 }
-
+//The idea is that recurser will spawn off copies of itself with different permutations of possible orderings to try.  A wining branch will return true and collapse everything.
 bool recurser(Circ_list* list, Vertex** vert_set)
 {
+	
 }
 
 void signalHandler(int signum)
