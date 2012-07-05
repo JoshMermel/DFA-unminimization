@@ -1,5 +1,7 @@
 #include "circ_list.h"
 #include <iostream>
+#include <fstream>
+
 #define FIRST 9
 using namespace std;
 
@@ -7,58 +9,89 @@ void graphContract(Vertex** vert_set, int num_verts);
 
 int main(int argc, char* argv[])
 {
-	if(argc < 1)
+	if(argc < 2)
 	{
-		cout << "This program takes in one parameter: the start vertex number.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
+		cout << "This program takes in two parameters: the start vertex number and then the location of the graph file.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
 	}
-	// determine how many vertices there are
-	int num_vertices;
-	cin >> num_vertices;
-	// purges a newline from the stream
-	cin.get();
+    
+    int num_vertices;
+    Vertex** vert_set;
+    ifstream myfile(argv[2]);
+    cout << argv[2] << endl;
+    if(myfile.is_open())
+    {
+        while(!myfile.eof())
+        {
+            // determine how many vertices there are
+            
+            string line;
+            getline(myfile,line);
+            num_vertices=atoi(line.c_str());
+            // purges a newline from the stream
+            //cin.get();
 
-	// create an array to store them
-	Vertex** vert_set = new Vertex*[num_vertices];
-	// read them into that array
-	char temp;
-	string temp_string;
-	
-	// for each vertex
-	for(int i = 0; i < num_vertices; i++)
-	{
-		// create an object to hold the data
-		vert_set[i] = new Vertex(i, num_vertices);
-		// read until you see a newline
-		//this is a garbage value to be rewritten by the following loop
-		temp = 'b';
-		while(1)
-		{
-			temp_string = "";
-			if(temp == '\n')
-				break;
-			temp = cin.get();
-			//r read until you see a space
-			while(1)
-			{
-				if(temp == ' ' || temp=='\n')
-					break;
-				//concatonate newly read chars onto temp_string
-				temp_string += temp;
-				temp = cin.get();
-			}
-			// set the vertex to know that it needs what was just found
-			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
-		}
+            // create an array to store them
+            vert_set = new Vertex*[num_vertices];
+            // read them into that array
+            char temp;
+            string temp_string;
+            
+            // for each vertex
+            for(int i = 0; i < num_vertices; i++)
+            {
+                // create an object to hold the data
+                vert_set[i] = new Vertex(i, num_vertices);
+                /*
+                 // read until you see a newline
+                 //this is a garbage value to be rewritten by the following loop
+                 temp = 'b';
+                 while(temp != '\n')
+                 {
+                 temp_string = "";
+                 temp = cin.get();
+                 //r read until you see a space
+                 while(temp != ' ' && temp != '\n')
+                 {
+                    //concatonate newly read chars onto temp_string
+                    temp_string += temp;
+                    temp = cin.get();
+                 }
+                // set the vertex to know that it needs what was just found
+                 vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+                 }
+                 */
+                for (int j = 0; j < num_vertices; j++) {
+                    getline(myfile, temp_string, ' ');
+                    vert_set[i]->set(atoi(temp_string.c_str())-1,0);
+                    cout << "check: "<< temp_string << endl;
+                    temp_string="";
+                }
 			
-	}
-	
+            }
+        }
 	graphContract(vert_set, num_vertices);
+    myfile.close();
+    }
+    else
+    {
+        cout << "BAD FILENAME.  HAVE A NICE DAY AND SOME CAKE." << endl;
+        exit(-2);
+    }
+    
+    cout << "test" << endl;
+    
+    for (int i = 0; i < num_vertices; i++) {
+            vert_set[i]->bit_print();
+    }
+    exit(-10);
 
 
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
 	
 	Circ_list my_list(vert_set[atoi(argv[1])-1]);
+    
+    my_list.print_list(my_list.start);
 
 	while(true)
 	{
