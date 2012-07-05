@@ -65,11 +65,14 @@ void Circ_list::check_forward()
 				start->vert->set((temp->vert->index), true);
 				temp->vert->set((start->vert->index), true);
 				// also remove all vertices between them.
-				cout << "Removing between vertex " << start->vert->index+1 << " and vertex " << temp->vert->index+1 << endl;
+				cout << "Removing between vertex " << 
+					start->vert->index+1 << 
+					" and vertex " << temp->vert->index+1 << endl;
 				remove(start, temp);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything right now\n";
+			cout << "Vertex "<< temp->vert->index+1<< 
+				" doesn't need anything right now\n";
 			return;
 		}
 		temp = temp -> next;
@@ -89,25 +92,30 @@ void Circ_list::check_backward()
 				start->vert->set((temp->vert->index), true);
 				temp->vert->set((start->vert->index), true);
 				// also remove all vertices between them.
-				cout << "Removing between vertex " << start->vert->index+1 << " and vertex " << temp->vert->index+1 << endl;
+				cout << "Removing between vertex " << 
+					start->vert->index+1 << " and vertex " <<
+					temp->vert->index+1 << endl;
 				remove(temp, start);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything right now\n";
+			cout << "Vertex "<< temp->vert->index+1<<
+			 " doesn't need anything right now\n";
 			return;
 		}
 		temp = temp -> prev;
 	}
 }
 
-void Circ_list::have_children(Vertex** vert_set)
+void Circ_list::have_children(Vertex** vert_set, vector<int>)
 {
+	//must change to nondeterministic
 	for(int i = 0; i < start->vert->neighbors.size(); i++)
 	{
 		// check if it needs a vertex
 		if(start->vert->is_needed(i))
 		{
-				cout << "Vertex " << start->vert->index+1 << " needs vertex " << i+1 << endl;
+			cout << "Vertex " << start->vert->index+1 << 
+			" needs vertex " << i+1 << endl;
 			// create that vertex and add it after start
 			Vertex* temp_vert = new Vertex(vert_set[i]);
 			Node* temp_node = new Node(temp_vert);
@@ -121,11 +129,13 @@ void Circ_list::have_children(Vertex** vert_set)
 			start = start->next->next;
 		}
 	}	
-	// increment start to the next unsaturated node and make sure I don't loop.
-	// neighbors.size() is equivalent to num_vertices, and so I can pick any
-	//place in the vert set
+	// increment start to the next unsaturated node 
+	// and make sure I don't loop.
+	// neighbors.size() is equivalent to num_vertices,
+	// and so I can pick and place in the vert set
 	int i=0;
-	while(start->vert->is_satisfied() && i < vert_set[0]->neighbors.size())
+	while(start->vert->is_satisfied() &&
+		 i < vert_set[0]->neighbors.size())
 	{
 		cout << "Vertex " << start->vert->index+1 << " is happy.\n";
 		start = start->next;
@@ -135,19 +145,19 @@ void Circ_list::have_children(Vertex** vert_set)
 
 void Circ_list::remove(Node* begin, Node* end)
 {
-	Node* temp = new Node;			// declare a temp node and make it the
-	temp -> next = begin -> next;		// beginning of a new linked list whose
-						// second node is the one after begin
-	temp -> next -> prev = temp;		// correct that node's prev pointer
-	end -> prev -> next = NULL;		// replace the end of the segment to be
-						// removed with NULL
-	begin -> next = end;			// contract the list so begin and end are
-	end -> prev = begin;			// adjacent
+	Node* temp = new Node;		// declare a temp node and make it the
+	temp -> next = begin -> next;	// beginning of a new linked list whose
+					// second node is the one after begin
+	temp -> next -> prev = temp;	// correct that node's prev pointer
+	end -> prev -> next = NULL;	// replace the end of the segment to be
+					// removed with NULL
+	begin -> next = end;		// contract the list so begin and end are
+	end -> prev = begin;		// adjacent
 
 	Node* tmp2 = temp;
-	while(temp != NULL)			// now read from temp until NULL
+	while(temp != NULL)		// now read from temp until NULL
 	{
-		tmp2 = temp;			// deleting the Node before where you are
+		tmp2 = temp;		// deleting the Node before where you are
 		temp = temp->next;
 		delete tmp2;
 	}
