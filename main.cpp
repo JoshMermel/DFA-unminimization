@@ -14,15 +14,19 @@ vector<int> permute(Vertex** vert_set);
 //Global variables so that signalHandler can do its work right.
 int num_vertices;
 Vertex** vert_set;
-void* clist_ptr;
+Circ_list* clist_ptr;
 
 int main(int argc, char* argv[])
 {
 	if(argc < 2)
 	{
-		cout << "This program takes in two parameters: the start vertex number and then the location of the graph file.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
+		cout << "This program takes in 2 parameters: the start vertex number ";
+		cout << "and then the location of the graph file.  The 1st vertex is ";
+		cout << "number 1.  Do not be confused that under the hood we start ";
+		cout << "with 0\n";
 	}
     signal(SIGINT, signalHandler);
+	signal(SIGTERM, signalHandler);
     ifstream myfile(argv[2]);
     cout << argv[2] << endl;
     if(myfile.is_open())
@@ -53,7 +57,9 @@ int main(int argc, char* argv[])
                     vert_set[i]->set(atoi(temp_string.c_str())-1,0);
                     temp_string="";
                 }
-                // This must be done so that getline can take the last char in the line.  It is delineated with a \n, so getline must be able to handle that
+                // This must be done so that getline can take the last char in
+				//the line.  It is delineated with a \n, so getline must be
+				//able to handle that
                 getline(myfile, temp_string);
                 vert_set[i]->set(atoi(temp_string.c_str())-1,0);
                 temp_string="";
@@ -106,7 +112,10 @@ int main(int argc, char* argv[])
 	cout << "flow got to the end of main - past the while loop\n";
 	exit(1);
 }
-//conract the graph so that there are no dangling nodes and so the graph is as simple as possible.  Thus there should be no tails no nodes with degree two or less.  This does not affect the math as these nodes could be trvially added back in after the algrorithm's expansion
+// conract the graph so that there are no dangling nodes and so the graph is
+// as simple as possible.  Thus there should be no tails no nodes with degree
+// two or less.  This does not affect the math as these nodes could be trvially
+// added back in after the algrorithm's expansion
 void graphContract(Vertex** vert_set, int num_verts)
 {
 	for(int i=0; i<num_verts; i++)
@@ -132,7 +141,8 @@ void graphContract(Vertex** vert_set, int num_verts)
 			//must reconnect
 			vert_set[vprev]->set(vnext,0);
 			vert_set[vnext]->set(vprev,0);
-			cout << "2) Contracting and connecting vertex " << vprev+1 << ", vertex " << i+1 << ", and vertex " << vnext+1 << endl;
+			cout << "2) Contracting and connecting vertex " << vprev+1 <<
+					", vertex " << i+1 << ", and vertex " << vnext+1 << endl;
 		}
 		if(degreecount==1)
 		{
