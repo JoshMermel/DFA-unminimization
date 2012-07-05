@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		cout << "with 0\n";
 	}
     signal(SIGINT, signalHandler);
-	signal(SIGTERM, signalHandler);
+    signal(SIGTERM, signalHandler);
     ifstream myfile(argv[2]);
     cout << argv[2] << endl;
     if(myfile.is_open())
@@ -177,5 +177,5 @@ void signalHandler(int signum)
 
 vector<int> permute(Vertex** vert_set)
 {
-
+	
 }
