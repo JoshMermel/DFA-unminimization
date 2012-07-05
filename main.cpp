@@ -18,7 +18,7 @@ Circ_list* clist_ptr;
 
 int main(int argc, char* argv[])
 {
-	if(argc < 1)
+	if(argc < 2)
 	{
 		cout << "This program takes in 2 parameters: the start vertex number ";
 		cout << "and then the location of the graph file.  The 1st vertex is ";
