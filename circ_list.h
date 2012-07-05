@@ -11,6 +11,7 @@
 #include <cmath>
 #include "vertex.h"
 #include "node.h"
+#include <vector>
 
 using namespace std;
 
@@ -36,7 +37,7 @@ class Circ_list
 
 		void check_forward();
 		void check_backward();
-		void have_children(Vertex** vert_set);
+		void have_children(Vertex** vert_set, vector<int>  permutations);
 			// these three functions should always be called in this order.
 			// The first two check forward and backward for the first
 			// non-saturated vertex and if it is one that can pair with the

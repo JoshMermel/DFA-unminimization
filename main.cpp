@@ -9,6 +9,7 @@ using namespace std;
 void graphContract(Vertex** vert_set, int num_verts);
 bool recurser(Circ_list* list, Vertex** vert_set);
 void signalHandler(int signum);
+vector<int> permute(Vertex** vert_set);
 
 //Global variables so that signalHandler can do its work right.
 int num_vertices;
@@ -83,6 +84,8 @@ int main(int argc, char* argv[])
 
 	my_list.print_list(my_list.start);
 
+	vector<int> perm;
+
 	while(!my_list.is_done())
 	{
 		
@@ -94,7 +97,8 @@ int main(int argc, char* argv[])
 		my_list.check_backward();			
 		// now look at what it is missing and create those nodes
 		my_list.print_list(my_list.start);
-		my_list.have_children(vert_set);
+		perm = permute(vert_set);
+		my_list.have_children(vert_set, perm);
 	}
 	//delete some dynamically allocated memory
 	cout << "I win!\n";
@@ -169,4 +173,9 @@ void signalHandler(int signum)
 	delete [] vert_set;
 	clist_ptr->~Circ_list();
 	exit(signum);
+}
+
+vector<int> permute(Vertex** vert_set)
+{
+
 }

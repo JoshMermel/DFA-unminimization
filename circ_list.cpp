@@ -106,28 +106,25 @@ void Circ_list::check_backward()
 	}
 }
 
-void Circ_list::have_children(Vertex** vert_set)
+void Circ_list::have_children(Vertex** vert_set, vector<int> permutations)
 {
-	//must change to nondeterministic
-	for(int i = 0; i < start->vert->neighbors.size(); i++)
+	// iterate through the list of permutations
+	vector<int>::iterator it;
+	for(it=permutations.begin(); it < permutations.end(); it++)
 	{
-		// check if it needs a vertex
-		if(start->vert->is_needed(i))
-		{
-			cout << "Vertex " << start->vert->index+1 << 
-			" needs vertex " << i+1 << endl;
-			// create that vertex and add it after start
-			Vertex* temp_vert = new Vertex(vert_set[i]);
-			Node* temp_node = new Node(temp_vert);
-			add_to_list(temp_node, start);
-			temp_vert->set((start->vert->index), true);
-			// copy whatever vertex start pointed to after that vertex
-			start->vert->set(i, true);
-			temp_node = new Node(start->vert);
-			start->vert->increase_references();
-			add_to_list(temp_node, start->next);
-			start = start->next->next;
-		}
+		cout << "Vertex " << start->vert->index+1 << 
+		" needs vertex " << *it+1 << endl;
+		// create that vertex and add it after start
+		Vertex* temp_vert = new Vertex(vert_set[*it]);
+		Node* temp_node = new Node(temp_vert);
+		add_to_list(temp_node, start);
+		temp_vert->set((start->vert->index), true);
+		// copy whatever vertex start pointed to after that vertex
+		start->vert->set(*it, true);
+		temp_node = new Node(start->vert);
+		start->vert->increase_references();
+		add_to_list(temp_node, start->next);
+		start = start->next->next;
 	}	
 	// increment start to the next unsaturated node 
 	// and make sure I don't loop.
