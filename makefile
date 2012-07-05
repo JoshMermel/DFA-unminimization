@@ -1,8 +1,8 @@
 expand: main.o circ_list.o node.o vertex.o
-	g++ -g main.o circ_list.o node.o vertex.o -o expand
+	g++ -g main.o circ_list.o node.o vertex.o -o expand -lpthread
 
 main.o: main.cpp
-	g++ -g -c main.cpp
+	g++ -g -c main.cpp -lpthread
 
 circ_list.o: circ_list.cpp
 	g++ -g -c circ_list.cpp
@@ -12,6 +12,3 @@ node.o: node.cpp
 
 vertex.o: vertex.cpp
 	g++ -g -c vertex.cpp
-
-treeNode.o: treeNode.cpp
-	g++ -g -c treeNode.cpp

@@ -21,6 +21,11 @@ class Circ_list
 		Circ_list(Vertex* vert);
 			// the default constructor for the class
 		
+		Circ_list(Circ_list* list);
+			// copy constructor, goes through the list and makes a copy
+			//PRECONDITIONS: The list has at least one element and no
+			//	pointer points to NULL
+						
 		void start_list_with(Vertex* vert);
 			// adding the first element to the list is slightly different
 			// than adding later elements so there is a specialized function

@@ -9,6 +9,17 @@ Circ_list::Circ_list(Vertex* vert)
 	start_list_with(vert);
 }
 
+Circ_list::Circ_list(Circ_list* list) //UNFINISHED
+{
+	Node* ptr = list->start;
+	start = new Node(ptr->vert);
+	while(ptr->vert!=NULL)
+	{
+
+		ptr=ptr->next;
+	}
+}
+
 // insert the first node into the list
 void Circ_list::start_list_with(Vertex* vert)
 {
@@ -106,6 +117,7 @@ void Circ_list::check_backward()
 	}
 }
 
+//UNFINISHED
 void Circ_list::have_children(Vertex** vert_set, vector<int> permutations)
 {
 	// iterate through the list of permutations
