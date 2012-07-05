@@ -7,7 +7,7 @@ void graphContract(Vertex** vert_set, int num_verts);
 
 int main(int argc, char* argv[])
 {
-	if(argc < 1)
+	if(argc < 2)
 	{
 		cout << "This program takes in one parameter: the start vertex number.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
 	}
