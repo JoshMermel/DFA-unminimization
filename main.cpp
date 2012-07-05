@@ -20,8 +20,6 @@ int main(int argc, char* argv[])
     cout << argv[2] << endl;
     if(myfile.is_open())
     {
-        while(!myfile.eof())
-        {
             // determine how many vertices there are
             
             string line;
@@ -40,34 +38,20 @@ int main(int argc, char* argv[])
             for(int i = 0; i < num_vertices; i++)
             {
                 // create an object to hold the data
-                vert_set[i] = new Vertex(i, num_vertices);
-                /*
-                 // read until you see a newline
-                 //this is a garbage value to be rewritten by the following loop
-                 temp = 'b';
-                 while(temp != '\n')
-                 {
-                 temp_string = "";
-                 temp = cin.get();
-                 //r read until you see a space
-                 while(temp != ' ' && temp != '\n')
-                 {
-                    //concatonate newly read chars onto temp_string
-                    temp_string += temp;
-                    temp = cin.get();
-                 }
-                // set the vertex to know that it needs what was just found
-                 vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
-                 }
-                 */
-                for (int j = 0; j < num_vertices; j++) {
+                vert_set[i] = new Vertex(i, num_vertices);                
+                // The range is adjusted so that the last number is excluded.
+                for (int j = 1; j < num_vertices-1; j++) 
+                {
                     getline(myfile, temp_string, ' ');
                     vert_set[i]->set(atoi(temp_string.c_str())-1,0);
-                    cout << "check: "<< temp_string << endl;
                     temp_string="";
                 }
+                // This must be done so that getline can take the last char in the line.  It is delineated with a \n, so getline must be able to handle that
+                getline(myfile, temp_string);
+                vert_set[i]->set(atoi(temp_string.c_str())-1,0);
+                temp_string="";
 			
-            }
+            
         }
 	graphContract(vert_set, num_vertices);
     myfile.close();
@@ -77,13 +61,6 @@ int main(int argc, char* argv[])
         cout << "BAD FILENAME.  HAVE A NICE DAY AND SOME CAKE." << endl;
         exit(-2);
     }
-    
-    cout << "test" << endl;
-    
-    for (int i = 0; i < num_vertices; i++) {
-            vert_set[i]->bit_print();
-    }
-    exit(-10);
 
 
 	// declare the circular doubly linked list and put the vertex whose index
