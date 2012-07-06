@@ -21,6 +21,11 @@ class Circ_list
 		Circ_list(Vertex* vert);
 			// the default constructor for the class
 		
+		Circ_list(Circ_list* list);
+			// copy constructor, goes through the list and makes a copy
+			//PRECONDITIONS: The list has at least one element and no
+			//	pointer points to NULL
+						
 		void start_list_with(Vertex* vert);
 			// adding the first element to the list is slightly different
 			// than adding later elements so there is a specialized function
@@ -37,7 +42,7 @@ class Circ_list
 
 		void check_forward();
 		void check_backward();
-		void have_children(Vertex** vert_set, vector<int>  permutations);
+		Circ_list have_children(Vertex** vert_set, vector<int>  permutation);
 			// these three functions should always be called in this order.
 			// The first two check forward and backward for the first
 			// non-saturated vertex and if it is one that can pair with the
@@ -47,6 +52,10 @@ class Circ_list
 			// satisfied and creates appropriate vertices and adjusts the
 			// circular linked list as appropriate.  It all adjusts the value
 			// of the start pointer
+            //
+            // PRECONDITION: permutation is a vector full of ints which
+            //      correspond with the index of the vertices that start needs.
+            // POSTCONDITION: outputs the changed circ_list
 
 		bool is_done();
 			// checks if all vertices in the list are satisfied or not.

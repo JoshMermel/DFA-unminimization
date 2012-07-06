@@ -2,12 +2,19 @@
 #include <iostream>
 #include <fstream>
 #include <csignal>
+#include <pthread.h>
+#include <stdlib.h>
 
-#define FIRST 9
 using namespace std;
 
+struct argbottle
+{
+	Circ_list* clist;
+	Vertex** vset;
+};
+
 void graphContract(Vertex** vert_set, int num_verts);
-bool recurser(Circ_list* list, Vertex** vert_set);
+void* recurser(void* b);
 void signalHandler(int signum);
 vector<int> permute(Vertex** vert_set);
 
@@ -15,6 +22,7 @@ vector<int> permute(Vertex** vert_set);
 int num_vertices;
 Vertex** vert_set;
 Circ_list* clist_ptr;
+bool found = false;
 
 int main(int argc, char* argv[])
 {
@@ -24,9 +32,10 @@ int main(int argc, char* argv[])
 		cout << "and then the location of the graph file.  The 1st vertex is ";
 		cout << "number 1.  Do not be confused that under the hood we start ";
 		cout << "with 0\n";
+		exit(-1);
 	}
     signal(SIGINT, signalHandler);
-	signal(SIGTERM, signalHandler);
+    signal(SIGTERM, signalHandler);
     ifstream myfile(argv[2]);
     cout << argv[2] << endl;
     if(myfile.is_open())
@@ -86,7 +95,7 @@ int main(int argc, char* argv[])
 
 	vector<int> perm;
 
-	while(!my_list.is_done())
+	/*while(!my_list.is_done())
 	{
 		
 		// check forward and backward of the vertex to see if it want to
@@ -97,9 +106,17 @@ int main(int argc, char* argv[])
 		my_list.check_backward();			
 		// now look at what it is missing and create those nodes
 		my_list.print_list(my_list.start);
-		perm = permute(vert_set);
+		//perm = permute(vert_set);
 		my_list.have_children(vert_set, perm);
-	}
+	}*/
+    
+	pthread_t recurse;
+	argbottle bottle;
+	bottle.clist=clist_ptr;
+	bottle.vset=vert_set;
+	pthread_create(&recurse, NULL, recurser, (void*)&bottle);
+	pthread_join(recurse, NULL);
+
 	//delete some dynamically allocated memory
 	cout << "I win!\n";
 	for(int i=0;i<num_vertices;i++)
@@ -142,7 +159,8 @@ void graphContract(Vertex** vert_set, int num_verts)
 			vert_set[vprev]->set(vnext,0);
 			vert_set[vnext]->set(vprev,0);
 			cout << "2) Contracting and connecting vertex " << vprev+1 <<
-					", vertex " << i+1 << ", and vertex " << vnext+1 << endl;
+					", vertex " << i+1 << ", and vertex " 
+					<< vnext+1 << endl;
 		}
 		if(degreecount==1)
 		{
@@ -157,10 +175,39 @@ void graphContract(Vertex** vert_set, int num_verts)
 }
 // The idea is that recurser will spawn off copies of itself with different
 // permutations of possible orderings to try.  A wining branch will return 
-// true and collapse everything.
-bool recurser(Circ_list* list, Vertex** vert_set)
+// true and collapse everything.  Note that we are not dealing with pointers
+// this is so that when the program forks, each fork will have its own memory.
+// PRECONDITION: bottle is already setup and this function is called as a thread.
+// POSTCONDITION: many many copies of the circ_list and vert_set will exist in memory
+void* recurser(void* b)
 {
-	
+    if(found)
+    {
+        int a=0;
+        return (void*)a;
+    }
+	if(((argbottle *)b)->clist->is_done())
+	{
+		found = true;
+        return (void*) b;
+	}
+
+    // this is where the permuter goes.  The logic should go:
+    // for each permutation have children as a different thread.
+	/*
+     {
+     //make the copies
+     argbottle* bottle;
+     bottle->clist = new Circ_list(((argbottle *)b)->clist);
+     bottle->vset = new Vertex*[num_vertices];
+     for (int i=0; i<num_vertices; i++) {
+     bottle->vset[i]=new Vertex(((argbottle*)b)->vset[i]);bottle->clist->have_children(bottle.vset);
+     }
+     //run the checks
+     bottle->clist->check_forward();
+     bottle->clist->check_backward();
+	pthread_t fork1;
+	pthread_create(&fork1,NULL,recurser, b);	}*/
 }
 
 void signalHandler(int signum)
@@ -177,5 +224,6 @@ void signalHandler(int signum)
 
 vector<int> permute(Vertex** vert_set)
 {
-
+	
 }
+

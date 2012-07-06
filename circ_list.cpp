@@ -9,6 +9,22 @@ Circ_list::Circ_list(Vertex* vert)
 	start_list_with(vert);
 }
 
+Circ_list::Circ_list(Circ_list* list) //UNTESTED
+{
+    //Copy start and set it up
+	Node* remote_ptr = list->start;
+    start = new Node(remote_ptr->vert);
+    start->next=start;
+    start->prev=start;
+    
+    //continuously add new nodes to match the remote list
+	while(remote_ptr->vert!=NULL)
+	{
+        add_to_list(new Node(remote_ptr->vert), start);
+		remote_ptr=remote_ptr->next;
+	}
+}
+
 // insert the first node into the list
 void Circ_list::start_list_with(Vertex* vert)
 {
@@ -106,11 +122,12 @@ void Circ_list::check_backward()
 	}
 }
 
-void Circ_list::have_children(Vertex** vert_set, vector<int> permutations)
+//UNFINISHED
+Circ_list Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 {
-	// iterate through the list of permutations
+	// iterate through the permutation
 	vector<int>::iterator it;
-	for(it=permutations.begin(); it < permutations.end(); it++)
+	for(it=permutation.begin(); it < permutation.end(); it++)
 	{
 		cout << "Vertex " << start->vert->index+1 << 
 		" needs vertex " << *it+1 << endl;
@@ -138,6 +155,7 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> permutations)
 		start = start->next;
 		i++;
 	}
+    return this;
 }
 
 void Circ_list::remove(Node* begin, Node* end)
