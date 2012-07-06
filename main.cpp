@@ -22,6 +22,7 @@ vector<int> permute(Vertex** vert_set);
 int num_vertices;
 Vertex** vert_set;
 Circ_list* clist_ptr;
+bool found = false;
 
 int main(int argc, char* argv[])
 {
@@ -94,7 +95,7 @@ int main(int argc, char* argv[])
 
 	vector<int> perm;
 
-	while(!my_list.is_done())
+	/*while(!my_list.is_done())
 	{
 		
 		// check forward and backward of the vertex to see if it want to
@@ -107,7 +108,8 @@ int main(int argc, char* argv[])
 		my_list.print_list(my_list.start);
 		//perm = permute(vert_set);
 		my_list.have_children(vert_set, perm);
-	}
+	}*/
+    
 	pthread_t recurse;
 	argbottle bottle;
 	bottle.clist=clist_ptr;
@@ -179,15 +181,33 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list and vert_set will exist in memory
 void* recurser(void* b)
 {
-	/*if(done)
+    if(found)
+    {
+        int a=0;
+        return (void*)a;
+    }
+	if(((argbottle *)b)->clist->is_done())
 	{
-		stop everything and return
-	}*/
-/*	((argbottle *)b)->clist->check_forward();
-	bottle.clist.check_backward();
-	bottle.clist.have_children(bottle.vset);
+		found = true;
+        return (void*) b;
+	}
+
+    // this is where the permuter goes.  The logic should go:
+    // for each permutation have children as a different thread.
+	/*
+     {
+     //make the copies
+     argbottle* bottle;
+     bottle->clist = new Circ_list(((argbottle *)b)->clist);
+     bottle->vset = new Vertex*[num_vertices];
+     for (int i=0; i<num_vertices; i++) {
+     bottle->vset[i]=new Vertex(((argbottle*)b)->vset[i]);bottle->clist->have_children(bottle.vset);
+     }
+     //run the checks
+     bottle->clist->check_forward();
+     bottle->clist->check_backward();
 	pthread_t fork1;
-	pthread_create(&fork1,NULL,recurser, b);	*/
+	pthread_create(&fork1,NULL,recurser, b);	}*/
 }
 
 void signalHandler(int signum)
