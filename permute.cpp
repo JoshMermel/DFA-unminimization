@@ -1,42 +1,45 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-// this is an implemention of the Johnson Trotter algorithm
+// This is an implemention of the Johnson-Trotter algorithm written by Josh
+// Mermelstein on 7/06/12
 
 struct int_bool 
 {
 	int num;
 	bool left;
+	// this bool determines wheather the number is facing right or left
 };
-/*
-bool is_done(int_bool data[], int arraysize);
-bool is_mobile(int_bool data[], int index, int arraysize);
-int get_biggest_mobile_index(int_bool data[], int arraysize);
-void swap(int_bool data[], int index, int arraysize);
-void reverse(int_bool data[], int val, int arraysize);
-vector<vector<int> > permute(vector<int> ordered);
-*/
+
 bool is_mobile(int_bool data[], int index, int arraysize)
 {
+	//return false if:
+	//if the number is on the far left and is facing left
 	if(index == 0 && data[index].left)
 	{
 		return false;
 	}
+	//or on the far right facing right
 	if(index == arraysize-1 && !data[index].left)
 	{
 		return false;
 	}
+	//or facing left but smaller than its left neighbor
 	if(data[index].left && data[index].num < data[index-1].num)
 	{
 		return false;
 	}
+	//or facing right but smaller than its right neighbor
 	if(!data[index].left && data[index].num < data[index+1].num)
 	{
 		return false;
 	}
+	//if none of those things happened, return true.
 	return true;
 }
 
+//the program ends when there are no "mobile" numbers.  This function checks
+//for mobile numbers and returns true only if it finds them.
 bool is_done(int_bool data[], int arraysize)
 {
 	for(int i = 0; i < arraysize; i++)
@@ -49,6 +52,8 @@ bool is_done(int_bool data[], int arraysize)
 	return true;
 }
 
+// this implements a step of the algorithm which is to reverse the direction of
+// a given number if it is bigger than the one that just switched.
 void reverse(int_bool data[], int val, int arraysize)
 {
 	for(int i = 0; i < arraysize; i++)
@@ -59,6 +64,10 @@ void reverse(int_bool data[], int val, int arraysize)
 		}
 	}
 }
+
+// swaps a vertex with the one it is pointing at.
+// can cause seg-faults if used incorrectly (eg, if called on index 0 when
+// index 0 is facing to the left)
 void swap(int_bool data[], int index, int arraysize)
 {
 	if(data[index].left)
@@ -75,7 +84,7 @@ void swap(int_bool data[], int index, int arraysize)
 	}
 }
 
-
+// does precisely what the name suggests it will do.
 int get_biggest_mobile_index(int_bool data[], int arraysize)
 {
 	int temp;
@@ -95,15 +104,21 @@ int get_biggest_mobile_index(int_bool data[], int arraysize)
 
 	return temp;
 }
+
+//this function is the crux of this set.  it reads in data from a vector and
+//returns a vector of vectors listing every permutation of the numbers in the
+//one that was passed it.  It requires the vector that was passed to it to be
+//sorted.
 vector<vector<int> > permute(vector<int> ordered)
 {
-	
+	// read in data from ordered
 	int_bool data[ordered.size()];
 	for(int i = 0; i < ordered.size(); i++)
 	{
 		data[i].num = ordered[i];
 		data[i].left = true;
 	}
+	//declare some temp variables
 	int to_swap;
 	int val;
 	vector<int> vect;
@@ -120,9 +135,11 @@ vector<vector<int> > permute(vector<int> ordered)
 		reverse(data, val, ordered.size());
 		for(int i = 0; i < ordered.size(); i++)
 		{
+			// put the permutation in a temporary vector
 			vect.push_back(i);
 		}
 		permutations.push_back(vect);
+		vect.erase();
 	}
 	
 	return permutations;
