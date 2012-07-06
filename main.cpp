@@ -1,9 +1,11 @@
-#include "circ_list.h"
 #include <iostream>
 #include <fstream>
 #include <csignal>
 #include <pthread.h>
 #include <stdlib.h>
+#include <vector>
+#include "permute.cpp"
+#include "circ_list.h"
 
 using namespace std;
 
@@ -16,7 +18,6 @@ struct argbottle
 void graphContract(Vertex** vert_set, int num_verts);
 void* recurser(void* b);
 void signalHandler(int signum);
-vector<int> permute(Vertex** vert_set);
 
 //Global variables so that signalHandler can do its work right.
 int num_vertices;
@@ -88,10 +89,9 @@ int main(int argc, char* argv[])
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
 	
-	Circ_list my_list(vert_set[atoi(argv[1])-1]);
-    	clist_ptr=&my_list;
+	clist_ptr = new Circ_list(vert_set[atoi(argv[1])-1]);
 
-	my_list.print_list(my_list.start);
+	clist_ptr->print_list(clist_ptr->start);
 
 	vector<int> perm;
 
@@ -118,12 +118,14 @@ int main(int argc, char* argv[])
 	pthread_join(recurse, NULL);
 
 	//delete some dynamically allocated memory
+	//unfinished?
 	cout << "I win!\n";
 	for(int i=0;i<num_vertices;i++)
 	{
 		delete vert_set[i];	
 	}
 	delete [] vert_set;
+	delete clist_ptr;
 	return 0;
 
 	cout << "flow got to the end of main - past the while loop\n";
@@ -181,42 +183,48 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list and vert_set will exist in memory
 void* recurser(void* b)
 {
+	((argbottle*)b)->clist->print_list(((argbottle*)b)->clist->start);
     	if(found)
     	{
 		int a=0;
+		delete ((argbottle*)b)->clist;
         	return (void*)a;
     	}
 	if(((argbottle *)b)->clist->is_done())
 	{
 		found = true;
+		delete ((argbottle*)b)->clist;
         	return (void*) b;
 	}
+	vector<int> myvector;
 	for(int k = 0; k < ((argbottle*)b)->clist->start->vert->neighbors.size(); k++)
 	{
 		// check if it needs a vertex
 		if(((argbottle*)b)->clist->start->vert->is_needed(k))
 		{
+			myvector.push_back(k);
 		}
 	}
     	// this is where the permuter goes.  The logic should go:
     	// for each permutation have children as a different thread.
-	vertex< vertex<int> > permutations = stuff;
+	vector< vector<int> > permutations = permute(myvector);
 	for(int i=0; i < permutations.size(); i++)
 	{
      		//make the copies
      		argbottle* bottle;
-     		bottle->clist = new Circ_list(((argbottle *)b)->clist);
-     		bottle->vset = new Vertex*[num_vertices];
+     		bottle->clist = new Circ_list(((argbottle *)b)->clist);//test this line
+     		bottle->vset = ((argbottle*)b)->vset;
+		/*bottle->vset = new Vertex*[num_vertices];
      		for (int j=0; j<num_vertices; j++) 
      		{
      			bottle->vset[j]=new Vertex(((argbottle*)b)->vset[j]);
-    		}
+    		}*/
      		//run the checks
      		bottle->clist->check_forward();
      		bottle->clist->check_backward();
      		bottle->clist->have_children(bottle->vset, permutations[i]);
      		pthread_t fork1;
-     		pthread_create(&fork1,NULL,recurser, b);	
+     		pthread_create(&fork1,NULL,recurser, bottle);	
 	}
 }
 
@@ -231,9 +239,3 @@ void signalHandler(int signum)
 	clist_ptr->~Circ_list();
 	exit(signum);
 }
-
-vector<int> permute(Vertex** vert_set)
-{
-	
-}
-
