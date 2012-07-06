@@ -6,14 +6,9 @@
 #include <vector>
 #include "permute.cpp"
 #include "circ_list.h"
+#include "argbottle.h"
 
 using namespace std;
-
-struct argbottle
-{
-	Circ_list* clist;
-	Vertex** vset;
-};
 
 void graphContract(Vertex** vert_set, int num_verts);
 void* recurser(void* b);
@@ -35,67 +30,67 @@ int main(int argc, char* argv[])
 		cout << "with 0\n";
 		exit(-1);
 	}
-    signal(SIGINT, signalHandler);
-    signal(SIGTERM, signalHandler);
-    ifstream myfile(argv[2]);
-    cout << argv[2] << endl;
-    if(myfile.is_open())
-    {
-            // determine how many vertices there are
-            
-            string line;
-            getline(myfile,line);
-            num_vertices=atoi(line.c_str());
-            // purges a newline from the stream
-            //cin.get();
-
-            // create an array to store them
-            vert_set = new Vertex*[num_vertices];
-            // read them into that array
-            char temp;
-            string temp_string;
-            
-            // for each vertex
-	// for each vertex
-	for(int i = 0; i < num_vertices; i++)
+	signal(SIGINT, signalHandler);
+	signal(SIGTERM, signalHandler);
+	ifstream myfile(argv[2]);
+	cout << argv[2] << endl;
+	if(myfile.is_open())
 	{
-		// create an object to hold the data
-		vert_set[i] = new Vertex(i, num_vertices);
-		// read until you see a newline
-		//this is a garbage value to be rewritten by the following loop
-		temp = 'b';
-		while(1)
+		// determine how many vertices there are
+
+		string line;
+		getline(myfile,line);
+		num_vertices=atoi(line.c_str());
+		// purges a newline from the stream
+		//cin.get();
+
+		// create an array to store them
+		vert_set = new Vertex*[num_vertices];
+		// read them into that array
+		char temp;
+		string temp_string;
+
+		// for each vertex
+		// for each vertex
+		for(int i = 0; i < num_vertices; i++)
 		{
-			temp_string = "";
-			if(temp == '\n')
-				break;
-			temp = myfile.get();
-			//r read until you see a space
+			// create an object to hold the data
+			vert_set[i] = new Vertex(i, num_vertices);
+			// read until you see a newline
+			//this is a garbage value to be rewritten by the following loop
+			temp = 'b';
 			while(1)
 			{
-				if(temp == ' ' || temp=='\n')
+				temp_string = "";
+				if(temp == '\n')
 					break;
-				//concatonate newly read chars onto temp_string
-				temp_string += temp;
 				temp = myfile.get();
+				//r read until you see a space
+				while(1)
+				{
+					if(temp == ' ' || temp=='\n')
+						break;
+					//concatonate newly read chars onto temp_string
+					temp_string += temp;
+					temp = myfile.get();
 				}
-		// set the vertex to know that it needs what was just found
-		vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+				// set the vertex to know that it needs what was just found
+				vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+			}
 		}
+		graphContract(vert_set, num_vertices);
+		myfile.close();
 	}
-	graphContract(vert_set, num_vertices);
-    	myfile.close();
-    }
-    else
-    {
-        cout << "BAD FILENAME.  HAVE SOME CAKE." << endl;
-        exit(-2);
-    }
+	else
+	{
+		cout << "BAD FILENAME.  HAVE SOME CAKE." << endl;
+		exit(-2);
+	}
 
 
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
-	
+
 	clist_ptr = new Circ_list(vert_set[atoi(argv[1])-1]);
 
 	clist_ptr->print_list(clist_ptr->start);
@@ -103,22 +98,22 @@ int main(int argc, char* argv[])
 	vector<int> perm;
 
 	/*while(!my_list.is_done())
-	{
-		
-		// check forward and backward of the vertex to see if it want to
-		// connect to the nearest non-saturated neighber and vice versa
-		my_list.print_list(my_list.start);
-		my_list.check_forward();
-		my_list.print_list(my_list.start);
-		my_list.check_backward();			
-		// now look at what it is missing and create those nodes
-		my_list.print_list(my_list.start);
-		//perm = permute(vert_set);
-		my_list.have_children(vert_set, perm);
+	  {
+
+	// check forward and backward of the vertex to see if it want to
+	// connect to the nearest non-saturated neighber and vice versa
+	my_list.print_list(my_list.start);
+	my_list.check_forward();
+	my_list.print_list(my_list.start);
+	my_list.check_backward();			
+	// now look at what it is missing and create those nodes
+	my_list.print_list(my_list.start);
+	//perm = permute(vert_set);
+	my_list.have_children(vert_set, perm);
 	}*/
     
 	pthread_t recurse;
-	argbottle bottle;
+	Argbottle bottle = Argbottle();
 	bottle.clist=clist_ptr;
 	bottle.vset=vert_set;
 	pthread_create(&recurse, NULL, recurser, (void*)&bottle);
@@ -190,30 +185,28 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list and vert_set will exist in memory
 void* recurser(void* b)
 {
-	((argbottle*)b)->clist->print_list(((argbottle*)b)->clist->start);
-	cout << "flag 1\n";
+	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
     	if(found)
     	{
 		int a=0;
-		delete ((argbottle*)b)->clist;
+		delete ((Argbottle*)b)->clist;
         	return (void*)a;
     	}
-	if(((argbottle *)b)->clist->is_done())
+	if(((Argbottle *)b)->clist->is_done())
 	{
 		found = true;
-		delete ((argbottle*)b)->clist;
+		delete ((Argbottle*)b)->clist;
         	return (void*) b;
 	}
 	vector<int> myvector;
-	for(int k = 0; k < ((argbottle*)b)->clist->start->vert->neighbors.size(); k++)
+	for(int k = 0; k < ((Argbottle*)b)->clist->start->vert->neighbors.size(); k++)
 	{
 		// check if it needs a vertex
-		if(((argbottle*)b)->clist->start->vert->is_needed(k))
+		if(((Argbottle*)b)->clist->start->vert->is_needed(k))
 		{
 			myvector.push_back(k);
 		}
 	}
-	cout << "flag 2\n";
     	// this is where the permuter goes.  The logic should go:
     	// for each permutation have children as a different thread.
 	vector< vector<int> > permutations = permute(myvector);
@@ -221,22 +214,13 @@ void* recurser(void* b)
 	for(int i=0; i < permutations.size(); i++)
 	{
      		//make the copies
-     		argbottle* bottle;
-		bottle->clist=NULL;
-		bottle->vset=NULL;
-     		bottle->clist = new Circ_list(((argbottle *)b)->clist);
-		cout << "copied the circ_lists\n";
-     		bottle->vset = ((argbottle*)b)->vset;
-		/*bottle->vset = new Vertex*[num_vertices];
-     		for (int j=0; j<num_vertices; j++) 
-     		{
-     			bottle->vset[j]=new Vertex(((argbottle*)b)->vset[j]);
-    		}*/
+     		Argbottle* bottle = new Argbottle();
+     		bottle->clist = new Circ_list(((Argbottle *)b)->clist);
+     		bottle->vset = ((Argbottle*)b)->vset;
      		//run the checks
      		bottle->clist->check_forward();
      		bottle->clist->check_backward();
      		bottle->clist->have_children(bottle->vset, permutations[i]);
-		cout << "making thread\n" << endl;
      		pthread_t fork1;
 		cout << "forking\n" << endl;
      		pthread_create(&fork1,NULL,recurser, bottle);	
