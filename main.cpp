@@ -1,6 +1,6 @@
 #include "circ_list.h"
 #include <iostream>
-#define FIRST 9
+#include <fstream>
 using namespace std;
 
 void graphContract(Vertex** vert_set, int num_verts);
@@ -9,13 +9,23 @@ int main(int argc, char* argv[])
 {
 	if(argc < 2)
 	{
-		cout << "This program takes in one parameter: the start vertex number.  The 1st vertex is number 1.  Do not be confused that under the hood we start with 0\n";
+		cout << "This program takes in 2 parameters: the start vertex number ";
+		cout << "and then the location of the graph file. The 1st vertex is ";
+		cout << "number 1. Do not be confused that under the hood we start ";
+		cout << "with 0\n";
+		exit(-1);
+	}
+
+	ifstream myfile(argv[2]);
+	if(!myfile.is_open())
+	{
+		cout << "BAD FILENAME, HAVE SOME CAKE\n";
 	}
 	// determine how many vertices there are
 	int num_vertices;
-	cin >> num_vertices;
+	myfile >> num_vertices;
 	// purges a newline from the stream
-	cin.get();
+	myfile.get();
 
 	// create an array to store them
 	Vertex** vert_set = new Vertex*[num_vertices];
@@ -36,7 +46,7 @@ int main(int argc, char* argv[])
 			temp_string = "";
 			if(temp == '\n')
 				break;
-			temp = cin.get();
+			temp = myfile.get();
 			//r read until you see a space
 			while(1)
 			{
@@ -44,7 +54,7 @@ int main(int argc, char* argv[])
 					break;
 				//concatonate newly read chars onto temp_string
 				temp_string += temp;
-				temp = cin.get();
+				temp = myfile.get();
 			}
 			// set the vertex to know that it needs what was just found
 			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
