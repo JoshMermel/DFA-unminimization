@@ -11,16 +11,17 @@ Circ_list::Circ_list(Vertex* vert)
 
 Circ_list::Circ_list(Circ_list* list) //UNTESTED
 {
-    //Copy start and set it up
+    	//Copy start and set it up
 	Node* remote_ptr = list->start;
-    start = new Node(remote_ptr->vert);
-    start->next=start;
-    start->prev=start;
+	start = new Node(remote_ptr->vert);
+    	start->next=start;
+    	start->prev=start;
+	remote_ptr=remote_ptr->next;
     
-    //continuously add new nodes to match the remote list
-	while(remote_ptr->vert!=NULL)
+    	//continuously add new nodes to match the remote list
+	while(remote_ptr->vert!=list->start->vert)
 	{
-        add_to_list(new Node(remote_ptr->vert), start);
+        	add_to_list(new Node(remote_ptr->vert), start);
 		remote_ptr=remote_ptr->next;
 	}
 }

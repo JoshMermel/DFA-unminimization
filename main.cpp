@@ -184,6 +184,7 @@ void graphContract(Vertex** vert_set, int num_verts)
 void* recurser(void* b)
 {
 	((argbottle*)b)->clist->print_list(((argbottle*)b)->clist->start);
+	cout << "flag 1\n";
     	if(found)
     	{
 		int a=0;
@@ -205,14 +206,17 @@ void* recurser(void* b)
 			myvector.push_back(k);
 		}
 	}
+	cout << "flag 2\n";
     	// this is where the permuter goes.  The logic should go:
     	// for each permutation have children as a different thread.
 	vector< vector<int> > permutations = permute(myvector);
+	cout << "permutations done\nThere are " << permutations.size() << " permutations.\n";
 	for(int i=0; i < permutations.size(); i++)
 	{
      		//make the copies
      		argbottle* bottle;
      		bottle->clist = new Circ_list(((argbottle *)b)->clist);//test this line
+		cout << "copied the circ_lists\n";
      		bottle->vset = ((argbottle*)b)->vset;
 		/*bottle->vset = new Vertex*[num_vertices];
      		for (int j=0; j<num_vertices; j++) 
@@ -223,7 +227,9 @@ void* recurser(void* b)
      		bottle->clist->check_forward();
      		bottle->clist->check_backward();
      		bottle->clist->have_children(bottle->vset, permutations[i]);
+		cout << "making thread\n" << endl;
      		pthread_t fork1;
+		cout << "forking\n" << endl;
      		pthread_create(&fork1,NULL,recurser, bottle);	
 	}
 }
