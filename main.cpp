@@ -56,32 +56,39 @@ int main(int argc, char* argv[])
             string temp_string;
             
             // for each vertex
-            for(int i = 0; i < num_vertices; i++)
-            {
-                // create an object to hold the data
-                vert_set[i] = new Vertex(i, num_vertices);                
-                // The range is adjusted so that the last number is excluded.
-                for (int j = 1; j < num_vertices-1; j++) 
-                {
-                    getline(myfile, temp_string, ' ');
-                    vert_set[i]->set(atoi(temp_string.c_str())-1,0);
-                    temp_string="";
-                }
-                // This must be done so that getline can take the last char in
-				//the line.  It is delineated with a \n, so getline must be
-				//able to handle that
-                getline(myfile, temp_string);
-                vert_set[i]->set(atoi(temp_string.c_str())-1,0);
-                temp_string="";
-			
-            
-        }
+	// for each vertex
+	for(int i = 0; i < num_vertices; i++)
+	{
+		// create an object to hold the data
+		vert_set[i] = new Vertex(i, num_vertices);
+		// read until you see a newline
+		//this is a garbage value to be rewritten by the following loop
+		temp = 'b';
+		while(1)
+		{
+			temp_string = "";
+			if(temp == '\n')
+				break;
+			temp = myfile.get();
+			//r read until you see a space
+			while(1)
+			{
+				if(temp == ' ' || temp=='\n')
+					break;
+				//concatonate newly read chars onto temp_string
+				temp_string += temp;
+				temp = myfile.get();
+				}
+		// set the vertex to know that it needs what was just found
+		vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+		}
+	}
 	graphContract(vert_set, num_vertices);
-    myfile.close();
+    	myfile.close();
     }
     else
     {
-        cout << "BAD FILENAME.  HAVE A NICE DAY AND SOME CAKE." << endl;
+        cout << "BAD FILENAME.  HAVE SOME CAKE." << endl;
         exit(-2);
     }
 
@@ -215,7 +222,7 @@ void* recurser(void* b)
 	{
      		//make the copies
      		argbottle* bottle;
-     		bottle->clist = new Circ_list(((argbottle *)b)->clist);//test this line
+     		bottle->clist = new Circ_list(((argbottle *)b)->clist);
 		cout << "copied the circ_lists\n";
      		bottle->vset = ((argbottle*)b)->vset;
 		/*bottle->vset = new Vertex*[num_vertices];
