@@ -139,7 +139,7 @@ vector<vector<int> > permute(vector<int> ordered)
 			vect.push_back(i);
 		}
 		permutations.push_back(vect);
-		vect.erase();
+		vect.clear();
 	}
 	
 	return permutations;
