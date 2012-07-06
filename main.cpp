@@ -222,6 +222,8 @@ void* recurser(void* b)
 	{
      		//make the copies
      		argbottle* bottle;
+		bottle->clist=NULL;
+		bottle->vset=NULL;
      		bottle->clist = new Circ_list(((argbottle *)b)->clist);
 		cout << "copied the circ_lists\n";
      		bottle->vset = ((argbottle*)b)->vset;
