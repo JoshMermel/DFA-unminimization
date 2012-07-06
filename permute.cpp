@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-// this is an implemention of the Johnson Trotter algorithm
+// this is an implemention of the Johnson-Trotter algorithm
 const int arraysize = 0;
 
 struct int_bool 
@@ -21,9 +21,9 @@ vector<vector<int> > permute(vector<int> ordered)
 {
 	
 	int_bool data[ordered.size()];
-	for(int i = 0; i < arraysize; i++)
+	for(int i = 0; i < ordered.size(); i++)
 	{
-		data[i].num = i;
+		data[i] = ordered[i];
 		data[i].left = true;
 	}
 	int to_swap;
