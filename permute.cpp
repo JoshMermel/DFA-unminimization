@@ -1,45 +1,45 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 // this is an implemention of the Johnson Trotter algorithm
 const int arraysize = 0;
 
-struct bloop 
+struct int_bool 
 {
 	int num;
 	bool left;
 };
 
-bool is_done(bloop data[]);
-bool is_mobile(bloop data[], int index);
-int get_biggest_mobile_index(bloop data[]);
-void swap(bloop data[], int index);
-void reverse(bloop data[], int val);
-void printarray(bloop data[]);
+bool is_done(int_bool data[], int arraysize);
+bool is_mobile(int_bool data[], int index, int arraysize);
+int get_biggest_mobile_index(int_bool data[], int arraysize);
+void swap(int_bool data[], int index, int arraysize);
+void reverse(int_bool data[], int val, int arraysize);
+vector<vector<int> > permute(vector<int> ordered);
 
-int main()
+vector<vector<int> > permute(vector<int> ordered)
 {
-	bloop data[arraysize];
+	
+	int_bool data[ordered.size()];
 	for(int i = 0; i < arraysize; i++)
 	{
 		data[i].num = i;
 		data[i].left = true;
 	}
-	printarray(data);
 	int to_swap;
 	int val;
 	vector<int> vect;
-	vector<vector<int>> permutations;
+	vector<vector<int> > permutations;
 	//while there exists a mobile integer
-	while(!is_done(data))
+	while(!is_done(data, ordered.size()))
 	{
   		//find the largest mobile integer k
-		to_swap = get_biggest_mobile_index(data);
+		to_swap = get_biggest_mobile_index(data, ordered.size());
 		val = data[to_swap].num;
   		//swap k and the adjacent integer it is looking at
-		swap(data, to_swap);
+		swap(data, to_swap, ordered.size());
   		//reverse the direction of all integers larger than k
-		reverse(data, val);
-		printarray(data);
+		reverse(data, val, ordered.size());
 		for(int i = 0; i < arraysize; i++)
 		{
 			vect.push_back(i);
@@ -47,10 +47,10 @@ int main()
 		permutations.push_back(vect);
 	}
 	
-	return 0;
+	return permutations;
 }
 
-void reverse(bloop data[], int val)
+void reverse(int_bool data[], int val, int arraysize)
 {
 	for(int i = 0; i < arraysize; i++)
 	{
@@ -61,23 +61,23 @@ void reverse(bloop data[], int val)
 	}
 }
 
-void swap(bloop data[], int index)
+void swap(int_bool data[], int index, int arraysize)
 {
 	if(data[index].left)
 	{
-		bloop temp = data[index];
+		int_bool temp = data[index];
 		data[index] = data[index-1];
 		data[index-1] = temp;
 	}
 	else
 	{
-		bloop temp = data[index];
+		int_bool temp = data[index];
 		data[index] = data[index+1];
 		data[index+1] = temp;
 	}
 }
 
-bool is_mobile(bloop data[], int index)
+bool is_mobile(int_bool data[], int index, int arraysize)
 {
 	if(index == 0 && data[index].left)
 	{
@@ -98,25 +98,24 @@ bool is_mobile(bloop data[], int index)
 	return true;
 }
 
-bool is_done(bloop data[])
+bool is_done(int_bool data[], int arraysize)
 {
 	for(int i = 0; i < arraysize; i++)
 	{
-		if(is_mobile(data, i))
+		if(is_mobile(data, i, arraysize))
 		{
 			return false;
 		}
 	}
-	cout << "done!\n";
 	return true;
 }
 
-int get_biggest_mobile_index(bloop data[])
+int get_biggest_mobile_index(int_bool data[], int arraysize)
 {
 	int temp;
 	for(int i = 0; i < arraysize; i++)
 	{
-		if(is_mobile(data, i))
+		if(is_mobile(data, i, arraysize))
 		{
 			temp = i;
 			break;
@@ -124,18 +123,9 @@ int get_biggest_mobile_index(bloop data[])
 	}
 	for(int i = 0; i < arraysize; i++)
 	{
-		if(is_mobile(data, i) && data[i].num > data[temp].num)
+		if(is_mobile(data, i, arraysize) && data[i].num > data[temp].num)
 			temp = i;
 	}
 
 	return temp;
-}
-
-void printarray(bloop data[])
-{
-	for(int i = 0; i < arraysize; i++)
-	{
-		cout << data[i].num+1 << ' ';
-	}
-	cout << endl;
 }
