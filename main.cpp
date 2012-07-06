@@ -181,33 +181,43 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list and vert_set will exist in memory
 void* recurser(void* b)
 {
-    if(found)
-    {
-        int a=0;
-        return (void*)a;
-    }
+    	if(found)
+    	{
+		int a=0;
+        	return (void*)a;
+    	}
 	if(((argbottle *)b)->clist->is_done())
 	{
 		found = true;
-        return (void*) b;
+        	return (void*) b;
 	}
-
-    // this is where the permuter goes.  The logic should go:
-    // for each permutation have children as a different thread.
-	/*
-     {
-     //make the copies
-     argbottle* bottle;
-     bottle->clist = new Circ_list(((argbottle *)b)->clist);
-     bottle->vset = new Vertex*[num_vertices];
-     for (int i=0; i<num_vertices; i++) {
-     bottle->vset[i]=new Vertex(((argbottle*)b)->vset[i]);bottle->clist->have_children(bottle.vset);
-     }
-     //run the checks
-     bottle->clist->check_forward();
-     bottle->clist->check_backward();
-	pthread_t fork1;
-	pthread_create(&fork1,NULL,recurser, b);	}*/
+	for(int k = 0; k < ((argbottle*)b)->clist->start->vert->neighbors.size(); k++)
+	{
+		// check if it needs a vertex
+		if(((argbottle*)b)->clist->start->vert->is_needed(k))
+		{
+		}
+	}
+    	// this is where the permuter goes.  The logic should go:
+    	// for each permutation have children as a different thread.
+	vertex< vertex<int> > permutations = stuff;
+	for(int i=0; i < permutations.size(); i++)
+	{
+     		//make the copies
+     		argbottle* bottle;
+     		bottle->clist = new Circ_list(((argbottle *)b)->clist);
+     		bottle->vset = new Vertex*[num_vertices];
+     		for (int j=0; j<num_vertices; j++) 
+     		{
+     			bottle->vset[j]=new Vertex(((argbottle*)b)->vset[j]);
+    		}
+     		//run the checks
+     		bottle->clist->check_forward();
+     		bottle->clist->check_backward();
+     		bottle->clist->have_children(bottle->vset, permutations[i]);
+     		pthread_t fork1;
+     		pthread_create(&fork1,NULL,recurser, b);	
+	}
 }
 
 void signalHandler(int signum)
