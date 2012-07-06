@@ -1,5 +1,5 @@
-expand: main.o circ_list.o node.o vertex.o
-	g++ -g main.o circ_list.o node.o vertex.o -o expand -lpthread
+expand: main.o circ_list.o node.o vertex.o argbottle.o
+	g++ -g main.o circ_list.o node.o vertex.o argbottle.o -o expand -lpthread
 
 main.o: main.cpp permute.cpp
 	g++ -g -c main.cpp permute.cpp -lpthread
@@ -12,3 +12,6 @@ node.o: node.cpp
 
 vertex.o: vertex.cpp
 	g++ -g -c vertex.cpp
+
+argbottle.o: argbottle.cpp
+	g++ -g -c argbottle.cpp
