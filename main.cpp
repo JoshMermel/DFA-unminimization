@@ -24,46 +24,45 @@ int main(int argc, char* argv[])
 	// determine how many vertices there are
 	int num_vertices;
 	myfile >> num_vertices;
+	cout << num_vertices << endl;
 	// purges a newline from the stream
-	myfile.get();
+	// THERE IS A PROBLEM HERE, IT WORKS FOR K_5 
+	// BUT REQUIRES ANOTHER PURGE FOR GOLDNER
+	//myfile.get();
+	char temp;
+	string temp_string;
+
+	getline(myfile,temp_string);
 
 	// create an array to store them
 	Vertex** vert_set = new Vertex*[num_vertices];
 	// read them into that array
-	char temp;
-	string temp_string;
-	
+		
 	// for each vertex
 	for(int i = 0; i < num_vertices; i++)
 	{
 		// create an object to hold the data
 		vert_set[i] = new Vertex(i, num_vertices);
 		// read until you see a newline
-		//this is a garbage value to be rewritten by the following loop
+		// this is a garbage value to be rewritten by the following loop
 		temp = 'b';
-		while(1)
+		while(temp!='\n')
 		{
 			temp_string = "";
-			if(temp == '\n')
-				break;
 			temp = myfile.get();
-			//r read until you see a space
-			while(1)
+			//read until you see a space
+			while(temp!=' ' && temp!= '\n')
 			{
-				if(temp == ' ' || temp=='\n')
-					break;
 				//concatonate newly read chars onto temp_string
 				temp_string += temp;
 				temp = myfile.get();
 			}
-			// set the vertex to know that it needs what was just found
-			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+		// set the vertex to know that it needs what was just found
+		vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
 		}
-			
 	}
-	
 	graphContract(vert_set, num_vertices);
-
+	myfile.close();
 
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
