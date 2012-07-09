@@ -214,9 +214,10 @@ void* recurser(void* b)
 	Argbottle** bottle = new Argbottle*[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
 	{
+		bottle[i] = new Argbottle();
      		if(found) {cout << "OH LOOK, A PUPPY\n";pthread_exit(0);}
 		//make the copies
-		cout << "[INFO]: " << i << " " << b << endl;
+		cout << "[INFO]: " << i << " " << b << " " << bottle[i] << endl;
      		bottle[i]->clist = new Circ_list(((Argbottle *)b)->clist);
 		bottle[i]->vset = new Vertex*[num_vertices];
 		for(int j = 0; j < num_vertices; j++)
@@ -231,11 +232,11 @@ void* recurser(void* b)
      		pthread_create(&fork[i],NULL,recurser, bottle[i]);	
 	}
 	// The program must wait.
-	pthread_cond_wait(&condition_var, &mutex_var);
-	//for(int i=0; i < permutations.size(); i++)
-	//	pthread_join(fork[i], NULL);
+	//pthread_cond_wait(&condition_var, &mutex_var);
+	for(int i=0; i < permutations.size(); i++)
+		pthread_join(fork[i], NULL);
 	//cout << "I WAS A GOOD LITTLE THREAD\n";
-	//pthread_exit(0);
+	pthread_exit(0);
 }
 
 void signalHandler(int signum)
