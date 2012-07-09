@@ -82,14 +82,14 @@ void Circ_list::check_forward()
 				start->vert->set((temp->vert->index), true);
 				temp->vert->set((start->vert->index), true);
 				// also remove all vertices between them.
-				cout << "Removing between vertex " << 
+				/*cout << "Removing between vertex " << 
 					start->vert->index+1 << 
-					" and vertex " << temp->vert->index+1 << endl;
+					" and vertex " << temp->vert->index+1 << endl;*/
 				remove(start, temp);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< 
-				" doesn't need vertex " << start->vert->index << endl;
+		/*	cout << "Vertex "<< temp->vert->index+1<< 
+				" doesn't need vertex " << start->vert->index << endl;*/
 			return;
 		}
 		temp = temp -> next;
@@ -109,14 +109,14 @@ void Circ_list::check_backward()
 				start->vert->set((temp->vert->index), true);
 				temp->vert->set((start->vert->index), true);
 				// also remove all vertices between them.
-				cout << "Removing between vertex " << 
+			/*	cout << "Removing between vertex " << 
 					start->vert->index+1 << " and vertex " <<
-					temp->vert->index+1 << endl;
+					temp->vert->index+1 << endl;*/
 				remove(temp, start);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<<
-			 " doesn't need vertex " << start->vert->index << endl;
+		/*	cout << "Vertex "<< temp->vert->index+1<<
+			 " doesn't need vertex " << start->vert->index << endl;*/
 			return;
 		}
 		temp = temp -> prev;
@@ -130,8 +130,8 @@ Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 	vector<int>::iterator it;
 	for(it=permutation.begin(); it < permutation.end(); it++)
 	{
-		cout << "Vertex " << start->vert->index+1 << 
-		" needs vertex " << (*it)+1 << endl;
+		//cout << "Vertex " << start->vert->index+1 << 
+		//" needs vertex " << (*it)+1 << endl;
 		// create that vertex and add it after start
 		Vertex* temp_vert = new Vertex(vert_set[*it]);
 		Node* temp_node = new Node(temp_vert);
@@ -154,7 +154,7 @@ Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 	while(start->vert->is_satisfied() &&
 		 i < vert_set[0]->neighbors.size())
 	{
-		cout << "Vertex " << start->vert->index+1 << " is happy.\n";
+		//cout << "Vertex " << start->vert->index+1 << " is happy.\n";
 		start = start->next;
 		i++;
 	}

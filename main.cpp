@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 	my_list.have_children(vert_set, perm);
 	}*/
     
-	//pthread_t recurse;
+	pthread_t recurse;
 	Argbottle *bottle = new Argbottle();
 	bottle->clist = clist_ptr;
 	bottle->vset = new Vertex*[num_vertices];
@@ -108,13 +108,13 @@ int main(int argc, char* argv[])
 	{
 		bottle->vset[i] = new Vertex(vert_set[i]);
 	}
-	//pthread_create(&recurse, NULL, recurser, (void*)bottle);
-	//pthread_join(recurse, NULL);
-	recurser((void*)bottle);
+	pthread_create(&recurse, NULL, recurser, (void*)bottle);
+	pthread_join(recurse, NULL);
+	//recurser((void*)bottle);
 
 	//delete some dynamically allocated memory
 	//unfinished?
-	cout << "I win!\n";
+	cout << "I finished!\n";
 	for(int i=0;i<num_vertices;i++)
 	{
 		delete vert_set[i];	
@@ -207,31 +207,35 @@ void* recurser(void* b)
 	}
     	// this is where the permuter goes.  The logic should go:
     	// for each permutation have children as a different thread.
+	cout << "permuting... ";
 	vector< vector<int> > permutations = permute(myvector);
-	cout << "permutations done\nThere are " << permutations.size() << " permutations.\n";
-     	pthread_t fork1[permutations.size()];
+	cout << "There are " << permutations.size() << " permutations.\n";
+     	pthread_t fork[permutations.size()];
+	Argbottle** bottle = new Argbottle*[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
 	{
      		if(found) {cout << "OH LOOK, A PUPPY\n";pthread_exit(0);}
 		//make the copies
-     		Argbottle* bottle = new Argbottle();
-     		bottle->clist = new Circ_list(((Argbottle *)b)->clist);
-		bottle->vset = new Vertex*[num_vertices];
+		cout << "[INFO]: " << i << " " << b << endl;
+     		bottle[i]->clist = new Circ_list(((Argbottle *)b)->clist);
+		bottle[i]->vset = new Vertex*[num_vertices];
 		for(int j = 0; j < num_vertices; j++)
 		{
-			bottle->vset[j] = new Vertex(((Argbottle*) b)->vset[j]);
+			bottle[i]->vset[j] = new Vertex(((Argbottle*) b)->vset[j]);
 		}
      		//run the checks
-     		bottle->clist->check_forward();
-     		bottle->clist->check_backward();
-     		bottle->clist = bottle->clist->have_children(bottle->vset, permutations[i]);
-		//cout << "forking\n" << endl;
-     		pthread_create(&fork1[i],NULL,recurser, bottle);	
+     		bottle[i]->clist->check_forward();
+     		bottle[i]->clist->check_backward();
+     		bottle[i]->clist = bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
+		cout << "forking\n" << endl;
+     		pthread_create(&fork[i],NULL,recurser, bottle[i]);	
 	}
 	// The program must wait.
 	pthread_cond_wait(&condition_var, &mutex_var);
-	cout << "I WAS A GOOD LITTLE THREAD\n";
-	pthread_exit(0);
+	//for(int i=0; i < permutations.size(); i++)
+	//	pthread_join(fork[i], NULL);
+	//cout << "I WAS A GOOD LITTLE THREAD\n";
+	//pthread_exit(0);
 }
 
 void signalHandler(int signum)
