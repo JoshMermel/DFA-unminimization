@@ -221,6 +221,12 @@ void* recurser(void* b)
      		bottle->clist->check_forward();
      		bottle->clist->check_backward();
      		bottle->clist->have_children(bottle->vset, permutations[i]);
+        if(found)
+        {
+            int a=0;
+            //delete ((Argbottle*)b)->clist;
+            pthread_exit(0);
+        }
      		pthread_t fork1;
 		cout << "forking\n" << endl;
      		pthread_create(&fork1,NULL,recurser, bottle);	
