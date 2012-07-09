@@ -182,21 +182,21 @@ void graphContract(Vertex** vert_set, int num_verts)
 // true and collapse everything.  Note that we are not dealing with pointers
 // this is so that when the program forks, each fork will have its own memory.
 // PRECONDITION: bottle is already setup and this function is called as a thread.
-// POSTCONDITION: many many copies of the circ_list and vert_set will exist in memory
+// POSTCONDITION: many many copies of the circ_list will exist in memory
 void* recurser(void* b)
 {
 	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
-    	if(found)
-    	{
-		int a=0;
-		delete ((Argbottle*)b)->clist;
-        	return (void*)a;
-    	}
+    if(found)
+    {
+        int a=0;
+        //delete ((Argbottle*)b)->clist;
+        pthread_exit(0);
+    }
 	if(((Argbottle *)b)->clist->is_done())
 	{
 		found = true;
-		delete ((Argbottle*)b)->clist;
-        	return (void*) b;
+		//delete ((Argbottle*)b)->clist;
+        return (void*) b;
 	}
 	vector<int> myvector;
 	for(int k = 0; k < ((Argbottle*)b)->clist->start->vert->neighbors.size(); k++)

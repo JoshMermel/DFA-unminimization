@@ -131,8 +131,9 @@ Circ_list Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 	for(it=permutation.begin(); it < permutation.end(); it++)
 	{
 		cout << "Vertex " << start->vert->index+1 << 
-		" needs vertex " << *it+1 << endl;
+		" needs vertex " << (*it)+1 << endl;
 		// create that vertex and add it after start
+        cout << "CUNTFUCK+" << vert_set[*it] << endl;
 		Vertex* temp_vert = new Vertex(vert_set[*it]);
 		Node* temp_node = new Node(temp_vert);
 		add_to_list(temp_node, start);
@@ -205,17 +206,23 @@ bool Circ_list::is_done()
 
 Circ_list::~Circ_list()
 {
-	start->prev->next=NULL;
+	if(start==NULL)
+    {
+        cout << "YOU SHOULD NEVER SEE ME\n";
+        return;
+    }
+    start->prev->next=NULL;
 	while(start!=NULL)
 	{	
 		Node *temp=start;
 		if(start->next==NULL){
 			start=NULL;
 			delete temp;
-			break;
+			return;
 		}
 		else 
 			start=start->next;
 		delete temp;
 	}
+    delete start;
 }
