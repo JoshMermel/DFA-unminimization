@@ -19,69 +19,63 @@ int num_vertices;
 Vertex** vert_set;
 Circ_list* clist_ptr;
 bool found = false;
+pthread_mutex_t mutex_var = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition_var = PTHREAD_COND_INITIALIZER;
 
 int main(int argc, char* argv[])
 {
 	if(argc < 2)
 	{
 		cout << "This program takes in 2 parameters: the start vertex number ";
-		cout << "and then the location of the graph file.  The 1st vertex is ";
-		cout << "number 1.  Do not be confused that under the hood we start ";
+		cout << "and then the location of the graph file. The 1st vertex is ";
+		cout << "number 1. Do not be confused that under the hood we start ";
 		cout << "with 0\n";
 		exit(-1);
 	}
 	signal(SIGINT, signalHandler);
 	signal(SIGTERM, signalHandler);
+
 	ifstream myfile(argv[2]);
-	cout << argv[2] << endl;
-	if(myfile.is_open())
+	if(!myfile.is_open())
 	{
-		// determine how many vertices there are
+		cout << "BAD FILENAME, HAVE SOME CAKE\n";
+	}
+	// determine how many vertices there are
+	myfile >> num_vertices;
+	// purges a newline from the stream
+	myfile.get();
 
-		string line;
-		getline(myfile,line);
-		num_vertices=atoi(line.c_str());
-		// purges a newline from the stream
-		//cin.get();
-
-		// create an array to store them
-		vert_set = new Vertex*[num_vertices];
-		// read them into that array
-		char temp;
-		string temp_string;
-
-		// for each vertex
-		for(int i = 0; i < num_vertices; i++)
+	// create an array to store them
+	vert_set = new Vertex*[num_vertices];
+	// read them into that array
+	char temp;
+	string temp_string;
+	
+	// for each vertex
+	for(int i = 0; i < num_vertices; i++)
+	{
+		// create an object to hold the data
+		vert_set[i] = new Vertex(i, num_vertices);
+		// read until you see a newline
+		//this is a garbage value to be rewritten by the following loop
+		temp = 'b';
+		while(temp!='\n')
 		{
-			// create an object to hold the data
-			vert_set[i] = new Vertex(i, num_vertices);
-			// read until you see a newline
-			//this is a garbage value to be rewritten by the following loop
-			temp = 'b';
-			while(temp == '\n') 
+			temp_string = "";
+			temp = myfile.get();
+			//r read until you see a space
+			while(temp!=' ' && temp!= '\n')
 			{
-				temp_string = "";
+				//concatonate newly read chars onto temp_string
+				temp_string += temp;
 				temp = myfile.get();
-				//read until you see a space
-				while(temp == ' ' || temp=='\n')
-				{
-					//concatonate newly read chars onto temp_string
-					temp_string += temp;
-					temp = myfile.get();
-				}
-				// set the vertex to know that it needs what was just found
-				vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
 			}
-		}
-		graphContract(vert_set, num_vertices);
-		myfile.close();
+			// set the vertex to know that it needs what was just found
+			vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+		}	
 	}
-	else
-	{
-		cout << "BAD FILENAME.  HAVE SOME CAKE." << endl;
-		exit(-2);
-	}
-
+	graphContract(vert_set, num_vertices);
+	myfile.close();
 
 	// declare the circular doubly linked list and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
@@ -106,7 +100,7 @@ int main(int argc, char* argv[])
 	my_list.have_children(vert_set, perm);
 	}*/
     
-	pthread_t recurse;
+	//pthread_t recurse;
 	Argbottle *bottle = new Argbottle();
 	bottle->clist = clist_ptr;
 	bottle->vset = new Vertex*[num_vertices];
@@ -114,8 +108,9 @@ int main(int argc, char* argv[])
 	{
 		bottle->vset[i] = new Vertex(vert_set[i]);
 	}
-	pthread_create(&recurse, NULL, recurser, (void*)bottle);
-	pthread_join(recurse, NULL);
+	//pthread_create(&recurse, NULL, recurser, (void*)bottle);
+	//pthread_join(recurse, NULL);
+	recurser((void*)bottle);
 
 	//delete some dynamically allocated memory
 	//unfinished?
@@ -148,7 +143,6 @@ void graphContract(Vertex** vert_set, int num_verts)
 		}
 		if(degreecount==2)
 		{
-	cout << "FISH\n";
 			int vprev=0,vnext=0;
 			for(vprev; vprev<num_verts; vprev++)
 				if(vert_set[i]->neighbors[vprev]==0) break;
@@ -168,7 +162,6 @@ void graphContract(Vertex** vert_set, int num_verts)
 		}
 		if(degreecount==1)
 		{
-	cout << "FISHSTICKS\n";
 			int k=0;
 			for(k;k<num_verts;k++)
 				if(vert_set[i]->neighbors[k]==0) break;
@@ -189,14 +182,16 @@ void* recurser(void* b)
 	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
     	if(found)
     	{
-        	int a=0;
         	//delete ((Argbottle*)b)->clist;
+		cout << "I WAS KILLED BY BREAD.\n";
         	pthread_exit(0);
     	}
 	if(((Argbottle *)b)->clist->is_done())
 	{
 		found = true;
 		//delete ((Argbottle*)b)->clist;
+		cout << "I FOUND AZTEC GOLD\n";
+		pthread_cond_signal(&condition_var);
         	return (void*) b;
 	}
 	// This should be the list of vertexs that clists's start vertex needs,
@@ -214,9 +209,11 @@ void* recurser(void* b)
     	// for each permutation have children as a different thread.
 	vector< vector<int> > permutations = permute(myvector);
 	cout << "permutations done\nThere are " << permutations.size() << " permutations.\n";
+     	pthread_t fork1[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
 	{
-     		//make the copies
+     		if(found) {cout << "OH LOOK, A PUPPY\n";pthread_exit(0);}
+		//make the copies
      		Argbottle* bottle = new Argbottle();
      		bottle->clist = new Circ_list(((Argbottle *)b)->clist);
 		bottle->vset = new Vertex*[num_vertices];
@@ -227,17 +224,14 @@ void* recurser(void* b)
      		//run the checks
      		bottle->clist->check_forward();
      		bottle->clist->check_backward();
-     		bottle->clist->have_children(bottle->vset, permutations[i]);
-        	if(found)
-        	{
-        		int a=0;
-        		//delete ((Argbottle*)b)->clist;
-        		pthread_exit(0);
-        	}
-     		pthread_t fork1;
-		cout << "forking\n" << endl;
-     		pthread_create(&fork1,NULL,recurser, bottle);	
+     		bottle->clist = bottle->clist->have_children(bottle->vset, permutations[i]);
+		//cout << "forking\n" << endl;
+     		pthread_create(&fork1[i],NULL,recurser, bottle);	
 	}
+	// The program must wait.
+	pthread_cond_wait(&condition_var, &mutex_var);
+	cout << "I WAS A GOOD LITTLE THREAD\n";
+	pthread_exit(0);
 }
 
 void signalHandler(int signum)

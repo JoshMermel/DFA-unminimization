@@ -124,7 +124,7 @@ void Circ_list::check_backward()
 }
 
 //UNFINISHED
-Circ_list Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
+Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 {
 	// iterate through the permutation
 	vector<int>::iterator it;
