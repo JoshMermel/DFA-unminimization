@@ -43,14 +43,14 @@ int main(int argc, char* argv[])
 	// determine how many vertices there are
 	myfile >> num_vertices;
 	// purges a newline from the stream
-	myfile.get();
+	char temp;
+	string temp_string;
+	getline(myfile, temp_string);
 
 	// create an array to store them
 	vert_set = new Vertex*[num_vertices];
 	// read them into that array
-	char temp;
-	string temp_string;
-	
+
 	// for each vertex
 	for(int i = 0; i < num_vertices; i++)
 	{
@@ -84,22 +84,6 @@ int main(int argc, char* argv[])
 
 	clist_ptr->print_list(clist_ptr->start);
 
-
-	/*while(!my_list.is_done())
-	  {
-
-	// check forward and backward of the vertex to see if it want to
-	// connect to the nearest non-saturated neighber and vice versa
-	my_list.print_list(my_list.start);
-	my_list.check_forward();
-	my_list.print_list(my_list.start);
-	my_list.check_backward();			
-	// now look at what it is missing and create those nodes
-	my_list.print_list(my_list.start);
-	//perm = permute(vert_set);
-	my_list.have_children(vert_set, perm);
-	}*/
-    
 	pthread_t recurse;
 	Argbottle *bottle = new Argbottle();
 	bottle->clist = clist_ptr;
@@ -229,12 +213,13 @@ void* recurser(void* b)
      		bottle[i]->clist->check_backward();
      		bottle[i]->clist = bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
 		cout << "forking\n" << endl;
-     		pthread_create(&fork[i],NULL,recurser, bottle[i]);	
+     		pthread_create(&fork[i],NULL,recurser, bottle[i]);
+		pthread_join(fork[i], NULL);	
 	}
 	// The program must wait.
 	//pthread_cond_wait(&condition_var, &mutex_var);
-	for(int i=0; i < permutations.size(); i++)
-		pthread_join(fork[i], NULL);
+	//for(int i=0; i < permutations.size(); i++)
+		//pthread_join(fork[i], NULL);
 	//cout << "I WAS A GOOD LITTLE THREAD\n";
 	pthread_exit(0);
 }
