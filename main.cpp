@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
 	if(!myfile.is_open())
 	{
 		cout << "BAD FILENAME, HAVE SOME CAKE\n";
+		exit (-1);
 	}
 	// determine how many vertices there are
 	myfile >> num_vertices;
