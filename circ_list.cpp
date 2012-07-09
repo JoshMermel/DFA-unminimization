@@ -133,7 +133,6 @@ Circ_list Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 		cout << "Vertex " << start->vert->index+1 << 
 		" needs vertex " << (*it)+1 << endl;
 		// create that vertex and add it after start
-        cout << "CUNTFUCK+" << vert_set[*it] << endl;
 		Vertex* temp_vert = new Vertex(vert_set[*it]);
 		Node* temp_node = new Node(temp_vert);
 		add_to_list(temp_node, start);

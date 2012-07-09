@@ -8,6 +8,6 @@ Argbottle::Argbottle()
 
 Argbottle::~Argbottle()
 {
-    if(clist!=NULL)
-        delete clist;
+    //if(clist!=NULL)
+        //     delete clist;
 }
