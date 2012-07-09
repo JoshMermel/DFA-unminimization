@@ -51,7 +51,6 @@ int main(int argc, char* argv[])
 		string temp_string;
 
 		// for each vertex
-		// for each vertex
 		for(int i = 0; i < num_vertices; i++)
 		{
 			// create an object to hold the data
@@ -59,17 +58,13 @@ int main(int argc, char* argv[])
 			// read until you see a newline
 			//this is a garbage value to be rewritten by the following loop
 			temp = 'b';
-			while(1)
+			while(temp == '\n') 
 			{
 				temp_string = "";
-				if(temp == '\n')
-					break;
 				temp = myfile.get();
-				//r read until you see a space
-				while(1)
+				//read until you see a space
+				while(temp == ' ' || temp=='\n')
 				{
-					if(temp == ' ' || temp=='\n')
-						break;
 					//concatonate newly read chars onto temp_string
 					temp_string += temp;
 					temp = myfile.get();
@@ -95,7 +90,6 @@ int main(int argc, char* argv[])
 
 	clist_ptr->print_list(clist_ptr->start);
 
-	vector<int> perm;
 
 	/*while(!my_list.is_done())
 	  {
@@ -113,10 +107,14 @@ int main(int argc, char* argv[])
 	}*/
     
 	pthread_t recurse;
-	Argbottle bottle = Argbottle();
-	bottle.clist=clist_ptr;
-	bottle.vset=vert_set;
-	pthread_create(&recurse, NULL, recurser, (void*)&bottle);
+	Argbottle *bottle = new Argbottle();
+	bottle->clist = clist_ptr;
+	bottle->vset = new Vertex*[num_vertices];
+	for(int i = 0; i < num_vertices; i++)
+	{
+		bottle->vset[i] = new Vertex(vert_set[i]);
+	}
+	pthread_create(&recurse, NULL, recurser, (void*)bottle);
 	pthread_join(recurse, NULL);
 
 	//delete some dynamically allocated memory
@@ -128,6 +126,7 @@ int main(int argc, char* argv[])
 	}
 	delete [] vert_set;
 	delete clist_ptr;
+	delete bottle;
 	return 0;
 
 	cout << "flow got to the end of main - past the while loop\n";
@@ -149,6 +148,7 @@ void graphContract(Vertex** vert_set, int num_verts)
 		}
 		if(degreecount==2)
 		{
+	cout << "FISH\n";
 			int vprev=0,vnext=0;
 			for(vprev; vprev<num_verts; vprev++)
 				if(vert_set[i]->neighbors[vprev]==0) break;
@@ -168,6 +168,7 @@ void graphContract(Vertex** vert_set, int num_verts)
 		}
 		if(degreecount==1)
 		{
+	cout << "FISHSTICKS\n";
 			int k=0;
 			for(k;k<num_verts;k++)
 				if(vert_set[i]->neighbors[k]==0) break;
@@ -186,18 +187,20 @@ void graphContract(Vertex** vert_set, int num_verts)
 void* recurser(void* b)
 {
 	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
-    if(found)
-    {
-        int a=0;
-        //delete ((Argbottle*)b)->clist;
-        pthread_exit(0);
-    }
+    	if(found)
+    	{
+        	int a=0;
+        	//delete ((Argbottle*)b)->clist;
+        	pthread_exit(0);
+    	}
 	if(((Argbottle *)b)->clist->is_done())
 	{
 		found = true;
 		//delete ((Argbottle*)b)->clist;
-        return (void*) b;
+        	return (void*) b;
 	}
+	// This should be the list of vertexs that clists's start vertex needs,
+	// in lexigraphic order.
 	vector<int> myvector;
 	for(int k = 0; k < ((Argbottle*)b)->clist->start->vert->neighbors.size(); k++)
 	{
@@ -216,17 +219,21 @@ void* recurser(void* b)
      		//make the copies
      		Argbottle* bottle = new Argbottle();
      		bottle->clist = new Circ_list(((Argbottle *)b)->clist);
-     		bottle->vset = ((Argbottle*)b)->vset;
+		bottle->vset = new Vertex*[num_vertices];
+		for(int j = 0; j < num_vertices; j++)
+		{
+			bottle->vset[j] = new Vertex(((Argbottle*) b)->vset[j]);
+		}
      		//run the checks
      		bottle->clist->check_forward();
      		bottle->clist->check_backward();
      		bottle->clist->have_children(bottle->vset, permutations[i]);
-        if(found)
-        {
-            int a=0;
-            //delete ((Argbottle*)b)->clist;
-            pthread_exit(0);
-        }
+        	if(found)
+        	{
+        		int a=0;
+        		//delete ((Argbottle*)b)->clist;
+        		pthread_exit(0);
+        	}
      		pthread_t fork1;
 		cout << "forking\n" << endl;
      		pthread_create(&fork1,NULL,recurser, bottle);	

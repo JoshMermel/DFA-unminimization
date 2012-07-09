@@ -89,7 +89,7 @@ void Circ_list::check_forward()
 				return;
 			}
 			cout << "Vertex "<< temp->vert->index+1<< 
-				" doesn't need anything right now\n";
+				" doesn't need vertex " << start->vert->index << endl;
 			return;
 		}
 		temp = temp -> next;
@@ -116,7 +116,7 @@ void Circ_list::check_backward()
 				return;
 			}
 			cout << "Vertex "<< temp->vert->index+1<<
-			 " doesn't need anything right now\n";
+			 " doesn't need vertex " << start->vert->index << endl;
 			return;
 		}
 		temp = temp -> prev;
@@ -137,8 +137,10 @@ Circ_list Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 		Node* temp_node = new Node(temp_vert);
 		add_to_list(temp_node, start);
 		temp_vert->set((start->vert->index), true);
+		start->vert->set(temp_vert->index, true);
 		// copy whatever vertex start pointed to after that vertex
-		start->vert->set(*it, true);
+		// don't worry about the bitsets as the original has already been
+		// modified.
 		temp_node = new Node(start->vert);
 		start->vert->increase_references();
 		add_to_list(temp_node, start->next);
@@ -147,7 +149,7 @@ Circ_list Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 	// increment start to the next unsaturated node 
 	// and make sure I don't loop.
 	// neighbors.size() is equivalent to num_vertices,
-	// and so I can pick and place in the vert set
+	// and so I can pick any place in the vert set
 	int i=0;
 	while(start->vert->is_satisfied() &&
 		 i < vert_set[0]->neighbors.size())

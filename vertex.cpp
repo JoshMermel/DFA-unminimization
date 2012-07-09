@@ -12,7 +12,7 @@ Vertex::Vertex(int my_index,int num_vertices)
 Vertex::Vertex(Vertex* vert)
 {
 	index = vert->index;
-	references = 1;
+	references = vert->references;
 	neighbors = vert->neighbors;
 }
 

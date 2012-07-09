@@ -11,7 +11,7 @@ class Vertex
 		Vertex(int my_index, int num_vertices);
 			// the constructor,
 			// sets a bunch of data
-		
+
 		Vertex(Vertex* vert);
 			// copy constuctor for Vertex
 	
@@ -44,7 +44,12 @@ class Vertex
 			// prints the bitset for a given vertex
 
 		int index;
+			// index goes from 0 -> i
 		vector<bool> neighbors;
+			// When a value is 0 then the vertex wants to be connected to
+			// the matching vertex.  This must be symmetric otherwise things
+			// will break.  A 1 means that the vertex has no business with
+			// the matching vertex.
        private:
 		int references;
 };
