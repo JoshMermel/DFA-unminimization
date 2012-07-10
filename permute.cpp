@@ -136,7 +136,7 @@ vector<vector<int> > permute(vector<int> ordered)
 		for(int i = 0; i < ordered.size(); i++)
 		{
 			// put the permutation in a temporary vector
-			vect.push_back(i);
+			vect.push_back(data[i].num);
 		}
 		permutations.push_back(vect);
 		vect.clear();

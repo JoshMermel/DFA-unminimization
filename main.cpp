@@ -164,45 +164,32 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list will exist in memory
 void* recurser(void* b)
 {
+	pthread_mutex_lock(&mutex_var);
 	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
-    	if(found)
-    	{
-        	//delete ((Argbottle*)b)->clist;
-		cout << "I WAS KILLED BY BREAD.\n";
-        	pthread_exit(0);
-    	}
-	if(((Argbottle *)b)->clist->is_done())
-	{
-		found = true;
-		//delete ((Argbottle*)b)->clist;
-		cout << "I FOUND AZTEC GOLD\n";
-		pthread_cond_signal(&condition_var);
-        	return (void*) b;
-	}
+	pthread_mutex_unlock(&mutex_var);
+    	
 	// This should be the list of vertexs that clists's start vertex needs,
 	// in lexigraphic order.
 	vector<int> myvector;
 	for(int k = 0; k < ((Argbottle*)b)->clist->start->vert->neighbors.size(); k++)
-	{
 		// check if it needs a vertex
 		if(((Argbottle*)b)->clist->start->vert->is_needed(k))
-		{
 			myvector.push_back(k);
-		}
-	}
+	
     	// this is where the permuter goes.  The logic should go:
     	// for each permutation have children as a different thread.
 	cout << "permuting... ";
 	vector< vector<int> > permutations = permute(myvector);
 	cout << "There are " << permutations.size() << " permutations.\n";
+
      	pthread_t fork[permutations.size()];
 	Argbottle** bottle = new Argbottle*[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
 	{
+		if(found) {cout << "OH LOOK, A PUPPY\n";pthread_exit(0);}
 		bottle[i] = new Argbottle();
-     		if(found) {cout << "OH LOOK, A PUPPY\n";pthread_exit(0);}
 		//make the copies
-		cout << "[INFO]: " << i << " " << b << " " << bottle[i] << endl;
+		//cout << "[INFO]: " << i << " " << b << " " << bottle[i] << endl;
      		bottle[i]->clist = new Circ_list(((Argbottle *)b)->clist);
 		bottle[i]->vset = new Vertex*[num_vertices];
 		for(int j = 0; j < num_vertices; j++)
@@ -212,16 +199,29 @@ void* recurser(void* b)
      		//run the checks
      		bottle[i]->clist->check_forward();
      		bottle[i]->clist->check_backward();
-     		bottle[i]->clist = bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
-		cout << "forking\n" << endl;
+		if(found)
+    		{
+        		//delete ((Argbottle*)b)->clist;
+			cout << "I WAS KILLED BY BREAD.\n";
+        		pthread_exit(0);
+    		}
+		if(((Argbottle *)b)->clist->is_done())
+		{
+			found = true;
+			//delete ((Argbottle*)b)->clist;
+			cout << "I FOUND AZTEC GOLD\n";
+			pthread_cond_signal(&condition_var);
+        		return (void*) b;
+		}
+     		bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
+		//cout << "forking\n" << endl;
      		pthread_create(&fork[i],NULL,recurser, bottle[i]);
-		pthread_join(fork[i], NULL);	
 	}
 	// The program must wait.
-	//pthread_cond_wait(&condition_var, &mutex_var);
+	pthread_cond_wait(&condition_var, &mutex_var);
 	//for(int i=0; i < permutations.size(); i++)
 		//pthread_join(fork[i], NULL);
-	//cout << "I WAS A GOOD LITTLE THREAD\n";
+	cout << "I WAS A GOOD LITTLE THREAD\n";
 	pthread_exit(0);
 }
 
