@@ -19,6 +19,7 @@ int num_vertices;
 Vertex** vert_set;
 Circ_list* clist_ptr;
 bool found = false;
+int iter=0;
 pthread_mutex_t mutex_var = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condition_var = PTHREAD_COND_INITIALIZER;
 
@@ -164,6 +165,13 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list will exist in memory
 void* recurser(void* b)
 {
+	int retval=0;
+	if(found)
+  	{
+       		cout << "I WAS KILLED BY BREAD.\n";
+        	pthread_exit(0);
+		return (void*) retval;
+    	}
 	pthread_mutex_lock(&mutex_var);
 	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
 	pthread_mutex_unlock(&mutex_var);
@@ -185,8 +193,20 @@ void* recurser(void* b)
      	pthread_t fork[permutations.size()];
 	Argbottle** bottle = new Argbottle*[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
+		bottle[i]=NULL;
+	for(int i=0; i < permutations.size(); i++)
 	{
-		if(found) {cout << "OH LOOK, A PUPPY\n";pthread_exit(0);}
+		if(found) 
+		{
+			cout << "OH LOOK, A PUPPY\n";
+			for(int n=0; n<permutations.size(); n++)
+				if(bottle[n]!=NULL)
+					delete bottle[n];
+			delete [] bottle;
+			delete ((Argbottle*)b);
+			pthread_exit(0);
+			return (void*) retval;
+		}
 		bottle[i] = new Argbottle();
 		//make the copies
 		//cout << "[INFO]: " << i << " " << b << " " << bottle[i] << endl;
@@ -199,30 +219,36 @@ void* recurser(void* b)
      		//run the checks
      		bottle[i]->clist->check_forward();
      		bottle[i]->clist->check_backward();
-		if(found)
-    		{
-        		//delete ((Argbottle*)b)->clist;
-			cout << "I WAS KILLED BY BREAD.\n";
-        		pthread_exit(0);
-    		}
-		if(((Argbottle *)b)->clist->is_done())
+
+		if(bottle[i]->clist->is_done() && iter > 1)
 		{
 			found = true;
 			//delete ((Argbottle*)b)->clist;
 			cout << "I FOUND AZTEC GOLD\n";
 			pthread_cond_signal(&condition_var);
-        		return (void*) b;
+			for(int n=0; n<permutations.size(); n++)
+				if(bottle[n]!=NULL)
+					delete bottle[n];
+			delete [] bottle;
+			delete ((Argbottle*)b);
+        		return (void*) retval;
 		}
      		bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
 		//cout << "forking\n" << endl;
      		pthread_create(&fork[i],NULL,recurser, bottle[i]);
 	}
+	iter++;
 	// The program must wait.
 	pthread_cond_wait(&condition_var, &mutex_var);
 	//for(int i=0; i < permutations.size(); i++)
 		//pthread_join(fork[i], NULL);
 	cout << "I WAS A GOOD LITTLE THREAD\n";
+	for(int n=0; n<permutations.size(); n++)
+		if(bottle[n]!=NULL)
+			delete bottle[n];
+	delete [] bottle;
 	pthread_exit(0);
+	return (void*) retval;
 }
 
 void signalHandler(int signum)

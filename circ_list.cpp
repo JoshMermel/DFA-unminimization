@@ -163,7 +163,7 @@ Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 
 void Circ_list::remove(Node* begin, Node* end)
 {
-	Node* temp = new Node;		// declare a temp node and make it the
+	Node* temp = new Node();		// declare a temp node and make it the
 	temp -> next = begin -> next;	// beginning of a new linked list whose
 					// second node is the one after begin
 	temp -> next -> prev = temp;	// correct that node's prev pointer
