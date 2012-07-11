@@ -21,6 +21,7 @@ Circ_list* clist_ptr;
 bool found = false;
 int iter=0;
 pthread_mutex_t mutex_var = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex_var_2 = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condition_var = PTHREAD_COND_INITIALIZER;
 
 int main(int argc, char* argv[])
@@ -95,7 +96,8 @@ int main(int argc, char* argv[])
 		bottle->vset[i] = new Vertex(vert_set[i]);
 	}
 	pthread_create(&recurse, NULL, recurser, (void*)bottle);
-	pthread_join(recurse, NULL);
+    pthread_cond_wait(&condition_var, &mutex_var);
+	//pthread_join(recurse, NULL);
 	//recurser((void*)bottle);
 
 	//delete some dynamically allocated memory
@@ -168,13 +170,14 @@ void* recurser(void* b)
 	int retval=0;
 	if(found)
   	{
-       		cout << "I WAS KILLED BY BREAD.\n";
-        	pthread_exit(0);
+   		cout << "I WAS KILLED BY BREAD.\n";
+    	pthread_exit(0);
 		return (void*) retval;
-    	}
-	pthread_mutex_lock(&mutex_var);
-	((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
-	pthread_mutex_unlock(&mutex_var);
+    }
+
+	pthread_mutex_lock(&mutex_var); //LOCK
+	
+    ((Argbottle*)b)->clist->print_list(((Argbottle*)b)->clist->start);
     	
 	// This should be the list of vertexs that clists's start vertex needs,
 	// in lexigraphic order.
@@ -183,19 +186,22 @@ void* recurser(void* b)
 		// check if it needs a vertex
 		if(((Argbottle*)b)->clist->start->vert->is_needed(k))
 			myvector.push_back(k);
-	
-    	// this is where the permuter goes.  The logic should go:
-    	// for each permutation have children as a different thread.
+
+	// this is where the permuter goes.  The logic should go:
+   	// for each permutation have children as a different thread.
 	cout << "permuting... ";
 	vector< vector<int> > permutations = permute(myvector);
 	cout << "There are " << permutations.size() << " permutations.\n";
 
-     	pthread_t fork[permutations.size()];
+	pthread_mutex_unlock(&mutex_var); //UNLOCK
+    
+    pthread_t fork[permutations.size()];
 	Argbottle** bottle = new Argbottle*[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
 		bottle[i]=NULL;
 	for(int i=0; i < permutations.size(); i++)
 	{
+    	pthread_mutex_lock(&mutex_var_2); //LOCKi
 		if(found) 
 		{
 			cout << "OH LOOK, A PUPPY\n";
@@ -210,7 +216,7 @@ void* recurser(void* b)
 		bottle[i] = new Argbottle();
 		//make the copies
 		//cout << "[INFO]: " << i << " " << b << " " << bottle[i] << endl;
-     		bottle[i]->clist = new Circ_list(((Argbottle *)b)->clist);
+     	bottle[i]->clist = new Circ_list(((Argbottle *)b)->clist);
 		bottle[i]->vset = new Vertex*[num_vertices];
 		for(int j = 0; j < num_vertices; j++)
 		{
@@ -231,11 +237,12 @@ void* recurser(void* b)
 					delete bottle[n];
 			delete [] bottle;
 			delete ((Argbottle*)b);
-        		return (void*) retval;
+        	return (void*) retval;
 		}
-     		bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
+     	bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
 		//cout << "forking\n" << endl;
-     		pthread_create(&fork[i],NULL,recurser, bottle[i]);
+     	pthread_create(&fork[i],NULL,recurser, bottle[i]);
+	    pthread_mutex_unlock(&mutex_var_2);  //UNLOCK
 	}
 	iter++;
 	// The program must wait.
