@@ -8,11 +8,11 @@ Argbottle::Argbottle()
 
 Argbottle::~Argbottle()
 {
-    	if(clist!=NULL)
-    		delete clist;
+    if(clist!=NULL)
+        delete clist;
 	if(vset!=NULL)
 	{
-		for(int i=0; i < vset[0]->neighbors.size(); i++)
+		for(int i=0; i < vset[0]->size; i++)
 			delete vset[i];
 		delete [] vset;
 	}

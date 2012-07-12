@@ -152,7 +152,7 @@ Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 	// and so I can pick any place in the vert set
 	int i=0;
 	while(start->vert->is_satisfied() &&
-		 i < vert_set[0]->neighbors.size())
+		 i < vert_set[0]->size)
 	{
 		//cout << "Vertex " << start->vert->index+1 << " is happy.\n";
 		start = start->next;

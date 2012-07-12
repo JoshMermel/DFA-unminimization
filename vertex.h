@@ -50,6 +50,9 @@ class Vertex
 			// the matching vertex.  This must be symmetric otherwise things
 			// will break.  A 1 means that the vertex has no business with
 			// the matching vertex.
+    
+    int size;
+    
        private:
 		int references;
 };
