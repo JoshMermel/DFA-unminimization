@@ -4,6 +4,7 @@ Argbottle::Argbottle()
 {
 	clist=NULL;
 	vset=NULL;
+    output="";
 }
 
 Argbottle::~Argbottle()

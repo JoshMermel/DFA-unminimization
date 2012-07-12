@@ -8,6 +8,7 @@
 #ifndef ARGBOTTLE
 #define ARGBOTTLE
 
+#include <string>
 #include "circ_list.h"
 #include "vertex.h"
 
@@ -16,6 +17,7 @@ class Argbottle
 	public:
 	Circ_list* clist;
 	Vertex** vset;
+    string output;
 	Argbottle();
 	~Argbottle();
 };

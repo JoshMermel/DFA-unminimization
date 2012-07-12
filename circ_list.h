@@ -39,6 +39,9 @@ class Circ_list
 			// given a start point, this function prints the list move forward
 			// from there stopping when it returns to the start point.
 			// ?add a parameter to signify direction?
+        
+    string toString(Node* begin);
+    // does the same thing as print_list but outputs a string instead.
 
 		void check_forward();
 		void check_backward();

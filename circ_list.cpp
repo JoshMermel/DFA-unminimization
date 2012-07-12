@@ -68,6 +68,27 @@ void Circ_list::print_list(Node* begin)
 	}
 }
 
+string Circ_list::toString(Node* begin)
+{
+    string ret = "";
+    if(begin == NULL)
+	{
+		ret = "the list is empty\n";
+	}
+	else
+	{
+		Node* temp = begin->next;
+		ret += begin->vert->index +1 + " ";
+		while(temp != begin)
+		{
+			ret += temp->vert->index +1 + " ";
+			temp = temp -> next;
+		}
+        ret += "\n";
+	}
+    return ret;
+}
+
 void Circ_list::check_forward()
 {
 	Node* temp = start->next;
