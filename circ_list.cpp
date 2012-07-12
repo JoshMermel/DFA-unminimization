@@ -2,7 +2,15 @@
 #include "node.h"
 #include "circ_list.h"
 #include <iostream>
+#include <sstream>
 
+
+string convertInt(int number)
+{
+    stringstream ss;//create a stringstream
+    ss << number;//add number to the stream
+    return ss.str();//return a string with the contents of the stream
+}
 
 Circ_list::Circ_list(Vertex* vert)
 {
@@ -77,11 +85,13 @@ string Circ_list::toString(Node* begin)
 	}
 	else
 	{
+        stringstream ss;
 		Node* temp = begin->next;
-		ret += begin->vert->index +1 + " ";
+        ret+=convertInt(begin->vert->index+1);
+        string s="";
 		while(temp != begin)
 		{
-			ret += temp->vert->index +1 + " ";
+            ret += " " + convertInt(temp->vert->index+1);
 			temp = temp -> next;
 		}
         ret += "\n";

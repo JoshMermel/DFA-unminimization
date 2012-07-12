@@ -97,10 +97,9 @@ int main(int argc, char* argv[])
 		bottle->vset[i] = new Vertex(vert_set[i]);
 	}
 	pthread_create(&recurse, NULL, recurser, (void*)bottle);
+    while(!found);
     //pthread_cond_wait(&condition_var, &mutex_var);
-	pthread_join(recurse, NULL);
-	//recurser((void*)bottle);
-
+	
 	//delete some dynamically allocated memory
 	//unfinished?
 	cout << "I finished!\n";
@@ -180,12 +179,12 @@ void* recurser(void* b)
 	// this is where the permuter goes.  The logic should go:
    	// for each permutation have children as a different thread.
 	vector< vector<int> > permutations = permute(myvector);
-	cout << "There are " << permutations.size() +1 << " permutations.\n";
-    
+	cout << "There are " << permutations.size() << " permutations.\n";
     pthread_t fork[permutations.size()];
 	Argbottle** bottle = new Argbottle*[permutations.size()];
 	for(int i=0; i < permutations.size(); i++)
 		bottle[i]=NULL;
+    
 	for(int i=0; i < permutations.size(); i++)
 	{
     	pthread_mutex_lock(&mutex_var_2); //LOCK2
@@ -205,7 +204,7 @@ void* recurser(void* b)
         bottle[i]->output = ""; 
 		for(int j = 0; j < num_vertices; j++)
 			bottle[i]->vset[j] = new Vertex(((Argbottle*) b)->vset[j]);
-
+        
         // have children        
         bottle[i]->clist->have_children(bottle[i]->vset, permutations[i]);
         bottle[i]->output += bottle[i]->clist->toString(bottle[i]->clist->start);
@@ -215,15 +214,15 @@ void* recurser(void* b)
         bottle[i]->output += bottle[i]->clist->toString(bottle[i]->clist->start);
         bottle[i]->clist->check_backward();
         bottle[i]->output += bottle[i]->clist->toString(bottle[i]->clist->start);
-
-		if(bottle[i]->clist->is_done())
+        
+        if(bottle[i]->clist->is_done())
 		{
             bottle[i]->output += bottle[i]->clist->toString(bottle[i]->clist->start);
-			found = true;
 			cout << "I FOUND AZTEC GOLD\n";
-			pthread_cond_broadcast(&condition_var);
             cout << bottle[i]->output;
+            pthread_cond_broadcast(&condition_var);
             pthread_mutex_unlock(&mutex_var_2);  //UNLOCK2
+            found = true;
             pthread_exit(NULL);
         	return (void*) retval;
 		}
@@ -231,6 +230,7 @@ void* recurser(void* b)
      	// The thread splits and unlocks so other threads may work.
         pthread_create(&fork[i],NULL,recurser, bottle[i]);
         pthread_mutex_unlock(&mutex_var_2); //UNLOCK2
+        pthread_mutex_unlock(&mutex_var);  //UNLOCK1
 	}
     pthread_mutex_unlock(&mutex_var);  //UNLOCK1
     pthread_exit(NULL);
