@@ -1,9 +1,15 @@
 #include "circ_list.h"
+#include <vector>
 #include <iostream>
 #include <fstream>
+#include <csignal>
+#include "main_helper.cpp"
+
 using namespace std;
 
 void graphContract(Vertex** vert_set, int num_verts);
+void signalHandler(int signum);
+bool recurser(Circ_list* clist, Vertex** vset, int num_vertices, int level);
 
 int main(int argc, char* argv[])
 {
@@ -64,77 +70,77 @@ int main(int argc, char* argv[])
 	graphContract(vert_set, num_vertices);
 	myfile.close();
 
-	// declare the circular doubly linked list and put the vertex whose index
+	// declare the circular doubly linked list->and put the vertex whose index
 	// is the same as the enviromental variable first into it to start it
 	
-	Circ_list my_list(vert_set[atoi(argv[1])-1]);
+	Circ_list* my_list = new Circ_list(vert_set[atoi(argv[1])-1]);
 
-	while(true)
-	{
-		
-		// check forward and backward of the vertex to see if it want to
-		// connect to the nearest non-saturated neighber and vice versa
-		my_list.print_list(my_list.start);
-		my_list.check_forward();
-		my_list.print_list(my_list.start);
-		my_list.check_backward();
-		// check if we are done
-		if(my_list.is_done())
-		{
-			//delete some dynamically allocated memory
-			cout << "I win!\n";
-			for(int i=0;i<num_vertices;i++)
-			{
-				delete vert_set[i];	
-			}
-			delete [] vert_set;
-			return 0;
-		}
-		// now look at what it is missing and create those nodes
-		my_list.print_list(my_list.start);
-		my_list.have_children(vert_set);
-	}
-
-	cout << "flow got to the end of main - past the while loop\n";
+    if(recurser(my_list, vert_set, num_vertices, 0))
+    {
+        cout << "Smoothie time\n";
+    }
+    else
+	    cout << "The tree yielded no good results\n";
+    delete my_list;
+    for(int i=0; i<num_vertices; i++)
+        delete vert_set[i];
+    delete [] vert_set;
 	exit(1);
 }
-//conract the graph so that there are no dangling nodes and so the graph is as simple as possible.  Thus there should be no tails no nodes with degree two or less.  This does not affect the math as these nodes could be trvially added back in after the algrorithm's expansion
-void graphContract(Vertex** vert_set, int num_verts)
+
+bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
 {
-	for(int i=0; i<num_verts; i++)
-	{
-		int boolcount=0;
-		for(int j=0;j<num_verts;j++)
-		{
-			if(vert_set[i]->neighbors[j]==0)
-				boolcount++;
-		}
-		if(boolcount==2)
-		{
-			int vprev=0,vnext=0;
-			for(vprev; vprev<num_verts; vprev++)
-				if(vert_set[i]->neighbors[vprev]==0) break;
-			vnext=vprev+1;
-			for(vnext; vnext<num_verts; vnext++)
-				if(vert_set[i]->neighbors[vnext]==0) break;
-			vert_set[vprev]->set(i,1); //perhaps "muting" will suffice for now
-			vert_set[i]->set(vprev,1);
-			vert_set[vnext]->set(i,1);
-			vert_set[i]->set(vprev,1);
-			//must reconnect
-			vert_set[vprev]->set(vnext,0);
-			vert_set[vnext]->set(vprev,0);
-			cout << "2) Contracting and connecting vertex " << vprev+1 << ", vertex " << i+1 << ", and vertex " << vnext+1 << endl;
-		}
-		if(boolcount==1)
-		{
-			int k=0;
-			for(k;k<num_verts;k++)
-				if(vert_set[i]->neighbors[k]==0) break;
-			vert_set[k]->set(i,1);
-			vert_set[i]->set(k,1);
-			cout <<"1) Contracting vertex "<< k+1 << " and vertex " << i+1 <<endl;
-		}
-	}
+   if(level>num_vertices*num_vertices)
+   {
+        cout << "INCONCEIVABLE!\n";
+        return false;
+    }
+
+    vector<int> myvector;
+    for(int i=0; i < num_vertices; i++)
+        if(clist->start->vert->needs(i))
+            myvector.push_back(i);
+    
+    vector< vector<int> > permutations = permute(myvector);
+
+    for(int i=0; i<permutations.size();i++)
+    {
+        Circ_list* list = new Circ_list(clist);
+        Vertex** vset = new Vertex*[num_vertices];
+        for(int j=0; j < num_vertices; j++)
+            vset[j] = new Vertex(vert_set[j]);
+
+        list->check_forward();
+        list->print_list(list->start);
+        list->check_backward();
+        list->print_list(list->start);
+        if(list->is_done())
+        {
+            cout << "(^_^)\n";
+            return true;
+        }
+        list->have_children(vset, permutations[i]);
+        list->print_list(list->start);
+        bool tmp = recurser(list, vset, num_vertices, level+1); 
+        delete list;
+        for(int j=0; j<num_vertices; j++)
+            delete vset[j];
+        delete [] vset;
+        if(tmp)
+            return true;
+    }
+    return false;
 }
 
+void signalHandler(int signum)
+{
+	cout << "CAUGHT INTERRUPT [" << signum << "], QUITTING..." << endl;
+/*	for(int i=0;i<num_vertices;i++)
+	{
+		delete vert_set[i];	
+	}
+	delete [] vert_set;
+	clist->ptr->~Circ_list();*/
+	exit(signum);
+}  
+	    

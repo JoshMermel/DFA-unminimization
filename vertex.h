@@ -28,7 +28,7 @@ class Vertex
 		int get_references();
 			// a getter for the private variable, index
 
-		bool is_needed(int index);
+		bool needs(int index);
 			// when passed an int representing an index, this function will
 			// return true if the vertex that index represents is needed and
 			// false if not.
