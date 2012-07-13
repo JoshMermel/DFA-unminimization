@@ -190,6 +190,7 @@ void* recurser(void* b)
     	pthread_mutex_lock(&mutex_var_2); //LOCK2
 		if(found) 
 		{
+            pthread_mutex_unlock(&mutex_var); //UNLOCK1
             pthread_mutex_unlock(&mutex_var_2); //UNLOCK2
 			pthread_exit(0);
 			return (void*) retval;
@@ -221,6 +222,7 @@ void* recurser(void* b)
 			cout << "I FOUND AZTEC GOLD\n";
             cout << bottle[i]->output;
             pthread_cond_broadcast(&condition_var);
+            pthread_mutex_unlock(&mutex_var); //UNLOCK1
             pthread_mutex_unlock(&mutex_var_2);  //UNLOCK2
             found = true;
             pthread_exit(NULL);
