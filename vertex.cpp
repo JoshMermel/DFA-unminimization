@@ -37,7 +37,7 @@ int Vertex::get_index()
 	return index;
 }
 
-bool Vertex::is_needed(int index)
+bool Vertex::needs(int index)
 {
 	return !neighbors[index];
 }
