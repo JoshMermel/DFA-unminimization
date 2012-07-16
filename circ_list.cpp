@@ -13,9 +13,16 @@ Circ_list::Circ_list(Circ_list* list)
 {    
     //Copy start and set it up
 	Node* remote_ptr = list->start;
-	start = new Node(remote_ptr->vert);
+	Vertex* tmp_vrt = new Vertex(remote_ptr->vert);
+	start = new Node(tmp_vrt);
     start->next=start;
     start->prev=start;
+	if(list->start->vert->index > 1000)
+		cout << "urine\n";
+	if(remote_ptr->next->vert->index > 1000)
+	{
+		cout << "poop\n";
+	}
 	remote_ptr=remote_ptr->next;
    	//continuously add new nodes to match the remote list
 	while(remote_ptr->vert!=list->start->vert)
@@ -129,7 +136,7 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 			temp_vert->set((start->vert->index), true);
 			// copy whatever vertex start pointed to after that vertex
 			start->vert->set(perm[i], true);
-			temp_node = new Node(start->vert);
+			temp_node = new Node(new Vertex(start->vert));
 			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
 			start = start->next->next;

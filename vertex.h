@@ -14,6 +14,9 @@ class Vertex
 		
 		Vertex(Vertex* vert);
 			// copy constuctor for Vertex
+        
+        ~Vertex();
+            // destructor
 	
 		void increase_references();
 			// adds one to the number of references
@@ -43,7 +46,7 @@ class Vertex
 		void bit_print();
 			// prints the bitset for a given vertex
 
-		int index;
+		const int index;
 		vector<bool> neighbors;
        private:
 		int references;

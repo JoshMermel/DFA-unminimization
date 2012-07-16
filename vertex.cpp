@@ -16,6 +16,10 @@ Vertex::Vertex(Vertex* vert)
 	neighbors = vert->neighbors;
 }
 
+Vertex::~Vertex()
+{
+}
+
 void Vertex::increase_references()
 {
 	references++;
