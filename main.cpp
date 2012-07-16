@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
 	if(!myfile.is_open())
 	{
 		cout << "BAD FILENAME, HAVE SOME CAKE\n";
+        exit(-2);
 	}
 	// determine how many vertices there are
 	int num_vertices;
@@ -77,7 +78,7 @@ int main(int argc, char* argv[])
 
     if(recurser(my_list, vert_set, num_vertices, 0))
     {
-        cout << "Smoothie time\n";
+        cout << "Fruit smoothie time\n";
     }
     else
 	    cout << "The tree yielded no fruits\n";
@@ -85,25 +86,26 @@ int main(int argc, char* argv[])
     for(int i=0; i<num_vertices; i++)
         delete vert_set[i];
     delete [] vert_set;
-	exit(1);
+	exit(0);
 }
 
 bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
 {
-   if(level>num_vertices*num_vertices)
-   {
+    // limit to n^2 levels
+    if(level>num_vertices*num_vertices)
+    {
         cout << "INCONCEIVABLE!\n";
         return false;
     }
 
     vector<int> myvector;
     for(int i=0; i < num_vertices; i++)
-        if(clist->start->vert->needs(i))
-            myvector.push_back(i);
+        myvector.push_back(i);
     
     vector< vector<int> > permutations = permute(myvector);
+    int psize = permutations.size();
 
-    for(int i=0; i<permutations.size();i++)
+    for(int i = 0; i < psize ;i++)
     {
         Circ_list* list = new Circ_list(clist);
         Vertex** vset = new Vertex*[num_vertices];
@@ -121,7 +123,9 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
         }
         list->have_children(vset, permutations[i]);
         list->print_list(list->start);
-        bool tmp = recurser(list, vset, num_vertices, level+1); 
+        
+        cout << "recurse\n";
+        bool tmp = recurser(list, vset, num_vertices, level+1); //loop
         delete list;
         for(int j=0; j<num_vertices; j++)
             delete vset[j];

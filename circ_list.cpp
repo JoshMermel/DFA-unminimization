@@ -127,6 +127,8 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
 	for(int i = 0; i < perm.size(); i++)
 	{
+		if(start->vert->needs(i))
+		{
 			cout << "Vertex " << start->vert->index+1 
                 << " needs vertex " << perm[i]+1 << endl;
 			// create that vertex and add it after start
@@ -140,6 +142,7 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
 			start = start->next->next;
+		}
 	}	
 	// incrememnt start to the next unsaturated node
 	while(start->vert->is_satisfied())
