@@ -74,10 +74,11 @@ int main(int argc, char* argv[])
 		
 		// check forward and backward of the vertex to see if it want to
 		// connect to the nearest non-saturated neighber and vice versa
-		my_list.print_list(my_list.start);
+		
 		my_list.check_forward();
 		my_list.print_list(my_list.start);
 		my_list.check_backward();
+        my_list.print_list(my_list.start);
 		// check if we are done
 		if(my_list.is_done())
 		{
@@ -91,8 +92,9 @@ int main(int argc, char* argv[])
 			return 0;
 		}
 		// now look at what it is missing and create those nodes
-		my_list.print_list(my_list.start);
 		my_list.have_children(vert_set);
+        my_list.print_list(my_list.start);
+
 	}
 
 	cout << "flow got to the end of main - past the while loop\n";
