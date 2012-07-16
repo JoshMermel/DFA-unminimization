@@ -125,6 +125,8 @@ vector<vector<int> > permute(vector<int> ordered)
 	int val;
 	vector<int> vect;
 	vector<vector<int> > permutations;
+    // Without this step, the originally ordered list is omitted
+    permutations.push_back(ordered);
 	//while there exists a mobile integer
 	while(!is_done(data, ordered.size()))
 	{

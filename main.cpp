@@ -100,7 +100,8 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
 
     vector<int> myvector;
     for(int i=0; i < num_vertices; i++)
-        myvector.push_back(i);
+        if(clist->start->vert->needs(i))
+            myvector.push_back(i);
     
     vector< vector<int> > permutations = permute(myvector);
     int psize = permutations.size();

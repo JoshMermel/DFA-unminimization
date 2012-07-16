@@ -17,12 +17,6 @@ Circ_list::Circ_list(Circ_list* list)
 	start = new Node(tmp_vrt);
     start->next=start;
     start->prev=start;
-	if(list->start->vert->index > 1000)
-		cout << "urine\n";
-	if(remote_ptr->next->vert->index > 1000)
-	{
-		cout << "poop\n";
-	}
 	remote_ptr=remote_ptr->next;
    	//continuously add new nodes to match the remote list
 	while(remote_ptr->vert!=list->start->vert)
@@ -63,13 +57,14 @@ void Circ_list::print_list(Node* begin)
 	}
 	else
 	{
-		Node* temp = begin->next;
-		cout << begin->vert->index +1<< ' ';
-		while(temp != begin)
+		Node* temp = begin;
+		//cout << begin->vert->index +1<< ' ';
+		do
 		{
 			cout << temp->vert->index +1<< ' ';
 			temp = temp -> next;
 		}
+		while(temp != begin);
 		cout << endl;
 	}
 }
@@ -92,7 +87,7 @@ void Circ_list::check_forward()
 				remove(start, temp);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything\n";
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index << endl;
 			return;
 		}
 		temp = temp -> next;
@@ -116,7 +111,7 @@ void Circ_list::check_backward()
 				remove(temp, start);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need anything\n";
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index << endl;
 			return;
 		}
 		temp = temp -> prev;
@@ -127,8 +122,8 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
 	for(int i = 0; i < perm.size(); i++)
 	{
-		if(start->vert->needs(i))
-		{
+		//if(start->vert->needs(i))
+		//{
 			cout << "Vertex " << start->vert->index+1 
                 << " needs vertex " << perm[i]+1 << endl;
 			// create that vertex and add it after start
@@ -136,13 +131,16 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
 			temp_vert->set((start->vert->index), true);
-			// copy whatever vertex start pointed to after that vertex
 			start->vert->set(perm[i], true);
-			temp_node = new Node(new Vertex(start->vert));
+			// copy whatever vertex start pointed to after that vertex
+			// note that this vertex is not copied but linked, this is
+			// to preserve the neighbors vector, containing what that
+			// vertex needs.
+			temp_node = new Node(start->vert);
 			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
 			start = start->next->next;
-		}
+		//}
 	}	
 	// incrememnt start to the next unsaturated node
 	while(start->vert->is_satisfied())
