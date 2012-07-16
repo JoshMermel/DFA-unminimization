@@ -27,7 +27,7 @@ Circ_list::Circ_list(Circ_list* list)
    	//continuously add new nodes to match the remote list
 	while(remote_ptr->vert!=list->start->vert)
 	{
-      	add_to_list(new Node(remote_ptr->vert), start);
+      	add_to_list(new Node(new Vertex(remote_ptr->vert)), start);
 		remote_ptr=remote_ptr->next;
 	}
 }

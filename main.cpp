@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
         cout << "Smoothie time\n";
     }
     else
-	    cout << "The tree yielded no good results\n";
+	    cout << "The tree yielded no fruits\n";
     delete my_list;
     for(int i=0; i<num_vertices; i++)
         delete vert_set[i];
@@ -122,10 +122,10 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
         list->have_children(vset, permutations[i]);
         list->print_list(list->start);
         bool tmp = recurser(list, vset, num_vertices, level+1); 
-        delete list;
-        for(int j=0; j<num_vertices; j++)
-            delete vset[j];
-        delete [] vset;
+        //delete list;
+        //for(int j=0; j<num_vertices; j++)
+        //delete vset[j];
+        //delete [] vset;
         if(tmp)
             return true;
     }
