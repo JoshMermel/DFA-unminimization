@@ -110,8 +110,6 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
         for(int j=0; j < num_vertices; j++)
             vset[j] = new Vertex(vert_set[j]);
 
-        list->have_children(vset, permutations[i]);
-        list->print_list(list->start);
         list->check_forward();
         list->print_list(list->start);
         list->check_backward();
@@ -121,7 +119,8 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
             cout << "(^_^)\n";
             return true;
         }
-
+        list->have_children(vset, permutations[i]);
+        list->print_list(list->start);
         bool tmp = recurser(list, vset, num_vertices, level+1); 
         delete list;
         for(int j=0; j<num_vertices; j++)
