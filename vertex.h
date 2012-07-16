@@ -1,8 +1,6 @@
 #ifndef MERMEL_VERTEX
 #define MERMEL_VERTEX
 
-#include <vector>
-
 using namespace std;
 
 class Vertex
@@ -25,9 +23,6 @@ class Vertex
 			// subtracts one from the number of references and returns wheather
 			// or not the number of references is bigger that 0
 
-		int get_index();
-			// a getter for the private variable, index
-
 		int get_references();
 			// a getter for the private variable, index
 
@@ -47,7 +42,8 @@ class Vertex
 			// prints the bitset for a given vertex
 
 		int index;
-		vector<bool> neighbors;
+        int size;
+		bool* neighbors;
        private:
 		int references;
 };
