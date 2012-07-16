@@ -21,7 +21,7 @@ Circ_list::Circ_list(Circ_list* list) //UNTESTED
 {
     	//Copy start and set it up
 	Node* remote_ptr = list->start;
-	start = new Node(remote_ptr->vert);
+	start = new Node(new Vertex(remote_ptr->vert));
     	start->next=start;
     	start->prev=start;
 	remote_ptr=remote_ptr->next;
@@ -29,7 +29,7 @@ Circ_list::Circ_list(Circ_list* list) //UNTESTED
     	//continuously add new nodes to match the remote list
 	while(remote_ptr->vert!=list->start->vert)
 	{
-        	add_to_list(new Node(remote_ptr->vert), start);
+        	add_to_list(new Node(new Vertex(remote_ptr->vert)), start);
 		remote_ptr=remote_ptr->next;
 	}
 }
@@ -172,7 +172,7 @@ Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
 		// copy whatever vertex start pointed to after that vertex
 		// don't worry about the bitsets as the original has already been
 		// modified.
-		temp_node = new Node(start->vert);
+		temp_node = new Node(new Vertex(start->vert));
 		start->vert->increase_references();
 		add_to_list(temp_node, start->next);
 		start = start->next->next;
