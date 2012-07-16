@@ -46,7 +46,7 @@ class Vertex
 		void bit_print();
 			// prints the bitset for a given vertex
 
-		const int index;
+		int index;
 		vector<bool> neighbors;
        private:
 		int references;
