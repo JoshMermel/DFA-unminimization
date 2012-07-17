@@ -4,22 +4,27 @@
 Vertex::Vertex(int my_index,int num_vertices)
 {
 	// fill the bitset with all ones
-	neighbors.resize(num_vertices,1);
+	neighbors = new bool[num_vertices];
+    for(int i = 0; i < num_vertices; i++)
+        neighbors[i]=1;
+    size = num_vertices;
 	index = my_index;
 	references = 1;
-    size = num_vertices;
 }
 
 Vertex::Vertex(Vertex* vert)
 {
 	index = vert->index;
-	references = vert->references;
-    // it appears that vectors do NOT deep copy.
-    for(int i=0;i < vert->size;i++)
-    {
-        neighbors.push_back(vert->neighbors[i]);
-    }
     size = vert->size;
+	references = 1;
+	neighbors = new bool[size];
+    for(int i = 0; i < size; i++)
+        neighbors[i]=vert->neighbors[i];
+}
+
+Vertex::~Vertex()
+{
+    delete [] neighbors;
 }
 
 void Vertex::increase_references()
@@ -38,25 +43,14 @@ int Vertex::get_references()
 	return references;
 }
 
-int Vertex::get_index()
+bool Vertex::needs(int index)
 {
-	return index;
-}
-
-bool Vertex::is_needed(int index)
-{
-	return !neighbors.at(index);
+	return !neighbors[index];
 }
 
 void Vertex::set(int index, bool val)
 {
-    if(index > size)
-    {
-        cout << "INDEX ARRAY OUT OF BOUNDS ERROR, VERTEX::SET(" << index << ", " << val << ");\n";
-        exit(0);
-    }
-        
-	neighbors.at(index) = val;
+	neighbors[index] = val;
 }
 
 bool Vertex::is_satisfied()

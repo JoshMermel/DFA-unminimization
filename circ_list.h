@@ -40,12 +40,12 @@ class Circ_list
 			// from there stopping when it returns to the start point.
 			// ?add a parameter to signify direction?
         
-    string toString(Node* begin);
-    // does the same thing as print_list but outputs a string instead.
+		string toString(Node* begin);
+			// does the same thing as print_list but outputs a string instead.
 
 		void check_forward();
 		void check_backward();
-		Circ_list* have_children(Vertex** vert_set, vector<int>  permutation);
+		void have_children(Vertex** vert_set, vector<int>  perm);
 			// these three functions should always be called in this order.
 			// The first two check forward and backward for the first
 			// non-saturated vertex and if it is one that can pair with the

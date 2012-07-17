@@ -166,14 +166,13 @@ void graphContract(Vertex** vert_set, int num_verts)
 // POSTCONDITION: many many copies of the circ_list will exist in memory
 void* recurser(void* b)
 {
-	int retval=0;
-	pthread_mutex_lock(&mutex_var); //LOCK1
+	//pthread_mutex_lock(&mutex_var); //LOCK1
     	
 	// This should be the list of vertexs that clists's start vertex needs,
 	// in lexigraphic order.
 	vector<int> myvector;
 	for(int k = 0; k < ((Argbottle*)b)->clist->start->vert->size; k++)
-		if(((Argbottle*)b)->clist->start->vert->is_needed(k))
+		if(((Argbottle*)b)->clist->start->vert->needs(k))
 			myvector.push_back(k);
 
 	// this is where the permuter goes.  The logic should go:
@@ -187,13 +186,14 @@ void* recurser(void* b)
     
 	for(int i=0; i < permutations.size(); i++)
 	{
-    	pthread_mutex_lock(&mutex_var_2); //LOCK2
+		bool tmp = false;
+    	//pthread_mutex_lock(&mutex_var_2); //LOCK2
 		if(found) 
 		{
-            pthread_mutex_unlock(&mutex_var); //UNLOCK1
-            pthread_mutex_unlock(&mutex_var_2); //UNLOCK2
-			pthread_exit(0);
-			return (void*) retval;
+            //pthread_mutex_unlock(&mutex_var); //UNLOCK1
+            //pthread_mutex_unlock(&mutex_var_2); //UNLOCK2
+			//pthread_exit(0);
+			return (void*) false;
 		}
         
         cout << "permutation: " << i << endl;
@@ -222,20 +222,24 @@ void* recurser(void* b)
 			cout << "I FOUND AZTEC GOLD\n";
             cout << bottle[i]->output;
             pthread_cond_broadcast(&condition_var);
-            pthread_mutex_unlock(&mutex_var); //UNLOCK1
-            pthread_mutex_unlock(&mutex_var_2);  //UNLOCK2
+            //pthread_mutex_unlock(&mutex_var); //UNLOCK1
+            //pthread_mutex_unlock(&mutex_var_2);  //UNLOCK2
             found = true;
-            pthread_exit(NULL);
-        	return (void*) retval;
+            //pthread_exit(NULL);
+        	return (void*) true;
 		}
         
      	// The thread splits and unlocks so other threads may work.
-        pthread_create(&fork[i],NULL,recurser, bottle[i]);
-        pthread_mutex_unlock(&mutex_var_2); //UNLOCK2
-        pthread_mutex_unlock(&mutex_var);  //UNLOCK1
+        tmp = (bool*) pthread_create(&fork[i],NULL,recurser, bottle[i]);
+        //pthread_mutex_unlock(&mutex_var_2); //UNLOCK2
+        //pthread_mutex_unlock(&mutex_var);  //UNLOCK1
 	}
-    pthread_mutex_unlock(&mutex_var);  //UNLOCK1
-    pthread_exit(NULL);
+	for (int i = 0; i < permutations.size(); i++) {
+		pthread_join(fork[i], NULL);
+	}
+    //pthread_mutex_unlock(&mutex_var);  //UNLOCK1
+    //pthread_exit(NULL);
+	return (void*) false;
 }
 
 void signalHandler(int signum)

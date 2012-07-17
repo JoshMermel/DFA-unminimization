@@ -17,20 +17,21 @@ Circ_list::Circ_list(Vertex* vert)
 	start_list_with(vert);
 }
 
-Circ_list::Circ_list(Circ_list* list) //UNTESTED
+Circ_list::Circ_list(Circ_list* list)
 {
-    	//Copy start and set it up
+    //Copy start and set it up
 	Node* remote_ptr = list->start;
 	start = new Node(new Vertex(remote_ptr->vert));
-    	start->next=start;
-    	start->prev=start;
+	start->next=start;
+	start->prev=start;
 	remote_ptr=remote_ptr->next;
-    
-    	//continuously add new nodes to match the remote list
-	while(remote_ptr->vert!=list->start->vert)
+	Node* start_ptr = start;
+   	//continuously add new nodes to match the remote list
+	while(remote_ptr!=list->start)
 	{
-        	add_to_list(new Node(new Vertex(remote_ptr->vert)), start);
+      	add_to_list(new Node(new Vertex(remote_ptr->vert)), start_ptr); 
 		remote_ptr=remote_ptr->next;
+		start_ptr = start_ptr->next;
 	}
 }
 
@@ -107,20 +108,17 @@ void Circ_list::check_forward()
 		if(!temp->vert->is_satisfied())
 		{
 			// check if start wants to connect to temp
-			if(start->vert->is_needed(temp->vert->get_index()))
+			if(start->vert->needs(temp->vert->index))
 			{
 				// connect them
 				start->vert->set((temp->vert->index), true);
 				temp->vert->set((start->vert->index), true);
 				// also remove all vertices between them.
-				/*cout << "Removing between vertex " << 
-					start->vert->index+1 << 
-					" and vertex " << temp->vert->index+1 << endl;*/
+				cout << "Removing between vertex " << start->vert->index+1 << " and vertex " << temp->vert->index+1 << endl;
 				remove(start, temp);
 				return;
 			}
-		/*	cout << "Vertex "<< temp->vert->index+1<< 
-				" doesn't need vertex " << start->vert->index << endl;*/
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index+1 << endl;
 			return;
 		}
 		temp = temp -> next;
@@ -134,62 +132,59 @@ void Circ_list::check_backward()
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			if(start->vert->is_needed(temp->vert->get_index()))
+			if(start->vert->needs(temp->vert->index))
 			{
 				// check if they should connect and connect them.
 				start->vert->set((temp->vert->index), true);
 				temp->vert->set((start->vert->index), true);
 				// also remove all vertices between them.
-			/*	cout << "Removing between vertex " << 
-					start->vert->index+1 << " and vertex " <<
-					temp->vert->index+1 << endl;*/
+				cout << "Removing between vertex " << start->vert->index+1 << " and vertex " << temp->vert->index+1 << endl;
 				remove(temp, start);
 				return;
 			}
-		/*	cout << "Vertex "<< temp->vert->index+1<<
-			 " doesn't need vertex " << start->vert->index << endl;*/
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index+1 << endl;
 			return;
 		}
 		temp = temp -> prev;
 	}
 }
 
-//UNFINISHED
-Circ_list* Circ_list::have_children(Vertex** vert_set, vector<int> permutation)
+void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
-	// iterate through the permutation
-	vector<int>::iterator it;
-	for(it=permutation.begin(); it < permutation.end(); it++)
+	/* DEBUG
+	 cout << "permutation list: ";
+	 for (int i = 0; i < perm.size(); i++) {
+	 cout << perm[i]+1 << " ";
+	 }*/
+	cout << endl;
+	for(int i = 0; i < perm.size(); i++)
 	{
-		//cout << "Vertex " << start->vert->index+1 << 
-		//" needs vertex " << (*it)+1 << endl;
-		// create that vertex and add it after start
-		Vertex* temp_vert = new Vertex(vert_set[*it]);
-		Node* temp_node = new Node(temp_vert);
-		add_to_list(temp_node, start);
-		temp_vert->set((start->vert->index), true);
-		start->vert->set(temp_vert->index, true);
-		// copy whatever vertex start pointed to after that vertex
-		// don't worry about the bitsets as the original has already been
-		// modified.
-		temp_node = new Node(new Vertex(start->vert));
-		start->vert->increase_references();
-		add_to_list(temp_node, start->next);
-		start = start->next->next;
+		if(start->vert->needs(perm[i]))
+		{
+			cout << "Vertex " << start->vert->index+1 
+			<< " needs vertex " << perm[i]+1 << endl;
+			// create that vertex and add it after start
+			Vertex* temp_vert = new Vertex(vert_set[perm[i]]);
+			Node* temp_node = new Node(temp_vert);
+			add_to_list(temp_node, start);
+			temp_vert->set((start->vert->index), true);
+			start->vert->set(perm[i], true);
+			// copy whatever vertex start pointed to after that vertex
+			// note that this vertex is not copied but linked, this is
+			// to preserve the neighbors vector, containing what that
+			// vertex needs.
+			temp_node = new Node(start->vert);
+			start->vert->increase_references();
+			add_to_list(temp_node, start->next);
+			start = start->next->next;
+		}
 	}	
-	// increment start to the next unsaturated node 
-	// and make sure I don't loop.
-	// neighbors.size() is equivalent to num_vertices,
-	// and so I can pick any place in the vert set
-	int i=0;
-	while(start->vert->is_satisfied() &&
-		 i < vert_set[0]->size)
+	// incrememnt start to the next unsaturated node
+	while(start->vert->is_satisfied())
 	{
-		//cout << "Vertex " << start->vert->index+1 << " is happy.\n";
+		cout << "Vertex " << start->vert->index+1 << " is happy for now.\n";
 		start = start->next;
-		i++;
 	}
-    return this;
 }
 
 void Circ_list::remove(Node* begin, Node* end)
@@ -238,23 +233,17 @@ bool Circ_list::is_done()
 
 Circ_list::~Circ_list()
 {
-	if(start==NULL)
-    {
-        cout << "YOU SHOULD NEVER SEE ME\n";
-        return;
-    }
-    start->prev->next=NULL;
+	start->prev->next=NULL;
 	while(start!=NULL)
 	{	
 		Node *temp=start;
 		if(start->next==NULL){
 			start=NULL;
 			delete temp;
-			return;
+			break;
 		}
 		else 
 			start=start->next;
 		delete temp;
 	}
-    delete start;
 }
