@@ -16,7 +16,7 @@ Vertex::Vertex(Vertex* vert)
 {
 	index = vert->index;
     size = vert->size;
-	references = 1;
+	references = vert->references;
 	neighbors = new bool[size];
     for(int i = 0; i < size; i++)
         neighbors[i]=vert->neighbors[i];

@@ -13,16 +13,17 @@ Circ_list::Circ_list(Circ_list* list)
 {    
     //Copy start and set it up
 	Node* remote_ptr = list->start;
-	Vertex* tmp_vrt = new Vertex(remote_ptr->vert);
-	start = new Node(tmp_vrt);
+	start = new Node(new Vertex(remote_ptr->vert));
     start->next=start;
     start->prev=start;
 	remote_ptr=remote_ptr->next;
+	Node* start_ptr = start;
    	//continuously add new nodes to match the remote list
-	while(remote_ptr->vert!=list->start->vert)
+	while(remote_ptr!=list->start)
 	{
-      	add_to_list(new Node(new Vertex(remote_ptr->vert)), start);
+      	add_to_list(new Node(new Vertex(remote_ptr->vert)), start_ptr); //this is the problem.  things are added in reverse order
 		remote_ptr=remote_ptr->next;
+		start_ptr = start_ptr->next;
 	}
 }
 
@@ -39,8 +40,7 @@ void Circ_list::start_list_with(Vertex* vert)
 // insert a node called to_add after the node called prior
 void Circ_list::add_to_list(Node* to_add, Node* prior)
 {
-	//shuffle pointers to put the one in.
-	
+	//shuffle pointers to put the one in.	
 	to_add -> prev = prior;
 	to_add-> next = prior -> next;
 	prior -> next = to_add;
@@ -58,13 +58,13 @@ void Circ_list::print_list(Node* begin)
 	else
 	{
 		Node* temp = begin;
-		//cout << begin->vert->index +1<< ' ';
-		do
+		cout << begin->vert->index +1<< ' ';
+		temp = begin->next;
+		while(temp != begin)
 		{
 			cout << temp->vert->index +1<< ' ';
 			temp = temp -> next;
 		}
-		while(temp != begin);
 		cout << endl;
 	}
 }
@@ -87,7 +87,7 @@ void Circ_list::check_forward()
 				remove(start, temp);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index << endl;
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index+1 << endl;
 			return;
 		}
 		temp = temp -> next;
@@ -111,7 +111,7 @@ void Circ_list::check_backward()
 				remove(temp, start);
 				return;
 			}
-			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index << endl;
+			cout << "Vertex "<< temp->vert->index+1<< " doesn't need Vertex " << start->vert->index+1 << endl;
 			return;
 		}
 		temp = temp -> prev;
@@ -120,10 +120,15 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
+	cout << "permutation list: ";
+	for (int i = 0; i < perm.size(); i++) {
+		cout << perm[i]+1 << " ";
+	}
+	cout << endl;
 	for(int i = 0; i < perm.size(); i++)
 	{
-		//if(start->vert->needs(i))
-		//{
+		if(start->vert->needs(perm[i]))
+		{
 			cout << "Vertex " << start->vert->index+1 
                 << " needs vertex " << perm[i]+1 << endl;
 			// create that vertex and add it after start
@@ -140,7 +145,7 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
 			start = start->next->next;
-		//}
+		}
 	}	
 	// incrememnt start to the next unsaturated node
 	while(start->vert->is_satisfied())
