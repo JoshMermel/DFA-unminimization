@@ -120,10 +120,11 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
+	/* DEBUG
 	cout << "permutation list: ";
 	for (int i = 0; i < perm.size(); i++) {
 		cout << perm[i]+1 << " ";
-	}
+	}*/
 	cout << endl;
 	for(int i = 0; i < perm.size(); i++)
 	{
