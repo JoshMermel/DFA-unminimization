@@ -15,6 +15,7 @@
 
 #include "vertex.h"
 #include "node.h"
+#include <vector>
 
 using namespace std;
 

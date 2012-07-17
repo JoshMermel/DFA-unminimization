@@ -77,7 +77,7 @@ void Circ_list::check_forward()
 		if(!temp->vert->is_satisfied())
 		{
 			// check if start wants to connect to temp
-			if(start->vert->needs(temp->vert->get_index()))
+			if(start->vert->needs(temp->vert->index))
 			{
 				// connect them
 				start->vert->set((temp->vert->index), true);
@@ -101,7 +101,7 @@ void Circ_list::check_backward()
 	{
 		if(!temp->vert->is_satisfied())
 		{
-			if(start->vert->needs(temp->vert->get_index()))
+			if(start->vert->needs(temp->vert->index))
 			{
 				// check if they should connect and connect them.
 				start->vert->set((temp->vert->index), true);

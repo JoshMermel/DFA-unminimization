@@ -43,11 +43,6 @@ int Vertex::get_references()
 	return references;
 }
 
-int Vertex::get_index()
-{
-	return index;
-}
-
 bool Vertex::needs(int index)
 {
 	return !neighbors[index];
