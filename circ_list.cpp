@@ -11,6 +11,10 @@ Circ_list::Circ_list(Vertex* vert)
 
 Circ_list::Circ_list(Circ_list* list)
 {    
+    num_verts = list->num_verts;
+    copies = new int[num_verts];
+    for(int i = 0; i < num_verts; i++)
+        copies[i] = list->copies[i];
     //Copy start and set it up
 	Node* remote_ptr = list->start;
 	start = new Node(new Vertex(remote_ptr->vert));
@@ -30,6 +34,11 @@ Circ_list::Circ_list(Circ_list* list)
 // insert the first node into the list
 void Circ_list::start_list_with(Vertex* vert)
 {
+    num_verts = vert->size;
+    copies = new int [num_verts];
+    for (int i = 0; i < num_verts; i++)
+        copies[i]=0;
+    copies[vert->index] = 1;
 	// shuffle pointers appropriately
 	Vertex* V = new Vertex(vert);
 	start = new Node(V);
@@ -120,12 +129,6 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
-	/* DEBUG
-	cout << "permutation list: ";
-	for (int i = 0; i < perm.size(); i++) {
-		cout << perm[i]+1 << " ";
-	}*/
-	cout << endl;
 	for(int i = 0; i < perm.size(); i++)
 	{
 		if(start->vert->needs(perm[i]))
@@ -133,6 +136,7 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 			cout << "Vertex " << start->vert->index+1 
                 << " needs vertex " << perm[i]+1 << endl;
 			// create that vertex and add it after start
+            copies[perm[i]]++;
 			Vertex* temp_vert = new Vertex(vert_set[perm[i]]);
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
@@ -154,6 +158,22 @@ void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 		cout << "Vertex " << start->vert->index+1 << " is happy for now.\n";
 		start = start->next;
 	}
+}
+
+bool Circ_list::check_any_less_than(int max)
+{
+    for(int i = 0; i < num_verts; i++)
+        if(copies[i]<=max)
+            return false;
+    return true;
+}
+
+bool Circ_list::check_any_greater_than(int min)
+{
+    for(int i = 0; i < num_verts; i++)
+        if(copies[i]>min)
+            return true;
+    return false;
 }
 
 void Circ_list::remove(Node* begin, Node* end)
@@ -215,4 +235,5 @@ Circ_list::~Circ_list()
 			start=start->next;
 		delete temp;
 	}
+    delete [] copies;
 }

@@ -9,20 +9,21 @@ using namespace std;
 
 void graphContract(Vertex** vert_set, int num_verts);
 void signalHandler(int signum);
-bool recurser(Circ_list* clist, Vertex** vset, int num_vertices, int level);
+bool recurser(Circ_list* clist, Vertex** vset, int num_vertices, int level, int bound);
 
 int main(int argc, char* argv[])
 {
-	if(argc < 2)
+	if(argc < 3)
 	{
-		cout << "This program takes in 2 parameters: the start vertex number ";
-		cout << "and then the location of the graph file. The 1st vertex is ";
-		cout << "number 1. Do not be confused that under the hood we start ";
-		cout << "with 0\n";
+		cout << "The program takes in 3 parameters: the start vertex number, ";
+		cout << "the bound (no vertex will be less than this when it stops a ";
+        cout << "recursion), then the location of the graph file. The 1st ";
+        cout << "vertex is number 1. Do not be confused that under the hood";
+        cout << "we start with 0\n";
 		return -1;
 	}
 
-	ifstream myfile(argv[2]);
+	ifstream myfile(argv[3]);
 	if(!myfile.is_open())
 	{
 		cout << "BAD FILENAME, HAVE SOME CAKE\n";
@@ -75,8 +76,8 @@ int main(int argc, char* argv[])
 	// is the same as the enviromental variable first into it to start it
 	
 	Circ_list* my_list = new Circ_list(vert_set[atoi(argv[1])-1]);
-
-    if(recurser(my_list, vert_set, num_vertices, 0))
+    int bound = atoi(argv[2]);
+    if(recurser(my_list, vert_set, num_vertices, 0, bound))
     {
         cout << "Fruit smoothie time\n";
     }
@@ -89,12 +90,12 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
+bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, int bound)
 {
     // limit to n^2 levels
-    if(level>num_vertices*num_vertices)
+    if(clist->check_any_greater_than(bound))
     {
-        cout << "INCONCEIVABLE!\n";
+        cout << "INCONCEIVABLE: " << level << "!\n";
         return false;
     }
 
@@ -114,7 +115,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
         for(int j=0; j < num_vertices; j++)
             vset[j] = new Vertex(vert_set[j]);
 
-		list->have_children(vset, permutations[i]); //too many permutations considering the check forward and back
+		list->have_children(vset, permutations[i]);
         list->print_list(list->start);
         list->check_forward();
         list->print_list(list->start);
@@ -129,7 +130,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
             delete [] vset;
             return true;
         }
-        tmp = recurser(list, vset, num_vertices, level+1); //loop
+        tmp = recurser(list, vset, num_vertices, level+1, bound); //loop
         delete list;
         for(int j=0; j<num_vertices; j++)
             delete vset[j];

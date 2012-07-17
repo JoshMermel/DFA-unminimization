@@ -56,6 +56,12 @@ class Circ_list
 		bool is_done();
 			// checks if all verices in the list are satisfied or not.
 
+        bool check_any_less_than(int max);
+            // checks if all elements in copies have a number greater than max
+
+        bool check_any_greater_than(int min);
+            // checks if ANY element in copies has a number greater than min
+
 		void remove(Node* begin, Node* end);
 			// given a Node to start at, a node to end at it removes all
 			// nodes (forward direction) between the two references 
@@ -63,6 +69,11 @@ class Circ_list
 			// switch the order of the parameters.
 		~Circ_list();
 		Node* start;
+        int* copies;
+            // There will be no way to decrement this because when a vertex
+            // is placed in the graph, it will not be removed.  This is on
+            // the mathematical level, and not the algorithmic level.
+        int num_verts;
 };
 
 #endif

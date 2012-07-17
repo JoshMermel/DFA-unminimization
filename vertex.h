@@ -24,7 +24,7 @@ class Vertex
 			// or not the number of references is bigger that 0
 
 		int get_references();
-			// a getter for the private variable, index
+			// a getter for the private variable, references
 
 		bool needs(int index);
 			// when passed an int representing an index, this function will
