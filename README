@@ -48,7 +48,7 @@ Ben:
 	Maybe decidable but worth considering that it is undecidable.
 	If it is decidable, then no vertex needs to be used more than twice
 Michael:
-	It could be anywhere from undecidable to NP-complete to P.
+	It could be anywhere from undecidable to NP-complete.
 Josh:
 	Probably decidable
 	If one can partition the verticies into two sets such that each set is

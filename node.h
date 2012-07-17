@@ -8,6 +8,7 @@
 #define MERMEL_NODE
 
 #include "vertex.h"
+#include <stdlib.h>
 
 class Node
 {
