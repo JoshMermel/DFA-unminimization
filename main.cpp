@@ -33,18 +33,17 @@ int main(int argc, char* argv[])
 	int num_vertices;
 	myfile >> num_vertices;
 	cout << num_vertices << endl;
-	// purges a newline from the stream
-	// THERE IS A PROBLEM HERE, IT WORKS FOR K_5 
-	// BUT REQUIRES ANOTHER PURGE FOR GOLDNER
-	//myfile.get();
 	char temp;
 	string temp_string;
-
+    // purge a remaining newline
 	getline(myfile,temp_string);
+
+    // handle kernel signals
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
 
 	// create an array to store them
 	Vertex** vert_set = new Vertex*[num_vertices];
-	// read them into that array
 		
 	// for each vertex
 	for(int i = 0; i < num_vertices; i++)
@@ -73,14 +72,13 @@ int main(int argc, char* argv[])
 	myfile.close();
 
 	// declare the circular doubly linked list->and put the vertex whose index
-	// is the same as the enviromental variable first into it to start it
-	
+	// is the same as the first argument into it to start it
 	Circ_list* my_list = new Circ_list(vert_set[atoi(argv[1])-1]);
+    // read the bound from the second argument
     int bound = atoi(argv[2]);
+    // start recursing, if it all works, good.
     if(recurser(my_list, vert_set, num_vertices, 0, bound))
-    {
         cout << "Fruit smoothie time\n";
-    }
     else
 	    cout << "The tree yielded no fruits\n";
     delete my_list;
@@ -92,29 +90,34 @@ int main(int argc, char* argv[])
 
 bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, int bound)
 {
-    // limit to n^2 levels
+    // if any vertex is used more than bound times then reject.
     if(clist->check_any_greater_than(bound))
     {
         cout << "INCONCEIVABLE: " << level << "!\n";
         return false;
     }
 
+    // create the list of permutations of the vertices that clist->start needs
     vector<int> myvector;
     for(int i=0; i < num_vertices; i++)
         if(clist->start->vert->needs(i))
             myvector.push_back(i);
-    
     vector< vector<int> > permutations = permute(myvector);
     int psize = permutations.size();
 
+    // for each permutation...
     for(int i = 0; i < psize ;i++)
     {
         bool tmp = false;
+
+        // make copies of each instance variable
         Circ_list* list = new Circ_list(clist);
         Vertex** vset = new Vertex*[num_vertices];
         for(int j=0; j < num_vertices; j++)
             vset[j] = new Vertex(vert_set[j]);
 
+        // run the algorithm on the newly copied variables
+        // for the current permutation
 		list->have_children(vset, permutations[i]);
         list->print_list(list->start);
         list->check_forward();
@@ -124,6 +127,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, 
         if(list->is_done())
         {
             cout << "(^_^)\n" ;
+            // clean up the copied instance variables
             delete list;
             for(int j=0; j<num_vertices; j++)
                 delete vset[j];
@@ -131,6 +135,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, 
             return true;
         }
         tmp = recurser(list, vset, num_vertices, level+1, bound); //loop
+        // clean up the copied instance variables, and get ready to try again.
         delete list;
         for(int j=0; j<num_vertices; j++)
             delete vset[j];

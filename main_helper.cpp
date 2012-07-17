@@ -149,7 +149,10 @@ vector<vector<int> > permute(vector<int> ordered)
 	return permutations;
 }
 
-//conract the graph so that there are no dangling nodes and so the graph is as simple as possible.  Thus there should be no tails no nodes with degree two or less.  This does not affect the math as these nodes could be trvially added back in after the algrorithm's expansion
+// contract the graph so that there are no dangling nodes and so the graph is as
+// simple as possible.  Thus there should be no tails no nodes with degree two
+// or less.  This does not affect the math as these nodes could be trvially
+// added back in after the algrorithm's expansion
 void graphContract(Vertex** vert_set, int num_verts)
 {
 	for(int i=0; i<num_verts; i++)
