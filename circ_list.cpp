@@ -21,7 +21,7 @@ Circ_list::Circ_list(Circ_list* list)
    	//continuously add new nodes to match the remote list
 	while(remote_ptr!=list->start)
 	{
-      	add_to_list(new Node(new Vertex(remote_ptr->vert)), start_ptr); //this is the problem.  things are added in reverse order
+      	add_to_list(new Node(new Vertex(remote_ptr->vert)), start_ptr); 
 		remote_ptr=remote_ptr->next;
 		start_ptr = start_ptr->next;
 	}

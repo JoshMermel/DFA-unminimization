@@ -19,14 +19,14 @@ int main(int argc, char* argv[])
 		cout << "and then the location of the graph file. The 1st vertex is ";
 		cout << "number 1. Do not be confused that under the hood we start ";
 		cout << "with 0\n";
-		exit(-1);
+		return -1;
 	}
 
 	ifstream myfile(argv[2]);
 	if(!myfile.is_open())
 	{
 		cout << "BAD FILENAME, HAVE SOME CAKE\n";
-        exit(-2);
+        return -2;
 	}
 	// determine how many vertices there are
 	int num_vertices;
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
     for(int i=0; i<num_vertices; i++)
         delete vert_set[i];
     delete [] vert_set;
-	exit(0);
+	return 0;
 }
 
 bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
@@ -108,6 +108,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
 
     for(int i = 0; i < psize ;i++)
     {
+        bool tmp = false;
         Circ_list* list = new Circ_list(clist);
         Vertex** vset = new Vertex*[num_vertices];
         for(int j=0; j < num_vertices; j++)
@@ -121,11 +122,14 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level)
         list->print_list(list->start);
         if(list->is_done())
         {
-            cout << "(^_^)\n";
+            cout << "(^_^)\n" ;
+            delete list;
+            for(int j=0; j<num_vertices; j++)
+                delete vset[j];
+            delete [] vset;
             return true;
         }
-
-        bool tmp = recurser(list, vset, num_vertices, level+1); //loop
+        tmp = recurser(list, vset, num_vertices, level+1); //loop
         delete list;
         for(int j=0; j<num_vertices; j++)
             delete vset[j];
