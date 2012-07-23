@@ -1,0 +1,36 @@
+\documentclass{article}
+
+\usepackage{amsthm}
+\newtheorem*{duplication}{Minimally Duplicated}
+\newtheorem*{overhead}{Overhead Bar}
+\newtheorem*{trees}{Unnecessary Trees}
+\newtheorem{mydef}{Definition}
+
+\begin{document}
+%\title{Unorganized Lemmas}
+%\author{Michael James \and Ben Hescott}
+%\date{\today}
+%\maketitle
+
+%\begin{abstract}
+%Here is where I'll introduce some stuff.
+%\end{abstract}
+
+\section{Proofs}
+Any graph, \emph{G}, can be rewritten such that it has levels.  This is like a tree however there may be cycles.  More specifically, each vertex (or node) has parents, children, and siblings.
+
+\theoremstyle{definition}
+\begin{mydef}
+A \textbf{minimum planar-expansion} is the planar-expansion of a graph, G, using the fewest number of duplications possible.
+\end{mydef}
+
+\begin{trees}
+If some planar-expansion results in two independant trees with a common root vertex, then one of the trees is unnecessary for the planar expansion.\\
+\textbf{Proof: }Suppose that the planar-expansion tree begins with the vertex $V_a$ and has children $V_b_1\ and\ V_b_2$.
+\end{trees}
+
+\begin{duplication}
+Given some non-planar graph, G, if some vertex, $V_i$, must be duplicated to create a minimum planar-expansion, then all vertices must be duplicated.\\
+\textbf{Proof: }For the sake of contradiction, assume not and that vertex $V_a$ is not duplicated to create a planar-expansion. $V_i$, however, was duplicated s.t. $\exists A = \left\{V_j,...,V_n\right\}$
+\end{duplication}
+\end{document}

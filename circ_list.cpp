@@ -83,6 +83,7 @@ void Circ_list::check_forward()
 	Node* temp = start->next;
 	while(temp != start)
 	{
+        // if our pointer's vertex is not yet satisfied
 		if(!temp->vert->is_satisfied())
 		{
 			// check if start wants to connect to temp
@@ -101,6 +102,8 @@ void Circ_list::check_forward()
 		}
 		temp = temp -> next;
 	}
+    // you may only connect once forward because you don't want to cut off
+    // other vertices from being connected later.
 }
 
 void Circ_list::check_backward()
@@ -129,30 +132,38 @@ void Circ_list::check_backward()
 
 void Circ_list::have_children(Vertex** vert_set, vector<int> perm)
 {
+    // for each element in the permutation
 	for(int i = 0; i < perm.size(); i++)
 	{
+        // does start need that vertex?
+        // this is redundant because the needs of the vertex might be smaller
+        // after check_forward and check_backward
 		if(start->vert->needs(perm[i]))
 		{
 			cout << "Vertex " << start->vert->index+1 
                 << " needs vertex " << perm[i]+1 << endl;
-			// create that vertex and add it after start
+	        // mark that a new vertex, perm[i],  is being added
             copies[perm[i]]++;
+            // create that vertex and add it after start
 			Vertex* temp_vert = new Vertex(vert_set[perm[i]]);
 			Node* temp_node = new Node(temp_vert);
 			add_to_list(temp_node, start);
 			temp_vert->set((start->vert->index), true);
 			start->vert->set(perm[i], true);
-			// copy whatever vertex start pointed to after that vertex
+			// copy whatever vertex start pointed to after that vertex.
 			// note that this vertex is not copied but linked, this is
 			// to preserve the neighbors vector, containing what that
-			// vertex needs.
+			// vertex needs.  Also, it is not marked in copies[] becuase
+            // it is not really a new vertex in the graph, just a new node
+            // in the circularly linked list.
 			temp_node = new Node(start->vert);
 			start->vert->increase_references();
 			add_to_list(temp_node, start->next);
+            // move past the vertex we just added
 			start = start->next->next;
 		}
 	}	
-	// incrememnt start to the next unsaturated node
+	// increment start to the next unsaturated node
 	while(start->vert->is_satisfied())
 	{
 		cout << "Vertex " << start->vert->index+1 << " is happy for now.\n";

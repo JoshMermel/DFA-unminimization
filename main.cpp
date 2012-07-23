@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     if(recurser(my_list, vert_set, num_vertices, 0, bound))
         cout << "Fruit smoothie time\n";
     else
-	    cout << "The tree yielded no fruits\n";
+	    cout << "The tree yielded nothing\n";
     delete my_list;
     for(int i=0; i<num_vertices; i++)
         delete vert_set[i];
@@ -93,7 +93,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, 
     // if any vertex is used more than bound times then reject.
     if(clist->check_any_greater_than(bound))
     {
-        cout << "INCONCEIVABLE: " << level << "!\n";
+        cout << "INCONCEIVABLE: " << level << "!\n\n";
         return false;
     }
 
@@ -108,8 +108,6 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, 
     // for each permutation...
     for(int i = 0; i < psize ;i++)
     {
-        bool tmp = false;
-
         // make copies of each instance variable
         Circ_list* list = new Circ_list(clist);
         Vertex** vset = new Vertex*[num_vertices];
@@ -134,7 +132,7 @@ bool recurser(Circ_list* clist, Vertex** vert_set, int num_vertices, int level, 
             delete [] vset;
             return true;
         }
-        tmp = recurser(list, vset, num_vertices, level+1, bound); //loop
+        bool tmp = recurser(list, vset, num_vertices, level+1, bound); //loop
         // clean up the copied instance variables, and get ready to try again.
         delete list;
         for(int j=0; j<num_vertices; j++)
