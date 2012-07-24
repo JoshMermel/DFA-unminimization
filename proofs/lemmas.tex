@@ -4,6 +4,11 @@
 \newtheorem*{duplication}{Minimally Duplicated}
 \newtheorem*{overhead}{Overhead Bar}
 \newtheorem*{trees}{Unnecessary Trees}
+\newtheorem*{mincolor}{0-Color Repetition}
+\newtheorem*{symmetry}{Planar-expansion Symmetry}
+%It looks like planar expansions have some element of symmetry to them.  This
+%could be because of the duplication.  Thus this would only be be pretty
+%corollary.
 \newtheorem{mydef}{Definition}
 
 \begin{document}
@@ -19,35 +24,69 @@
 \section{Proofs}
 Any graph, \emph{G}, can be rewritten such that it has levels.  This is like a 
 tree however there may be cycles.  More specifically, each vertex (or node) has
-parents, children, and siblings.
+parents, children, and siblings.\\
+
+\theoremstyle{definition}
+\begin{mydef}
+Given some graph, \emph{G}, give every vertex its own color. Each color, $C_i$, 
+is connected to colors $C_{j},...,C_{n}$. Now make copies of
+each color such that the graph is planar and each $C_i$ has a relationship with 
+at least one color for each $C_{j},...,C_{n}$.  The resulting graph is a 
+\textbf{planar-expansion}.\\
+\end{mydef}
 
 \theoremstyle{definition}
 \begin{mydef}
 A \textbf{minimum planar-expansion} is the planar-expansion of a graph, G, using
-the fewest number of duplications possible.
+the fewest number of edges and vertices as possible while maintaining the 
+properties of a planar-expansion.\\
 \end{mydef}
 
+
 \begin{trees}
-If some planar-expansion results in two independent trees with a common root 
-vertex, then one of the trees is unnecessary for the planar expansion.\\
-\textbf{Proof: }Suppose that the planar-expansion tree begins with the vertex 
-$V_a$ and has children $V_{b_1}\ and\ V_{b_2}$. These children have the same
-coloring (from the planar-expansion), because they are independent trees.  Since
-they are independent, $V_a$ is satisfied by either $V_{b_1}\ or\ V_{b_2}$.  Thus
-only one of the branches is required for the planar-expansion and the other is
-unnecessary.$\qed$
+If some planar-expansion results in two independent, minimally expanded trees 
+with a common root vertex, then it is not a minimal planar-expansion.
 \end{trees}
+\paragraph{Proof: }
+Assume not, and that there is some vertex or edge in one of the two trees, 
+$V_b$ or $V_c$ that is required for the common root, $V_a$ to be satisfied.
+%Suppose that the planar-expansion tree begins with the vertex 
+%$V_a$ and has children $V_{b_1}\ and\ V_{b_2}$. These children have the same
+%coloring (from the planar-expansion), because they are independent trees.  Since
+%they are independent, $V_a$ is satisfied by either $V_{b_1}\ or\ V_{b_2}$.  Thus
+%only one of the branches is required for the planar-expansion and the other is
+%unnecessary.$\qed$\\
+
+
+\begin{mincolor}
+If some vertex, $V_i$ connects to two or more vertices of the same coloring in a
+planar-expansion then the expansion is not minimal.
+\end{mincolor}
+\paragraph{Proof: }
+Given some graph, \emph{G}, where some vertex, $V_i$, connects 
+to two vertices of the same coloring, it can be made smaller while maintaining 
+its planar-expansion property with the following algorithm:...\\
 
 \begin{duplication}
 Given some non-planar graph, G, if some vertex, $V_i$, must be duplicated to 
-create a minimum planar-expansion, then all vertices must be duplicated.\\
-\textbf{Proof: }For the sake of contradiction, assume not and that vertex $V_a$
-is not duplicated to create a planar-expansion. $V_i$, however, was duplicated.
-This must happen because \emph{G} is non-planar and so at least one vertex must
-be duplicated. It follows then that there are a set of vertices, \emph{A}, that
-can connect to $V_i$ but not to $V^{'}_{i}$. Consequently, there must also exist
-a set, \emph{$A^{'}$}, that can connect to $V^{'}_{i}$. Since, \emph{A}$\neq$
-\emph{$A^{'}$} (otherwise it would follow that $V_{i}=V^{'}_{i}$, and that 
-\emph{G} is planar), there exists a set \emph{C}=
+create a minimum planar-expansion, then all vertices must be duplicated.
 \end{duplication}
+\paragraph{Proof: }
+For the sake of contradiction, assume not and that 
+vertex $V_a$ is not duplicated to create a planar-expansion. $V_i$, however, was
+duplicated. This must happen because \emph{G} is non-planar and so at least one 
+vertex must be duplicated. Let us say that set \emph{A} is the set of vertices 
+that $V_i$ connects to in \emph{G}. It follows then that there are two sets of 
+vertices, \emph{B} and \emph{C}, that are independent of each other such that 
+\emph{B} $\cup$ \emph{C}=\emph{A} such that \emph{B} can connect to $V_i$,
+ planarly, but not to $V^{'}_{i}$. Conversely, \emph{C} can connect to 
+ $V^{'}_{i}$ planarly. At this point, \emph{B} and \emph{C} must be duplicated
+ to planarly satisfy $V^{'}_i$ and $V_i$, respectively. $V_i$ is then 
+ connected to \emph{B} and \emph{$C^{'}$}, and vise versa.  The ordering of
+ \emph{B} $\cup$ \emph{$C^{'}$} and \emph{C} $\cup$ \emph{$B^{'}$}  must be 
+ unique.  If they were the same then the tree would be unnecessary: $V_i\ and\ 
+ V^{'}_{i}$ are required by the same vertex (not multiple as $V_i$ is the first
+ instance of a duplication) so with their parent as the root, the subgraph
+ including $V_i\ and\ V^{'}_{i}$ would violate the Unnecessary Trees lemma.
+
 \end{document}
