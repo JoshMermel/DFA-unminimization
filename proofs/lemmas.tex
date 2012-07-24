@@ -17,20 +17,37 @@
 %\end{abstract}
 
 \section{Proofs}
-Any graph, \emph{G}, can be rewritten such that it has levels.  This is like a tree however there may be cycles.  More specifically, each vertex (or node) has parents, children, and siblings.
+Any graph, \emph{G}, can be rewritten such that it has levels.  This is like a 
+tree however there may be cycles.  More specifically, each vertex (or node) has
+parents, children, and siblings.
 
 \theoremstyle{definition}
 \begin{mydef}
-A \textbf{minimum planar-expansion} is the planar-expansion of a graph, G, using the fewest number of duplications possible.
+A \textbf{minimum planar-expansion} is the planar-expansion of a graph, G, using
+the fewest number of duplications possible.
 \end{mydef}
 
 \begin{trees}
-If some planar-expansion results in two independant trees with a common root vertex, then one of the trees is unnecessary for the planar expansion.\\
-\textbf{Proof: }Suppose that the planar-expansion tree begins with the vertex $V_a$ and has children $V_b_1\ and\ V_b_2$.
+If some planar-expansion results in two independent trees with a common root 
+vertex, then one of the trees is unnecessary for the planar expansion.\\
+\textbf{Proof: }Suppose that the planar-expansion tree begins with the vertex 
+$V_a$ and has children $V_{b_1}\ and\ V_{b_2}$. These children have the same
+coloring (from the planar-expansion), because they are independent trees.  Since
+they are independent, $V_a$ is satisfied by either $V_{b_1}\ or\ V_{b_2}$.  Thus
+only one of the branches is required for the planar-expansion and the other is
+unnecessary.$\qed$
 \end{trees}
 
 \begin{duplication}
-Given some non-planar graph, G, if some vertex, $V_i$, must be duplicated to create a minimum planar-expansion, then all vertices must be duplicated.\\
-\textbf{Proof: }For the sake of contradiction, assume not and that vertex $V_a$ is not duplicated to create a planar-expansion. $V_i$, however, was duplicated s.t. $\exists A = \left\{V_j,...,V_n\right\}$
+Given some non-planar graph, G, if some vertex, $V_i$, must be duplicated to 
+create a minimum planar-expansion, then all vertices must be duplicated.\\
+\textbf{Proof: }For the sake of contradiction, assume not and that vertex $V_a$
+is not duplicated to create a planar-expansion. $V_i$, however, was duplicated.
+This must happen because \emph{G} is non-planar and so at least one vertex must
+be duplicated. It follows then that there are a set of vertices, \emph{A}, that
+can connect to $V_i$ but not to $V^{'}_{i}$. Consequently, there must also exist
+a set, \emph{$A^{'}$}, that can connect to $V^{'}_{i}$. Since, \emph{A}$\neq$
+\emph{$A^{'}$} (otherwise it would follow that $V_{i}=V^{'}_{i}$, and that 
+\emph{G} is planar), there exists a set \emph{C}=
 \end{duplication}
 \end{document}

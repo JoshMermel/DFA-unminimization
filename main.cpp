@@ -44,12 +44,15 @@ int main(int argc, char* argv[])
 
 	// create an array to store them
 	Vertex** vert_set = new Vertex*[num_vertices];
-		
-	// for each vertex
-	for(int i = 0; i < num_vertices; i++)
-	{
+    for(int i = 0; i < num_vertices; i++)
+    {
 		// create an object to hold the data
 		vert_set[i] = new Vertex(i, num_vertices);
+    }
+	
+    // for each vertex
+	for(int i = 0; i < num_vertices; i++)
+	{
 		// read until you see a newline
 		// this is a garbage value to be rewritten by the following loop
 		temp = 'b';
@@ -66,6 +69,7 @@ int main(int argc, char* argv[])
 			}
 		// set the vertex to know that it needs what was just found
 		vert_set[i]->set(atoi(temp_string.c_str())-1, 0);
+        vert_set[atoi(temp_string.c_str())-1]->set(i, 0);
 		}
 	}
 	graphContract(vert_set, num_vertices);
