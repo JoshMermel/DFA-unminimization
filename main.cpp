@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 			//read until you see a space
 			while(temp!=' ' && temp!= '\n')
 			{
-				//concatonate newly read chars onto temp_string
+				//concatenate newly read chars onto temp_string
 				temp_string += temp;
 				temp = myfile.get();
 			}

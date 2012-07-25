@@ -54,14 +54,13 @@ $V_b$ or $V_c$ that is required for the common parent, $V_a$ to be satisfied.
 Because $V_b$ and $V_c$ share the same color, with the same parent, they must 
 be identical. These trees are shown to be identical by induction.  Given that 
 the top nodes are the same coloring, with a common parent, both must have the 
-same number and color children.  $\exists$ an ordering of the children such 
-that 
-%Suppose that the planar-expansion tree begins with the vertex 
-%$V_a$ and has children $V_{b_1}\ and\ V_{b_2}$. These children have the same
-%coloring (from the planar-expansion), because they are independent trees.  Since
-%they are independent, $V_a$ is satisfied by either $V_{b_1}\ or\ V_{b_2}$.  Thus
-%only one of the branches is required for the planar-expansion and the other is
-%unnecessary.$\qed$\\
+same number and color children.  There exists an ordering of the children such 
+that the children of $V_b$ match exactly the children of $V_c$ because they are 
+trees, so they are planar and acyclic.  There must also exist an ordering of 
+the children of the children of $V_b$ and $V_c$ by the same principles.  This 
+process continues until the trees are the exact same in every level.  Since the 
+trees are the same but there is some vertex or edge in one but not the other,
+to satisfy $V_a$, there is a contraction.$\qed$\\
 
 
 \begin{mincolor}
@@ -88,8 +87,8 @@ vertices, \emph{B} and \emph{C}, that are independent of each other such that
  planarly, but not to $V^{'}_{i}$. Conversely, \emph{C} can connect to 
  $V^{'}_{i}$ planarly. At this point, \emph{B} and \emph{C} must be duplicated
  to planarly satisfy $V^{'}_i$ and $V_i$, respectively. $V_i$ is then 
- connected to \emph{B} and \emph{$C^{'}$}, and vise versa.  The ordering of
- \emph{B} $\cup$ \emph{$C^{'}$} and \emph{C} $\cup$ \emph{$B^{'}$}  must be 
+ connected to \emph{B} and \emph{$C^{'}$}, and vise versa. The ordering of
+ \emph{B} $\cup$ \emph{$C^{'}$} and \emph{C} $\cup$ \emph{$B^{'}$} must be 
  unique.  If they were the same then the tree would be unnecessary: $V_i\ and\ 
  V^{'}_{i}$ are required by the same vertex (not multiple as $V_i$ is the first
  instance of a duplication) so with their parent as the root, the subgraph
