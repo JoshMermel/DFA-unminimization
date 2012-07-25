@@ -45,11 +45,17 @@ properties of a planar-expansion.\\
 
 \begin{trees}
 If some planar-expansion results in two independent, minimally expanded trees 
-with a common root vertex, then it is not a minimal planar-expansion.
+where the root vertices are the same color, then it is not a minimal 
+planar-expansion.
 \end{trees}
 \paragraph{Proof: }
 Assume not, and that there is some vertex or edge in one of the two trees, 
-$V_b$ or $V_c$ that is required for the common root, $V_a$ to be satisfied.
+$V_b$ or $V_c$ that is required for the common parent, $V_a$ to be satisfied.
+Because $V_b$ and $V_c$ share the same color, with the same parent, they must 
+be identical. These trees are shown to be identical by induction.  Given that 
+the top nodes are the same coloring, with a common parent, both must have the 
+same number and color children.  $\exists$ an ordering of the children such 
+that 
 %Suppose that the planar-expansion tree begins with the vertex 
 %$V_a$ and has children $V_{b_1}\ and\ V_{b_2}$. These children have the same
 %coloring (from the planar-expansion), because they are independent trees.  Since
