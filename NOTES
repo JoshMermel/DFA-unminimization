@@ -1,0 +1,18 @@
+Michael James' notes
+
+I really think proving that if a vertex is duplicated then everything else must 
+also be duplicated n times is terrifically important.  I think with this lemma 
+we can show that all planar-expansions are hamiltonian.  This lemma will also 
+be the key to showing that these expansions are symmetrical.
+On that note:
+I've noticed that every expansion we do, can be done in such a way that a curve
+can be drawn through the graph such that the two halves make a tessellation. 
+This is purely something interesting that I've noticed so far.
+
+Euler's Characteristic:
+V-E+F=2; This isn't true for the original graph--we assume it's non-planar.
+But in the expansion, this is true.  Moreover, V'-E'+F'=2 where V'=K*V, E'=K*E, 
+and F' has some relationship to F, probably not K*F.  This is assuming that the 
+conjecture I have above is true.  So, with a bit of math: E-V=(F-2)/K.  E-V is
+an integer, so K|(F-2).  I'm not sure where this can go, but I think there
+might be something in the formulae for us.
